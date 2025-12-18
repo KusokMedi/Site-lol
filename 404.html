@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Страница не найдена | KusokMedi</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Фон со звёздами */
+    .stars-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    .container {
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* 404 */
+    .error-code {
+      font-size: 10rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #00d4ff, #0099ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+      margin-bottom: 1rem;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    /* Кнопки */
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00d4ff, #0099ff);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px #00d4ff40;
+    }
+
+    .btn-secondary {
+      background: rgba(0, 212, 255, 0.2);
+      border: 2px solid #00d4ff;
+      color: #00d4ff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 212, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    /* Footer */
+    .footer-text {
+      margin-top: 2rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .footer-text em {
+      color: #00d4ff;
+    }
+
+    @media (max-width: 600px) {
+      .error-code {
+        font-size: 6rem;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Фон со звёздами -->
+  <div class="stars-bg" id="starsBg"></div>
+
+  <div class="container">
+    <div class="error-code">404</div>
+    <h1>Страница потерялась в космосе! 🚀</h1>
+    <p class="subtitle">
+      Похоже, вы попали в пустоту. Но не переживайте — вернуться домой легко 🌌
+    </p>
+
+    <div class="buttons">
+      <a href="index.html" class="btn btn-primary">← На главную</a>
+      <a href="index.html#contacts" class="btn btn-secondary">📞 Связаться со мной</a>
+    </div>
+
+    <p class="footer-text">
+      <em>P.S. Даже космос иногда ошибается 😉</em>
+    </p>
+  </div>
+
+  <script>
+    // Создание звёзд в фоне
+    const starsBg = document.getElementById('starsBg');
+    for (let i = 0; i < 60; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.animationDelay = Math.random() * 3 + 's';
+      starsBg.appendChild(star);
+    }
+    // Авто-редирект на главную страницу через 3.5 секунды
+    (function() {
+      try {
+        const homepage = '/';
+        // Если нужно дать пользователю шанс вернуться — задержка 3500ms
+        setTimeout(() => {
+          // Используем replace чтобы не оставлять 404 в истории
+          window.location.replace(homepage);
+        }, 3500);
+      } catch (e) {
+        console.error('Redirect failed', e);
+      }
+    })();
+  </script>
+</body>
+</html>
