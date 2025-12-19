@@ -1,203 +1,504 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - Страница не найдена | KusokMedi</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Страница не найдена</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
 
-    /* Фон со звёздами */
-    .stars-bg {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
 
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.6;
-      animation: twinkle 3s infinite;
-    }
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 5vh 5vw;
+            text-align: center;
+        }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
+        .error-wrapper {
+            perspective: 1000px;
+            margin-bottom: 3vh;
+            opacity: 0;
+            animation: fadeInScale 1s ease 0.2s forwards;
+        }
 
-    .container {
-      max-width: 800px;
-      width: 90%;
-      text-align: center;
-      position: relative;
-      z-index: 10;
-    }
+        .error-code {
+            font-size: clamp(80px, 15vw, 180px);
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite, float 6s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+            transform-style: preserve-3d;
+            line-height: 1;
+        }
 
-    /* 404 */
-    .error-code {
-      font-size: 10rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, #00d4ff, #0099ff, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
-      margin-bottom: 1rem;
-      animation: float 4s ease-in-out infinite;
-    }
+        .error-code::before {
+            content: '404';
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.5), rgba(118, 75, 162, 0.5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: blur(20px);
+            animation: glowShift 3s ease infinite;
+        }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateX(0deg); }
+            25% { transform: translateY(-2vh) rotateX(5deg); }
+            75% { transform: translateY(-1vh) rotateX(-5deg); }
+        }
 
-    .subtitle {
-      font-size: 1.2rem;
-      color: #aaa;
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
+        @keyframes glowPulse {
+            0%, 100% { filter: drop-shadow(0 0 3vh rgba(102, 126, 234, 0.6)); }
+            50% { filter: drop-shadow(0 0 6vh rgba(240, 147, 251, 0.8)); }
+        }
 
-    /* Кнопки */
-    .buttons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
+        @keyframes glowShift {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
 
-    .btn {
-      padding: 1rem 2rem;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-    }
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
 
-    .btn-primary {
-      background: linear-gradient(135deg, #00d4ff, #0099ff);
-      color: #000;
-    }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px #00d4ff40;
-    }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .btn-secondary {
-      background: rgba(0, 212, 255, 0.2);
-      border: 2px solid #00d4ff;
-      color: #00d4ff;
-    }
+        h1 {
+            font-size: clamp(28px, 5vw, 56px);
+            margin-bottom: 2vh;
+            color: #ffffff;
+            text-shadow: 0 0 2vh rgba(102, 126, 234, 0.5);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            line-height: 1.2;
+        }
 
-    .btn-secondary:hover {
-      background: rgba(0, 212, 255, 0.3);
-      transform: translateY(-3px);
-    }
+        p {
+            font-size: clamp(14px, 2vw, 22px);
+            color: #b0b0b0;
+            margin-bottom: 5vh;
+            line-height: 1.8;
+            max-width: 90vw;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.9s forwards;
+        }
 
-    /* Footer */
-    .footer-text {
-      margin-top: 2rem;
-      color: #666;
-      font-size: 0.9rem;
-    }
+        .btn-wrapper {
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.2s forwards;
+        }
 
-    .footer-text em {
-      color: #00d4ff;
-    }
+        .btn {
+            position: relative;
+            display: inline-block;
+            padding: clamp(12px, 2vh, 18px) clamp(30px, 5vw, 50px);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: clamp(16px, 2vw, 20px);
+            font-weight: 600;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0.8vh 3vh rgba(102, 126, 234, 0.4);
+        }
 
-    @media (max-width: 600px) {
-      .error-code {
-        font-size: 6rem;
-      }
-      h1 {
-        font-size: 2rem;
-      }
-      .buttons {
-        flex-direction: column;
-      }
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn:hover {
+            transform: translateY(-0.5vh) scale(1.05);
+            box-shadow: 0 1.5vh 5vh rgba(102, 126, 234, 0.6);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .circle {
+            width: clamp(50px, 8vw, 100px);
+            height: clamp(50px, 8vw, 100px);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            animation: orbit 20s linear infinite;
+            opacity: 0;
+        }
+
+        .circle1 { 
+            top: 10%; 
+            left: 10%; 
+            animation: orbit 15s linear infinite, fadeIn 1s ease 0.3s forwards; 
+        }
+        .circle2 { 
+            top: 20%; 
+            right: 15%; 
+            animation: orbit 20s linear infinite reverse, fadeIn 1s ease 0.5s forwards; 
+        }
+        .circle3 { 
+            bottom: 15%; 
+            left: 15%; 
+            animation: orbit 25s linear infinite, fadeIn 1s ease 0.7s forwards; 
+        }
+        .circle4 { 
+            bottom: 20%; 
+            right: 10%; 
+            animation: orbit 18s linear infinite reverse, fadeIn 1s ease 0.9s forwards; 
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(clamp(30px, 5vw, 50px)) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(clamp(30px, 5vw, 50px)) rotate(-360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 0.6; }
+        }
+
+        .illustration {
+            font-size: clamp(80px, 12vw, 150px);
+            margin-bottom: 4vh;
+            animation: bounce 2s ease-in-out infinite, rotate3d 8s ease-in-out infinite;
+            filter: drop-shadow(0 1vh 3vh rgba(102, 126, 234, 0.5));
+            opacity: 0;
+            animation: bounce 2s ease-in-out 0.5s infinite, rotate3d 8s ease-in-out infinite, fadeInDown 1s ease forwards;
+            line-height: 1;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-3vh) scale(1.1); }
+        }
+
+        @keyframes rotate3d {
+            0%, 100% { transform: rotateY(0deg) rotateX(0deg); }
+            25% { transform: rotateY(10deg) rotateX(5deg); }
+            50% { transform: rotateY(0deg) rotateX(10deg); }
+            75% { transform: rotateY(-10deg) rotateX(5deg); }
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2s infinite;
+            color: #ff00ff;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 2s infinite;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(3px, -3px); }
+            40% { transform: translate(3px, 3px); }
+            60% { transform: translate(-3px, -3px); }
+            80% { transform: translate(-3px, 3px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 3vh 5vw;
+            }
+            .circle {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .container {
+                padding: 2vh 5vw;
+            }
+            .error-wrapper {
+                margin-bottom: 1vh;
+            }
+            h1 {
+                margin-bottom: 1vh;
+            }
+            p {
+                margin-bottom: 2vh;
+            }
+        }
+
+        .snowflake {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(10px, 1.5vw, 20px);
+            pointer-events: none;
+            z-index: 5;
+            animation: snowfall linear forwards, snowfadeInOut ease-in-out forwards;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(110vh) translateX(var(--drift)) rotate(360deg);
+            }
+        }
+
+        @keyframes snowfadeInOut {
+            0% {
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Фон со звёздами -->
-  <div class="stars-bg" id="starsBg"></div>
+    <canvas id="canvas"></canvas>
+    
+    <div class="decoration circle circle1"></div>
+    <div class="decoration circle circle2"></div>
+    <div class="decoration circle circle3"></div>
+    <div class="decoration circle circle4"></div>
 
-  <div class="container">
-    <div class="error-code">404</div>
-    <h1>Страница потерялась в космосе! 🚀</h1>
-    <p class="subtitle">
-      Похоже, вы попали в пустоту. Но не переживайте — вернуться домой легко 🌌
-    </p>
-
-    <div class="buttons">
-      <a href="index.html" class="btn btn-primary">← На главную</a>
-      <a href="index.html#contacts" class="btn btn-secondary">📞 Связаться со мной</a>
+    <div class="container">
+        <div class="illustration">🌌</div>
+        <div class="error-wrapper">
+            <div class="error-code glitch" data-text="404">404</div>
+        </div>
+        <h1>Потерялись в космосе?</h1>
+        <p>Эта страница улетела в параллельное измерение и пока не вернулась.<br>
+        Но не волнуйтесь — путь домой всегда открыт!</p>
+        <div class="btn-wrapper">
+            <a href="index.html" class="btn"><span>🚀 Вернуться домой</span></a>
+        </div>
     </div>
 
-    <p class="footer-text">
-      <em>P.S. Даже космос иногда ошибается 😉</em>
-    </p>
-  </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-  <script>
-    // Создание звёзд в фоне
-    const starsBg = document.getElementById('starsBg');
-    for (let i = 0; i < 60; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = Math.random() * 100 + '%';
-      star.style.top = Math.random() * 100 + '%';
-      star.style.animationDelay = Math.random() * 3 + 's';
-      starsBg.appendChild(star);
-    }
-    // Авто-редирект на главную страницу через 3.5 секунды
-    (function() {
-      try {
-        const homepage = '/';
-        // Если нужно дать пользователю шанс вернуться — задержка 3500ms
-        setTimeout(() => {
-          // Используем replace чтобы не оставлять 404 в истории
-          window.location.replace(homepage);
-        }, 3500);
-      } catch (e) {
-        console.error('Redirect failed', e);
-      }
-    })();
-  </script>
+        const particles = [];
+        const mouse = { x: null, y: null };
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = `hsl(${Math.random() * 60 + 240}, 70%, 60%)`;
+                this.opacity = 1;
+                this.life = 100;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 1;
+                this.opacity = this.life / 100;
+
+                if (this.life <= 0) {
+                    const index = particles.indexOf(this);
+                    if (index > -1) {
+                        particles.splice(index, 1);
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+            }
+        }
+
+        // Create particles at mouse position
+        function createParticles(x, y) {
+            for (let i = 0; i < 3; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.shadowBlur = 0;
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Mouse movement
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+            createParticles(e.x, e.y);
+        });
+
+        // Touch support for mobile
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches[0]) {
+                mouse.x = e.touches[0].clientX;
+                mouse.y = e.touches[0].clientY;
+                createParticles(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        // Resize handling
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 50;
+            const moveY = (e.clientY - window.innerHeight / 2) / 50;
+            
+            const errorCode = document.querySelector('.error-code');
+            const illustration = document.querySelector('.illustration');
+            
+            if (errorCode) {
+                errorCode.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
+            if (illustration) {
+                illustration.style.transform = `translate(${-moveX}px, ${-moveY}px)`;
+            }
+        });
+    </script>
 </body>
 </html>

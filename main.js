@@ -28,8 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
       title: "Матвей",
       subtitle: "Python-разработчик • Создаю ботов, скрипты и сайты",
       heroTitle: "Привет! Я Матвей",
-      heroText1: "Я — Python-разработчик, специализирующийся на создании Telegram-ботов, различных скриптов и автоматизаций. Также могу разрабатывать сайты (фронтенд и бэкенд).",
-      heroText2: "Работаю над любыми задачами — от простых инструментов до сложных решений. Если нужно, обсудим индивидуальные проекты не только на Python.",
+      heroText1: "Я - Python-разработчик, специализирующийся на создании Telegram-ботов, различных скриптов и автоматизаций. Также могу разрабатывать сайты (фронтенд и бэкенд).",
+      heroText2: "Работаю над любыми задачами - от простых инструментов до сложных решений. Если нужно, обсудим индивидуальные проекты не только на Python.",
       portfolioTitle: "Портфолио",
       project1Title: "Telegram-боты",
       project1Desc: "Разработка автоматизированных ботов для различных задач: уведомления, управление контентом, интеграции с API.",
@@ -43,14 +43,18 @@ document.addEventListener("DOMContentLoaded", () => {
       github: "GitHub",
       discord: "Discord",
       email: "Gmail",
-      youtube: "YouTube"
+      youtube: "YouTube",
+      navigation: "Навигация",
+      about: "О себе",
+      copyright: "© 2025 KusokMedi. Все права защищены.",
+      developer: "Python-разработчик"
     },
     en: {
       title: "Matvey",
       subtitle: "Python Developer • Creating bots, scripts and websites",
       heroTitle: "Hello! I'm Matvey",
       heroText1: "I'm a Python developer specializing in creating Telegram bots, various scripts and automations. I can also develop websites (frontend and backend).",
-      heroText2: "I work on any tasks — from simple tools to complex solutions. If needed, we can discuss individual projects not only in Python.",
+      heroText2: "I work on any tasks - from simple tools to complex solutions. If needed, we can discuss individual projects not only in Python.",
       portfolioTitle: "Portfolio",
       project1Title: "Telegram Bots",
       project1Desc: "Development of automated bots for various tasks: notifications, content management, API integrations.",
@@ -64,7 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
       github: "GitHub",
       discord: "Discord",
       email: "Gmail",
-      youtube: "YouTube"
+      youtube: "YouTube",
+      navigation: "Navigation",
+      about: "About",
+      copyright: "© 2025 KusokMedi. All rights reserved.",
+      developer: "Python-developer"
     }
   };
 
@@ -95,6 +103,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.contact-link span')[2].textContent = translations[lang].discord;
     document.querySelectorAll('.contact-link span')[3].textContent = translations[lang].email;
     document.querySelectorAll('.contact-link span')[4].textContent = translations[lang].youtube;
+    
+    // Обновление футера
+    document.querySelector('.quick-links h4').textContent = translations[lang].navigation;
+    document.querySelectorAll('.quick-links a')[0].textContent = translations[lang].portfolioTitle;
+    document.querySelectorAll('.quick-links a')[1].textContent = translations[lang].contactsTitle;
+    document.querySelectorAll('.quick-links a')[2].textContent = translations[lang].about;
+    document.querySelector('.copyright').textContent = translations[lang].copyright;
+    document.querySelector('.footer-info p').textContent = translations[lang].developer;
 
     langRu.classList.toggle('active', lang === 'ru');
     langEn.classList.toggle('active', lang === 'en');
@@ -137,72 +153,157 @@ document.addEventListener("DOMContentLoaded", () => {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--accent-gradient);
-    color: white;
-    border: none;
-    font-size: 24px;
+    background: rgba(30, 41, 59, 0.7);
+    color: var(--accent-primary);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    font-size: 20px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    display: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
     z-index: 1000;
     transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
   `;
   document.body.appendChild(scrollToTopButton);
 
   window.addEventListener('scroll', () => {
     if (window.pageYOffset > 300) {
-      scrollToTopButton.style.display = 'block';
+      scrollToTopButton.style.opacity = '1';
     } else {
-      scrollToTopButton.style.display = 'none';
+      scrollToTopButton.style.opacity = '0';
     }
   });
 
   scrollToTopButton.addEventListener('click', () => {
+    smoothScrollToTop();
+  });
+  
+  // Добавляем обработчик для кнопки "Наверх" в футере
+  const footerBackToTopButton = document.querySelector('.back-to-top');
+  if (footerBackToTopButton) {
+    footerBackToTopButton.addEventListener('click', () => {
+      smoothScrollToTop();
+    });
+  }
+
+  // ============= SMOOTH SCROLLING =============
+  
+  // Custom smooth scroll to top
+  function smoothScrollToTop() {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
+  }
+  
+  // Override anchor link scrolling with smooth scrolling
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        const offsetTop = targetElement.offsetTop - 50; // Смещение на 50 пикселей вверх
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
+      }
+    });
   });
+  
+  // Скрываем основную кнопку прокрутки при приближении к футеру
+  const footerElement = document.querySelector('footer');
+  if (footerElement) {
+    window.addEventListener('scroll', () => {
+      const footerPosition = footerElement.getBoundingClientRect().top;
+      const windowHeight = window.innerHeight;
+      
+      // Если футер появляется в окне просмотра, скрываем кнопку
+      if (footerPosition < windowHeight * 0.8) {
+        scrollToTopButton.style.opacity = '0';
+      } else if (window.pageYOffset > 300) {
+        // Возвращаем кнопку, если мы не внизу страницы
+        scrollToTopButton.style.opacity = '1';
+      }
+    });
+  }
 
   // ============= SNOW EFFECT =============
   // Create snow container
   const snowContainer = document.createElement('div');
   snowContainer.id = 'snow';
   snowContainer.style.cssText = `
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: -2;
     overflow: hidden;
   `;
   document.body.appendChild(snowContainer);
 
-  // Create snowflakes
+  // Store snowflakes for position updates
+  let snowflakes = [];
+  let documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+                               document.documentElement.clientHeight, document.documentElement.scrollHeight,
+                               document.documentElement.offsetHeight);
+
+  // Create snowflakes with pre-warming
   function createSnowflakes() {
     const snowflakeCount = 150;
+    
+    // Update container height first
+    updateSnowContainerHeight();
     
     for (let i = 0; i < snowflakeCount; i++) {
       const snowflake = document.createElement('div');
       snowflake.innerHTML = '❄';
+      
+      // Randomize properties
+      const size = Math.random() * 25 + 15;
+      const opacity = 0.2 + Math.random() * 0.6; // От 20% до 80%
+      const fallDuration = Math.random() * 20 + 15;
+      // Start falling immediately with minimal delay
+      const fallDelay = Math.random() * 2;
+      
+      // Pre-warm: distribute snowflakes vertically throughout the document
+      const verticalPos = Math.random() * documentHeight;
+      
       snowflake.style.cssText = `
         position: absolute;
-        top: -20px;
-        color: #fff;
-        font-size: ${Math.random() * 10 + 5}px;
-        opacity: ${Math.random() * 0.5 + 0.3};
-        animation: fall ${Math.random() * 10 + 5}s linear infinite;
-        animation-delay: ${Math.random() * 5}s;
+        top: ${verticalPos}px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: ${size}px;
+        opacity: ${opacity};
+        animation: fall ${fallDuration}s linear infinite;
+        animation-delay: -${fallDelay}s;
         left: ${Math.random() * 100}%;
-        text-shadow: 0 0 5px #fff;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        will-change: transform;
       `;
+      
       snowContainer.appendChild(snowflake);
+      snowflakes.push({
+        element: snowflake,
+        initialTop: verticalPos,
+        speed: 1 + Math.random() * 2
+      });
     }
+  }
+
+  // Update snow container height to match document
+  function updateSnowContainerHeight() {
+    documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+                             document.documentElement.clientHeight, document.documentElement.scrollHeight,
+                             document.documentElement.offsetHeight);
+    snowContainer.style.height = documentHeight + 'px';
   }
 
   // Add CSS for snow animation
@@ -210,12 +311,193 @@ document.addEventListener("DOMContentLoaded", () => {
   style.textContent = `
     @keyframes fall {
       to {
-        transform: translateY(105vh) rotate(${Math.random() * 360}deg);
+        transform: translateY(${documentHeight}px) rotate(360deg);
       }
+    }
+    
+    #snow {
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: -2;
+      overflow: hidden;
+    }
+    
+    #snow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
   `;
   document.head.appendChild(style);
 
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    updateSnowContainerHeight();
+  });
+
+  // Функция для проверки количества снежинок в верхней части экрана
+  function checkAndAddSnowflakes() {
+    const topSectionHeight = 200; // Высота верхней части экрана в пикселях
+    const minSnowflakes = 5; // Минимальное количество снежинок в верхней части
+    
+    // Подсчитываем количество снежинок в верхней части экрана
+    let snowflakesInTop = 0;
+    const snowflakes = document.querySelectorAll('#snow > div');
+    
+    snowflakes.forEach(snowflake => {
+      const topPosition = parseFloat(snowflake.style.top);
+      if (topPosition <= topSectionHeight) {
+        snowflakesInTop++;
+      }
+    });
+    
+    // Если снежинок недостаточно, добавляем новые
+    if (snowflakesInTop < minSnowflakes) {
+      const snowflakesToAdd = minSnowflakes - snowflakesInTop;
+      addSnowflakes(snowflakesToAdd);
+    }
+  }
+  
+  // Функция для добавления новых снежинок
+  function addSnowflakes(count) {
+    for (let i = 0; i < count; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.innerHTML = '❄';
+      
+      // Randomize properties
+      const size = Math.random() * 25 + 15;
+      const opacity = 0.2 + Math.random() * 0.6; // От 20% до 80%
+      const fallDuration = Math.random() * 20 + 15;
+      const fallDelay = Math.random() * 2;
+      
+      // Размещаем снежинку за пределами экрана сверху
+      const verticalPos = -100 - Math.random() * 200; // От -100 до -300 пикселей
+      
+      snowflake.style.cssText = `
+        position: absolute;
+        top: ${verticalPos}px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: ${size}px;
+        opacity: ${opacity};
+        animation: fall ${fallDuration}s linear infinite;
+        animation-delay: -${fallDelay}s;
+        left: ${Math.random() * 100}%;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        will-change: transform;
+      `;
+      
+      snowContainer.appendChild(snowflake);
+    }
+  }
+
+  // Функция для создания снежинок с анимацией появления
+  function createSnowflakesWithFadeIn(count) {
+    for (let i = 0; i < count; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.innerHTML = '❄';
+      
+      // Randomize properties
+      const size = Math.random() * 25 + 15;
+      const opacity = 0.2 + Math.random() * 0.6; // От 20% до 80%
+      const fallDuration = Math.random() * 20 + 15;
+      const fallDelay = Math.random() * 2;
+      
+      // Размещаем снежинку за пределами экрана сверху
+      const verticalPos = -300 - Math.random() * 200; // От -300 до -500 пикселей
+      
+      snowflake.style.cssText = `
+        position: absolute;
+        top: ${verticalPos}px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: ${size}px;
+        opacity: 0; /* Начинаем с нулевой прозрачности для анимации появления */
+        animation: fall ${fallDuration}s linear infinite, fadeIn 1s ease-in forwards;
+        animation-delay: -${fallDelay}s, 0s; /* Добавляем задержку для анимации появления */
+        left: ${Math.random() * 100}%;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        will-change: transform;
+      `;
+      
+      snowContainer.appendChild(snowflake);
+    }
+  }
+  
+  // Добавляем CSS для анимации появления
+  const fadeInStyle = document.createElement('style');
+  fadeInStyle.textContent = `
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(fadeInStyle);
+  
+  // Функция для создания случайного количества снежинок с анимацией появления
+  function createRandomSnowflakes() {
+    const count = Math.floor(Math.random() * 11) + 5; // Случайное количество от 5 до 15
+    createSnowflakesWithFadeIn(count);
+  }
+  
+  // Создаем снежинки с случайной периодичностью от 2 до 4 секунд
+  function startRandomSnowfall() {
+    createRandomSnowflakes();
+    const randomInterval = (Math.random() * 2 + 2) * 1000; // Случайный интервал от 2 до 4 секунд
+    setTimeout(startRandomSnowfall, randomInterval);
+  }
+  
+  // Запускаем создание снежинок
+  startRandomSnowfall();
+
   // Initialize snow effect
   createSnowflakes();
+  
+  // Функция для автоматического решения проблем с footer
+  function fixFooterIssues() {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+    
+    // Убедимся, что footer всегда внизу
+    const body = document.body;
+    const html = document.documentElement;
+    const windowHeight = window.innerHeight;
+    const bodyHeight = Math.max(
+      body.scrollHeight, body.offsetHeight,
+      html.clientHeight, html.scrollHeight, html.offsetHeight
+    );
+    
+    // Если контент меньше высоты окна, добавляем отступ для прижатия footer к низу
+    if (bodyHeight < windowHeight) {
+      const footerHeight = footer.offsetHeight;
+      const extraPadding = windowHeight - bodyHeight;
+      document.querySelector('main').style.paddingBottom = extraPadding + 'px';
+    }
+    
+    // Проверяем и исправляем позиционирование footer
+    const main = document.querySelector('main');
+    if (main) {
+      main.style.flex = '1';
+    }
+    
+    // Убедимся, что body использует flexbox
+    body.style.display = 'flex';
+    body.style.flexDirection = 'column';
+    body.style.minHeight = '100vh';
+  }
+  
+  // Вызываем функцию при загрузке и изменении размера окна
+  window.addEventListener('load', fixFooterIssues);
+  window.addEventListener('resize', fixFooterIssues);
+  
+  // Наблюдаем за изменениями DOM для автоматического исправления
+  const observerConfig = { childList: true, subtree: true };
+  const bodyObserver = new MutationObserver(fixFooterIssues);
+  bodyObserver.observe(document.body, observerConfig);
 });
