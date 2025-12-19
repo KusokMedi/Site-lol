@@ -239,23 +239,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const snowContainer = document.createElement('div');
   snowContainer.id = 'snow';
   snowContainer.style.cssText = `
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     pointer-events: none;
     z-index: -2;
     overflow: hidden;
   `;
   document.body.appendChild(snowContainer);
 
+  // Store snowflakes for position updates
+  let snowflakes = [];
+  let documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+                               document.documentElement.clientHeight, document.documentElement.scrollHeight,
+                               document.documentElement.offsetHeight);
+
   // Create snowflakes with pre-warming
   function createSnowflakes() {
-    // Clear existing snowflakes
-    snowContainer.innerHTML = '';
-    
     const snowflakeCount = 150;
+    
+    // Update container height first
+    updateSnowContainerHeight();
     
     for (let i = 0; i < snowflakeCount; i++) {
       const snowflake = document.createElement('div');
@@ -263,16 +268,19 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Randomize properties
       const size = Math.random() * 25 + 15;
-      const opacity = 0.2 + Math.random() * 0.6; // От 20% до 80%
+      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.75
+        ? 0.2 + Math.random() * 0.1  // 20% до 30%
+        : 0.31 + Math.random() * 0.49; // 31% до 80%
       const fallDuration = Math.random() * 20 + 15;
       // Start falling immediately with minimal delay
       const fallDelay = Math.random() * 2;
       
-      // Pre-warm: distribute snowflakes vertically throughout the viewport
-      const verticalPos = Math.random() * window.innerHeight;
+      // Pre-warm: distribute snowflakes vertically throughout the document
+      const verticalPos = Math.random() * documentHeight;
       
       snowflake.style.cssText = `
-        position: fixed;
+        position: absolute;
         top: ${verticalPos}px;
         color: rgba(255, 255, 255, 0.8);
         font-size: ${size}px;
@@ -282,11 +290,23 @@ document.addEventListener("DOMContentLoaded", () => {
         left: ${Math.random() * 100}%;
         text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         will-change: transform;
-        z-index: -1;
       `;
       
       snowContainer.appendChild(snowflake);
+      snowflakes.push({
+        element: snowflake,
+        initialTop: verticalPos,
+        speed: 1 + Math.random() * 2
+      });
     }
+  }
+
+  // Update snow container height to match document
+  function updateSnowContainerHeight() {
+    documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight,
+                             document.documentElement.clientHeight, document.documentElement.scrollHeight,
+                             document.documentElement.offsetHeight);
+    snowContainer.style.height = documentHeight + 'px';
   }
 
   // Add CSS for snow animation
@@ -294,33 +314,159 @@ document.addEventListener("DOMContentLoaded", () => {
   style.textContent = `
     @keyframes fall {
       to {
-        transform: translateY(100vh) rotate(360deg);
+        transform: translateY(${documentHeight}px) rotate(360deg);
       }
     }
     
     #snow {
-      position: fixed !important;
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: -2;
+      overflow: hidden;
+    }
+    
+    #snow::before {
+      content: '';
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      z-index: -2;
-      overflow: hidden;
+      z-index: -1;
     }
   `;
   document.head.appendChild(style);
 
   // Handle window resize
   window.addEventListener('resize', () => {
-    createSnowflakes();
+    updateSnowContainerHeight();
   });
+
+  // Функция для проверки количества снежинок в верхней части экрана
+  function checkAndAddSnowflakes() {
+    const topSectionHeight = 200; // Высота верхней части экрана в пикселях
+    const minSnowflakes = 5; // Минимальное количество снежинок в верхней части
+    
+    // Подсчитываем количество снежинок в верхней части экрана
+    let snowflakesInTop = 0;
+    const snowflakes = document.querySelectorAll('#snow > div');
+    
+    snowflakes.forEach(snowflake => {
+      const topPosition = parseFloat(snowflake.style.top);
+      if (topPosition <= topSectionHeight) {
+        snowflakesInTop++;
+      }
+    });
+    
+    // Если снежинок недостаточно, добавляем новые
+    if (snowflakesInTop < minSnowflakes) {
+      const snowflakesToAdd = minSnowflakes - snowflakesInTop;
+      addSnowflakes(snowflakesToAdd);
+    }
+  }
+  
+  // Функция для добавления новых снежинок
+  function addSnowflakes(count) {
+    for (let i = 0; i < count; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.innerHTML = '❄';
+      
+      // Randomize properties
+      const size = Math.random() * 25 + 15;
+      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.75
+        ? 0.2 + Math.random() * 0.1  // 20% до 30%
+        : 0.31 + Math.random() * 0.49; // 31% до 80%
+      const fallDuration = Math.random() * 20 + 15;
+      const fallDelay = Math.random() * 2;
+      
+      // Размещаем снежинку за пределами экрана сверху
+      const verticalPos = -100 - Math.random() * 200; // От -100 до -300 пикселей
+      
+      snowflake.style.cssText = `
+        position: absolute;
+        top: ${verticalPos}px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: ${size}px;
+        opacity: ${opacity};
+        animation: fall ${fallDuration}s linear infinite;
+        animation-delay: -${fallDelay}s;
+        left: ${Math.random() * 100}%;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        will-change: transform;
+      `;
+      
+      snowContainer.appendChild(snowflake);
+    }
+  }
+
+  // Функция для создания снежинок с анимацией появления
+  function createSnowflakesWithFadeIn(count) {
+    for (let i = 0; i < count; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.innerHTML = '❄';
+      
+      // Randomize properties
+      const size = Math.random() * 25 + 15;
+      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.75
+        ? 0.2 + Math.random() * 0.1  // 20% до 30%
+        : 0.31 + Math.random() * 0.49; // 31% до 80%
+      const fallDuration = Math.random() * 20 + 15;
+      const fallDelay = Math.random() * 2;
+      
+      // Размещаем снежинку за пределами экрана сверху
+      const verticalPos = -300 - Math.random() * 200; // От -300 до -500 пикселей
+      
+      snowflake.style.cssText = `
+        position: absolute;
+        top: ${verticalPos}px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: ${size}px;
+        opacity: 0; /* Начинаем с нулевой прозрачности для анимации появления */
+        animation: fall ${fallDuration}s linear infinite, fadeIn 1s ease-in forwards;
+        animation-delay: -${fallDelay}s, 0s; /* Добавляем задержку для анимации появления */
+        left: ${Math.random() * 100}%;
+        text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        will-change: transform;
+      `;
+      
+      snowContainer.appendChild(snowflake);
+    }
+  }
+  
+  // Добавляем CSS для анимации появления
+  const fadeInStyle = document.createElement('style');
+  fadeInStyle.textContent = `
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  `;
+  document.head.appendChild(fadeInStyle);
+  
+  // Функция для создания случайного количества снежинок с анимацией появления
+  function createRandomSnowflakes() {
+    const count = Math.floor(Math.random() * 11) + 5; // Случайное количество от 5 до 15
+    createSnowflakesWithFadeIn(count);
+  }
+  
+  // Создаем снежинки с случайной периодичностью от 2 до 4 секунд
+  function startRandomSnowfall() {
+    createRandomSnowflakes();
+    const randomInterval = (Math.random() * 2 + 2) * 1000; // Случайный интервал от 2 до 4 секунд
+    setTimeout(startRandomSnowfall, randomInterval);
+  }
+  
+  // Запускаем создание снежинок
+  startRandomSnowfall();
 
   // Initialize snow effect
   createSnowflakes();
-  
-  // Recreate snowflakes periodically to ensure they keep falling
-  setInterval(createSnowflakes, 30000);
   
   // Функция для автоматического решения проблем с footer
   function fixFooterIssues() {
