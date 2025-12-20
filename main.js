@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Create snowflakes with pre-warming
   function createSnowflakes() {
-    const snowflakeCount = 150;
+    const snowflakeCount = 450;
     
     // Update container height first
     updateSnowContainerHeight();
@@ -268,8 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Randomize properties
       const size = Math.random() * 25 + 15;
-      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
-      const opacity = Math.random() < 0.75
+      // 95% шанс на 20-30% opacity, 5% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.95
         ? 0.2 + Math.random() * 0.1  // 20% до 30%
         : 0.31 + Math.random() * 0.49; // 31% до 80%
       const fallDuration = Math.random() * 20 + 15;
@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
         text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         will-change: transform;
       `;
-      
+
       snowContainer.appendChild(snowflake);
       snowflakes.push({
         element: snowflake,
@@ -317,7 +317,18 @@ document.addEventListener("DOMContentLoaded", () => {
         transform: translateY(${documentHeight}px) rotate(360deg);
       }
     }
-    
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .fade-out {
+      opacity: 0 !important;
+      transition: opacity 2s ease-out;
+    }
+
     #snow {
       position: absolute !important;
       top: 0;
@@ -327,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
       z-index: -2;
       overflow: hidden;
     }
-    
+
     #snow::before {
       content: '';
       position: absolute;
@@ -349,21 +360,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkAndAddSnowflakes() {
     const topSectionHeight = 200; // Высота верхней части экрана в пикселях
     const minSnowflakes = 5; // Минимальное количество снежинок в верхней части
-    
+
     // Подсчитываем количество снежинок в верхней части экрана
     let snowflakesInTop = 0;
     const snowflakes = document.querySelectorAll('#snow > div');
-    
+
     snowflakes.forEach(snowflake => {
       const topPosition = parseFloat(snowflake.style.top);
       if (topPosition <= topSectionHeight) {
         snowflakesInTop++;
       }
     });
-    
-    // Если снежинок недостаточно, добавляем новые
-    if (snowflakesInTop < minSnowflakes) {
-      const snowflakesToAdd = minSnowflakes - snowflakesInTop;
+
+    // Если снежинок недостаточно и общее количество не превышает лимит, добавляем новые
+    if (snowflakesInTop < minSnowflakes && snowflakes.length < 1000) {
+      const snowflakesToAdd = Math.min(minSnowflakes - snowflakesInTop, 1000 - snowflakes.length);
       addSnowflakes(snowflakesToAdd);
     }
   }
@@ -376,8 +387,8 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Randomize properties
       const size = Math.random() * 25 + 15;
-      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
-      const opacity = Math.random() < 0.75
+      // 95% шанс на 20-30% opacity, 5% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.95
         ? 0.2 + Math.random() * 0.1  // 20% до 30%
         : 0.31 + Math.random() * 0.49; // 31% до 80%
       const fallDuration = Math.random() * 20 + 15;
@@ -398,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
         text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         will-change: transform;
       `;
-      
+
       snowContainer.appendChild(snowflake);
     }
   }
@@ -411,8 +422,8 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Randomize properties
       const size = Math.random() * 25 + 15;
-      // 75% шанс на 20-30% opacity, 25% шанс на 31-80% opacity
-      const opacity = Math.random() < 0.75
+      // 95% шанс на 20-30% opacity, 5% шанс на 31-80% opacity
+      const opacity = Math.random() < 0.95
         ? 0.2 + Math.random() * 0.1  // 20% до 30%
         : 0.31 + Math.random() * 0.49; // 31% до 80%
       const fallDuration = Math.random() * 20 + 15;
@@ -427,13 +438,13 @@ document.addEventListener("DOMContentLoaded", () => {
         color: rgba(255, 255, 255, 0.8);
         font-size: ${size}px;
         opacity: 0; /* Начинаем с нулевой прозрачности для анимации появления */
-        animation: fall ${fallDuration}s linear infinite, fadeIn 1s ease-in forwards;
+        animation: fall ${fallDuration}s linear infinite, fadeIn 2s ease-in forwards;
         animation-delay: -${fallDelay}s, 0s; /* Добавляем задержку для анимации появления */
         left: ${Math.random() * 100}%;
         text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
         will-change: transform;
       `;
-      
+
       snowContainer.appendChild(snowflake);
     }
   }
@@ -451,23 +462,49 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Функция для создания случайного количества снежинок с анимацией появления
   function createRandomSnowflakes() {
-    const count = Math.floor(Math.random() * 11) + 5; // Случайное количество от 5 до 15
+    const count = Math.floor(Math.random() * 31) + 15; // Случайное количество от 15 до 45
     createSnowflakesWithFadeIn(count);
   }
   
-  // Создаем снежинки с случайной периодичностью от 2 до 4 секунд
+  // Создаем снежинки с случайной периодичностью от 1 до 3 секунд
   function startRandomSnowfall() {
-    createRandomSnowflakes();
-    const randomInterval = (Math.random() * 2 + 2) * 1000; // Случайный интервал от 2 до 4 секунд
+    // Проверяем общее количество снежинок, чтобы избежать перегрузки
+    const currentSnowflakes = document.querySelectorAll('#snow > div').length;
+    if (currentSnowflakes < 1000) {
+      createRandomSnowflakes();
+    }
+    const randomInterval = (Math.random() * 2 + 1) * 1000; // Случайный интервал от 1 до 3 секунд
     setTimeout(startRandomSnowfall, randomInterval);
   }
   
   // Запускаем создание снежинок
   startRandomSnowfall();
 
+  // Function to update snowflakes and remove the lowest one if too many
+  function updateSnowflakes() {
+    const snowflakes = document.querySelectorAll('#snow > div');
+    if (snowflakes.length > 1000) {
+      let lowest = null;
+      let maxBottom = -Infinity;
+      snowflakes.forEach(snowflake => {
+        const rect = snowflake.getBoundingClientRect();
+        if (rect.bottom > maxBottom) {
+          maxBottom = rect.bottom;
+          lowest = snowflake;
+        }
+      });
+      if (lowest) {
+        lowest.classList.add('fade-out');
+        setTimeout(() => lowest.remove(), 2000);
+      }
+    }
+    requestAnimationFrame(updateSnowflakes);
+  }
+
   // Initialize snow effect
   createSnowflakes();
-  
+  updateSnowflakes();
+
   // Функция для автоматического решения проблем с footer
   function fixFooterIssues() {
     const footer = document.querySelector('footer');
