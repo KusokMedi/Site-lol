@@ -1,130 +1,95 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KusokMedi</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="icon.png" type="image/png">
-  <script defer src="main.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Digital Creator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <img src="resources/logo.gif" alt="Логотип" class="logo">
-    <h1>Матвей</h1>
-    <p class="subtitle">Python-разработчик • Создаю ботов, скрипты и сайты</p>
-    <div class="language-switcher">
-      <button id="lang-ru" class="lang-btn active">RU</button>
-      <button id="lang-en" class="lang-btn">EN</button>
-    </div>
-  </header>
-
-  <main class="container">
-    <section id="hero" class="fade-in">
-      <h2>Привет! Я Матвей</h2>
-      <p>Я - Python-разработчик, специализирующийся на создании Telegram-ботов, различных скриптов и автоматизаций. Также могу разрабатывать сайты (фронтенд и бэкенд).</p>
-      <p>Работаю над любыми задачами - от простых инструментов до сложных решений. Если нужно, обсудим индивидуальные проекты не только на Python.</p>
-    </section>
-
-    <section id="portfolio" class="fade-in">
-      <h2>Портфолио</h2>
-      <div class="projects">
-        <div class="project">
-          <h3>Telegram-боты</h3>
-          <p>Разработка автоматизированных ботов для различных задач: уведомления, управление контентом, интеграции с API.</p>
+    <header class="glass-nav">
+        <div class="logo-container">
+            <img src="resources/logo.gif" alt="My Logo" class="logo">
+            <span class="logo-text">Dev<span class="neon-text">Craft</span></span>
         </div>
-        <div class="project">
-          <h3>Скрипты и автоматизации</h3>
-          <p>Создание скриптов для обработки данных, веб-скрапинга, автоматизации рутинных процессов.</p>
-        </div>
-        <div class="project">
-          <h3>Веб-разработка</h3>
-          <p>Фронтенд и бэкенд решения, от лендингов до сложных веб-приложений.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contacts" class="fade-in">
-      <h2>Контакты</h2>
-      <p>Свяжитесь со мной для обсуждения проектов</p>
-      <div class="contact-links">
-        <a href="https://t.me/kusokmedi52" target="_blank" class="contact-link">
-          <img src="resources/tg-logo-nobg.png" alt="Telegram">
-          <span>Telegram</span>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#projects">Проекты</a></li>
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </nav>
+        <a href="https://github.com/твоя-ссылка" target="_blank" class="btn btn-github glass-effect">
+            GitHub
         </a>
-        <a href="https://github.com/kusokmedi" target="_blank" class="contact-link">
-          <img src="resources/github.png" alt="GitHub">
-          <span>GitHub</span>
-        </a>
-        <a href="https://discord.gg/RSVEzBBbgq" target="_blank" class="contact-link">
-          <img src="resources/discord-logo.svg" alt="Discord">
-          <span>Discord</span>
-        </a>
-        <a href="mailto:matvejs.stepanovs116@gmail.com" class="contact-link">
-          <img src="resources/Gmail_icon.png" alt="Email">
-          <span>Gmail</span>
-        </a>
-        <a href="https://youtube.com/@kusokmedi" target="_blank" class="contact-link">
-          <img src="resources/yt-logo.png" alt="YouTube">
-          <span>YouTube</span>
-        </a>
-      </div>
-    </section>
-  </main>
+    </header>
 
-  <footer>
-    <div class="footer-content">
-      <div class="footer-top">
-        <div class="social-links">
-          <a href="https://t.me/kusokmedi52" target="_blank" class="social-link">
-            <img src="resources/tg-logo-nobg.png" alt="Telegram">
-          </a>
-          <a href="https://github.com/kusokmedi" target="_blank" class="social-link">
-            <img src="resources/github.png" alt="GitHub">
-          </a>
-          <a href="https://discord.gg/RSVEzBBbgq" target="_blank" class="social-link">
-            <img src="resources/discord-logo.svg" alt="Discord">
-          </a>
-          <a href="mailto:matvejs.stepanovs116@gmail.com" class="social-link">
-            <img src="resources/Gmail_icon.png" alt="Email">
-          </a>
-          <a href="https://youtube.com/@kusokmedi" target="_blank" class="social-link">
-            <img src="resources/yt-logo.png" alt="YouTube">
-          </a>
+    <main>
+        <section id="hero" class="hidden">
+            <div class="hero-content">
+                <h1>Создаю цифровые <span class="neon-text">миры</span> <br>и сложные системы</h1>
+                <p class="usp">От кастомных серверов Minecraft до умных Telegram-ботов и современных веб-приложений. Превращаю идеи в премиальные продукты.</p>
+                <a href="#contacts" class="btn btn-primary neon-box">Заказать проект</a>
+            </div>
+        </section>
+
+        <section id="projects" class="hidden">
+            <h2 class="section-title">Избранные проекты</h2>
+            <div class="projects-grid">
+                <div class="card glass-effect">
+                    <div class="card-content">
+                        <h3>🌍 Minecraft Server</h3>
+                        <p>Уникальный мир с кастомными механиками, собственной экономикой и стабильным онлайном. Оптимизированное ядро и самописные плагины.</p>
+                        <a href="#" class="btn btn-outline">Присоединиться</a>
+                    </div>
+                </div>
+                <div class="card glass-effect">
+                    <div class="card-content">
+                        <h3>🎮 Discord Community</h3>
+                        <p>Крупный сервер с настроенной системой ролей, автоматизацией через ботов и активным комьюнити. Безопасность и вовлеченность на высшем уровне.</p>
+                        <a href="#" class="btn btn-outline">Зайти на сервер</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="hidden">
+            <h2 class="section-title">Моя экспертиза</h2>
+            <div class="services-grid">
+                <div class="service-item glass-effect">
+                    <div class="icon">🤖</div>
+                    <h3>Telegram Боты</h3>
+                    <p>Разработка сложных ботов для бизнеса: магазины, интеграции с API, парсинг и автоматизация.</p>
+                </div>
+                <div class="service-item glass-effect">
+                    <div class="icon">💻</div>
+                    <h3>Web-разработка</h3>
+                    <p>Создание современных, быстрых и адаптивных сайтов с продуманным UI/UX дизайном.</p>
+                </div>
+                <div class="service-item glass-effect">
+                    <div class="icon">⚙️</div>
+                    <h3>Администрирование</h3>
+                    <p>Настройка серверов (Linux), деплой проектов, обеспечение безопасности и отказоустойчивости.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacts" class="hidden">
+        <div class="contact-panel glass-effect">
+            <h2>Свяжитесь со мной</h2>
+            <p>Готов обсудить ваш следующий проект. Выберите удобный способ связи:</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon" title="Telegram"><img src="resources/tg-logo-nobg.png" alt="Telegram"></a>
+                <a href="#" class="social-icon" title="GitHub"><img src="resources/github.png" alt="GitHub"></a>
+                <a href="#" class="social-icon" title="Discord"><img src="resources/discord-logo.svg" alt="Discord"></a>
+                <a href="#" class="social-icon" title="Gmail"><img src="resources/Gmail_icon.png" alt="Gmail"></a>
+                <a href="#" class="social-icon" title="YouTube"><img src="resources/yt-logo.png" alt="YouTube"></a>
+            </div>
         </div>
-        <div class="footer-info">
-          <h3>KusokMedi</h3>
-          <p>Python-разработчик</p>
-        </div>
-        <button class="back-to-top" aria-label="Наверх">↑</button>
-      </div>
-      
-      <div class="footer-middle">
-        <div class="quick-links">
-          <h4>Навигация</h4>
-          <ul>
-            <li><a href="#portfolio">Портфолио</a></li>
-            <li><a href="#contacts">Контакты</a></li>
-            <li><a href="#hero">О себе</a></li>
-          </ul>
-        </div>
-      </div>
-      
-      <div class="footer-bottom">
-        <p class="copyright" data-lang="copyright">© 2025 KusokMedi. Все права защищены.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <p>
-
-  </p>
-  <p>
-
-  </p>
-  <p>
-    
-  </p>
-
+    <script src="main.js"></script>
 </body>
 </html>
