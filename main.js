@@ -6,18 +6,52 @@ const bgImages = [
     'bgs/photo_4_2026-04-26_16-16-29.jpg'
 ];
 
+let currentBgIndex = -1;
+
+function getRandomBgIndex() {
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * bgImages.length);
+    } while (newIndex === currentBgIndex);
+    return newIndex;
+}
+
 function setRandomBg() {
-    const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
+    currentBgIndex = getRandomBgIndex();
+    const randomImage = bgImages[currentBgIndex];
     const hero = document.querySelector('.hero');
-    hero.style.opacity = '0';
     
+    // Создаем overlay для плавной смены
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.inset = '0';
+    overlay.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
+    overlay.style.backgroundPosition = 'center';
+    overlay.style.backgroundSize = window.innerWidth <= 768 ? 'cover' : '125%';
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 1.5s ease-in-out';
+    overlay.style.zIndex = '0';
+    
+    hero.appendChild(overlay);
+    
+    // Запускаем fade in
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+    });
+    
+    // После завершения анимации меняем основной фон и удаляем overlay
     setTimeout(() => {
         hero.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
-        hero.style.backgroundSize = '125%';
         hero.style.backgroundPosition = 'center';
-        hero.style.transition = 'opacity 1s ease, background-size 0.3s ease';
-        hero.style.opacity = '1';
-    }, 100);
+        hero.style.backgroundSize = window.innerWidth <= 768 ? 'cover' : '125%';
+        overlay.remove();
+    }, 1500);
+}
+
+function startBgRotation() {
+    setInterval(() => {
+        setRandomBg();
+    }, Math.random() * 5000 + 5000); // 5-10 секунд
 }
 
 // Logo click to scroll to top
@@ -120,6 +154,7 @@ window.addEventListener('load', () => {
     }, 1000);
     
     setRandomBg();
+    startBgRotation();
     initLogo();
     animateLogo();
 });

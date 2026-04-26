@@ -392,9 +392,10 @@ section {
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 25px;
+    justify-content: center;
 }
 
 .glass-card {
@@ -403,7 +404,8 @@ section {
     border-radius: 20px;
     padding: 40px;
     transition: transform 0.3s ease, border-color 0.3s ease;
-    height: 100%;
+    flex: 1 1 320px;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
 }
@@ -431,17 +433,6 @@ section {
     line-height: 1.7;
     flex-grow: 1;
     margin-bottom: 20px;
-}
-
-.bot-feature {
-    font-size: 0.85rem;
-    background: rgba(255, 149, 0, 0.1);
-    color: var(--accent);
-    padding: 8px 14px;
-    border-radius: 8px;
-    display: inline-block;
-    margin-bottom: 20px;
-    border: 1px solid rgba(255, 149, 0, 0.3);
 }
 
 .card-btn {
@@ -723,6 +714,10 @@ footer {
         font-size: 1.2rem;
         padding: 15px 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .hero {
+        background-size: cover !important;
     }
     
     .hero h1 { font-size: 3.5rem; }
