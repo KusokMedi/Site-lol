@@ -1,4 +1,4 @@
-// Enhanced BG with Fallbacks and Auto-Rotation
+// Enhanced BG with Fallbacks - STATIC IMAGE
 const bgContainer = document.getElementById('heroBg');
 const bgImages = [
     '/bgs/photo_1_2026-04-26_16-16-29.jpg',
@@ -11,9 +11,6 @@ const fallbacks = [
     'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=1932',
     'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070'
 ];
-
-let currentBgIndex = 0;
-let bgRotationInterval = null;
 
 function getRandomBg() {
     return bgImages[Math.floor(Math.random() * bgImages.length)];
@@ -41,14 +38,6 @@ function setBg(imagePath = null) {
     }, 400);
 }
 
-function startBgRotation(interval = 15000) {
-    if (bgRotationInterval) clearInterval(bgRotationInterval);
-    
-    bgRotationInterval = setInterval(() => {
-        setBg();
-    }, interval);
-}
-
 // Orb following mouse with smooth easing
 const orb = document.getElementById('orb');
 let orbX = 0, orbY = 0;
@@ -68,7 +57,16 @@ function animateOrb() {
 
 animateOrb();
 
-// Enhanced Logo Particles with better visual
+// Logo click to scroll to top
+const logoWrapper = document.querySelector('.logo-wrapper');
+logoWrapper.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+        duration: 1000
+    });
+});
 const canvas = document.getElementById("logoCanvas");
 const ctx = canvas.getContext("2d");
 let particles = [];
@@ -198,8 +196,7 @@ window.addEventListener('load', () => {
     // Create background particles
     createBgParticles();
     
-    // Start background rotation every 15 seconds
-    startBgRotation(15000);
+    // NOTE: BG rotation disabled - keeping static image
 });
 
 // Reinitialize logo on window resize
