@@ -121,9 +121,10 @@ nav {
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(2, 4, 8, 0.4);
-    backdrop-filter: blur(30px);
-    border-bottom: 1px solid var(--glass-border);
+    background: rgba(2, 4, 8, 0.3);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     animation: slideInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -150,8 +151,9 @@ nav {
     height: 42px;
     border-radius: 10px;
     overflow: hidden;
-    background: rgba(0, 212, 255, 0.08);
-    backdrop-filter: blur(10px);
+    background: rgba(0, 212, 255, 0.06);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -269,12 +271,12 @@ nav {
 
 .hero-bg {
     position: absolute;
-    inset: -10%;
+    inset: -25%;
     z-index: -1;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    filter: blur(2px);
+    filter: blur(1px);
     animation: bgZoom 25s ease-in-out infinite, bgFadeIn 2s ease-out;
 }
 
@@ -367,10 +369,11 @@ nav {
 .btn:hover::before { opacity: 1; }
 
 .btn-sec { 
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.06);
     color: #fff;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
 }
 
 .btn-sec:hover { 
@@ -430,9 +433,9 @@ section {
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 28px;
     padding: 40px;
@@ -454,11 +457,11 @@ section {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
     opacity: 0;
     transition: opacity 0.6s;
     z-index: 0;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(30px);
 }
 
 .glass-card > * {
@@ -504,14 +507,15 @@ section {
 
 .bot-feature {
     font-size: 0.85rem;
-    background: rgba(0, 212, 255, 0.1);
+    background: rgba(0, 212, 255, 0.06);
     color: var(--accent);
     padding: 8px 14px;
     border-radius: 8px;
     display: inline-block;
     margin-bottom: 20px;
-    border: 1px solid rgba(0, 212, 255, 0.25);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     animation: fadeIn 1s ease-out 0.5s both;
 }
 
@@ -537,13 +541,13 @@ section {
 
 /* --- CTA --- */
 .cta-box {
-    background: rgba(0, 212, 255, 0.03);
+    background: rgba(0, 212, 255, 0.02);
     border-radius: 40px;
     padding: 80px 40px;
     text-align: center;
-    border: 1px solid rgba(0, 212, 255, 0.15);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    backdrop-filter: blur(60px);
+    -webkit-backdrop-filter: blur(60px);
     animation: fadeInScale 0.8s ease-out both;
     position: relative;
     overflow: hidden;
@@ -610,10 +614,11 @@ section {
 /* --- Footer (Updated) --- */
 footer {
     padding: 80px 20px;
-    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    border-top: 1px solid rgba(0, 212, 255, 0.08);
     position: relative;
     background: linear-gradient(to top, rgba(0, 212, 255, 0.03), transparent);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
     animation: fadeInUp 0.8s ease-out both;
 }
 
@@ -725,7 +730,7 @@ footer {
 .copy-container {
     margin-top: 40px;
     padding-top: 25px;
-    border-top: 1px solid rgba(0, 212, 255, 0.1);
+    border-top: none;
     width: 100%;
     text-align: center;
     animation: fadeIn 1s ease-out 0.6s both;
