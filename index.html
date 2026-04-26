@@ -3,93 +3,559 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Digital Creator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>KusokMedi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap");
+
+        :root {
+            --bg: #020408;
+            --accent: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.4);
+            --text: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --blur: 16px;
+            --transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Background Effects --- */
+        .bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 50% 50%, #0a1120 0%, #020408 100%);
+        }
+
+        .liquid-orb {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(2, 4, 8, 0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 170px;
+            height: 42px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .logo-wrapper::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 300%;
+            background: conic-gradient(from 0deg, transparent, var(--accent), transparent 30%);
+            animation: rotateBorder 4s linear infinite;
+        }
+
+        .logo-wrapper::after {
+            content: "";
+            position: absolute;
+            inset: 2px;
+            background: #020408;
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        #logoCanvas {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .logo {
+            position: relative;
+            z-index: 3;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .logo span { color: var(--accent); }
+
+        .links { display: flex; gap: 25px; }
+        .links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+        .links a:hover { opacity: 1; color: var(--accent); }
+
+        /* --- Hero --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.2);
+            mask-image: linear-gradient(to bottom, black 80%, transparent);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 12vw, 6rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -3px;
+        }
+        .hero h1 span { color: var(--accent); text-shadow: 0 0 30px var(--accent-glow); }
+
+        .hero p {
+            max-width: 600px;
+            opacity: 0.7;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+
+        .btn-group { display: flex; gap: 15px; }
+        .btn {
+            background: var(--accent);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 800;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 30px var(--accent-glow); }
+        .btn-sec { background: var(--glass); color: #fff; border: 1px solid var(--glass-border); }
+        .btn-sec:hover { background: rgba(255,255,255,0.1); }
+
+        /* --- Sections Structure --- */
+        section {
+            max-width: 1100px;
+            margin: 120px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-header h2 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 10px; }
+        .line { width: 50px; height: 4px; background: var(--accent); margin: 0 auto; border-radius: 10px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(var(--blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px;
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .glass-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .glass-card i { font-size: 3rem; color: var(--accent); margin-bottom: 25px; display: block; }
+        .glass-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
+        .glass-card p { opacity: 0.6; font-size: 1rem; line-height: 1.7; flex-grow: 1; margin-bottom: 20px; }
+
+        .bot-feature {
+            font-size: 0.85rem;
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .card-btn {
+            background: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            text-align: center;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .card-btn:hover { filter: brightness(1.1); box-shadow: 0 5px 15px var(--accent-glow); }
+
+        /* --- Projects Image Styles (Optional) --- */
+        .work-card {
+            position: relative;
+            border-radius: 28px;
+            overflow: hidden;
+            height: 250px;
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+        .work-card img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); transition: 0.5s; }
+        .work-card:hover img { transform: scale(1.1); filter: brightness(0.7); }
+        .work-info {
+            position: absolute;
+            bottom: 0; left: 0; padding: 25px;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        /* --- CTA --- */
+        .cta-box {
+            background: linear-gradient(145deg, rgba(0,212,255,0.05), rgba(0,0,0,0.5));
+            border-radius: 40px;
+            padding: 80px 40px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(var(--blur));
+        }
+        .tg-btn {
+            background: #229ED9;
+            color: #fff;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+            margin-top: 25px;
+        }
+        .tg-btn:hover { transform: scale(1.05); box-shadow: 0 10px 25px rgba(34, 158, 217, 0.4); }
+
+        /* --- Footer (Updated) --- */
+        footer {
+            padding: 80px 20px;
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+            background: linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.02));
+        }
+
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .footer-logo { 
+            font-size: 1.8rem;
+            font-weight: 800; 
+            letter-spacing: 4px; 
+            text-transform: uppercase;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .footer-nav {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+        .footer-nav a:hover { opacity: 1; color: var(--accent); }
+
+        .socials { display: flex; justify-content: center; gap: 25px; }
+        .socials a { 
+            background: var(--glass);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: #fff; 
+            font-size: 1.4rem; 
+            border: 1px solid var(--glass-border);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .socials a:hover { 
+            transform: translateY(-10px);
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .copy-container {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+            text-align: center;
+        }
+
+        .copy { font-size: 0.75rem; opacity: 0.2; text-transform: uppercase; letter-spacing: 2px; }
+
+        @keyframes rotateBorder { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .links { display: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .grid { grid-template-columns: 1fr; }
+            .footer-nav { gap: 20px; }
+        }
+    </style>
 </head>
 <body>
-    <header class="glass-nav">
-        <div class="logo-container">
-            <img src="resources/logo.gif" alt="My Logo" class="logo">
-            <span class="logo-text">Dev<span class="neon-text">Craft</span></span>
+
+<div class="bg-container">
+    <div id="orb" class="liquid-orb"></div>
+</div>
+
+<nav>
+    <div class="nav-content">
+        <div class="logo-wrapper">
+            <canvas id="logoCanvas"></canvas>
+            <a href="#" class="logo">Kusok<span>Medi</span></a>
         </div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#projects">Проекты</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#contacts">Контакты</a></li>
-            </ul>
-        </nav>
-        <a href="https://github.com/твоя-ссылка" target="_blank" class="btn btn-github glass-effect">
-            GitHub
+        <div class="links">
+            <a href="#skills">Навыки</a>
+            <a href="#projects">Проекты</a>
+            <a href="https://discord.gg/RSVEzBBbgq" target="_blank">Discord</a>
+            <a href="https://t.me/KusokMedi52" target="_blank">Telegram</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <div id="heroBg" class="hero-bg"></div>
+    <h1>Kusok<span>Medi.</span></h1>
+    <p>Создание Minecraft серверов и автоматизация на Python. Быстро, качественно и с вниманием к деталям.</p>
+    <div class="btn-group">
+        <a href="#discuss" class="btn">Начать проект</a>
+        <a href="https://discord.gg/RSVEzBBbgq" target="_blank" class="btn btn-sec"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+</header>
+
+<section id="skills">
+    <div class="section-header">
+        <h2>Что я делаю ⚡</h2>
+        <div class="line"></div>
+    </div>
+    <div class="grid">
+        <div class="glass-card">
+            <i class="fas fa-cubes"></i>
+            <h3>Minecraft Servers</h3>
+            <p>Полная настройка серверной части: от выбора ядра до тонкой оптимизации производительности и настройки игровых механик.</p>
+        </div>
+        <div class="glass-card">
+            <i class="fab fa-python"></i>
+            <h3>Python & Bots</h3>
+            <p>Разработка продвинутых Telegram ботов и скриптов для автоматизации любых процессов и работы с данными.</p>
+        </div>
+        <div class="glass-card">
+            <i class="fas fa-code"></i>
+            <h3>Web Interfaces</h3>
+            <p>Верстка современных адаптивных сайтов с эффектами стекла и плавными анимациями для вашего бизнеса или проекта.</p>
+        </div>
+    </div>
+</section>
+
+<section id="projects">
+    <div class="section-header">
+        <h2>Проекты 📁</h2>
+        <div class="line"></div>
+    </div>
+    <div class="grid">
+        <!-- AnonSpeak Bot -->
+        <div class="glass-card">
+            <i class="fas fa-user-secret"></i>
+            <h3>AnonSpeak Bot</h3>
+            <p>Уникальный бот для анонимного общения. Позволяет отправлять в одном сообщении до 3 различных типов медиа (стикеры, видео, фото, аудио, кружочки).</p>
+            <div class="bot-feature">🔥 Несколько сообшений в 1 + предпросмотр</div>
+            <a href="https://t.me/AnonSpeakKM_bot" target="_blank" class="card-btn">Запустить бота</a>
+        </div>
+        
+        <!-- KusokMediSaveBot -->
+        <div class="glass-card">
+            <i class="fas fa-download"></i>
+            <h3>KusokMediSaveBot</h3>
+            <p>Мощный инструмент для скачивания видео из TikTok, Instagram, YouTube, Twitter и других платформ. Поддерживает удобный Inline-режим.</p>
+            <div class="bot-feature">⚡ Inline Mode (@KusokMediSaveBot URL)</div>
+            <a href="https://t.me/KusokMediSaveBot" target="_blank" class="card-btn">Начать скачивание</a>
+        </div>
+    </div>
+</section>
+
+<section id="discuss">
+    <div class="cta-box">
+        <h2>Нужен крутой результат? 🤝</h2>
+        <p>Напиши мне, и мы обсудим твою идею. Я помогу реализовать проект любой сложности.</p>
+        <a href="https://t.me/KusokMedi52" target="_blank" class="tg-btn">
+            <i class="fab fa-telegram-plane"></i> Связаться в Telegram
         </a>
-    </header>
+    </div>
+</section>
 
-    <main>
-        <section id="hero" class="hidden">
-            <div class="hero-content">
-                <h1>Создаю цифровые <span class="neon-text">миры</span> <br>и сложные системы</h1>
-                <p class="usp">От кастомных серверов Minecraft до умных Telegram-ботов и современных веб-приложений. Превращаю идеи в премиальные продукты.</p>
-                <a href="#contacts" class="btn btn-primary neon-box">Заказать проект</a>
-            </div>
-        </section>
-
-        <section id="projects" class="hidden">
-            <h2 class="section-title">Избранные проекты</h2>
-            <div class="projects-grid">
-                <div class="card glass-effect">
-                    <div class="card-content">
-                        <h3>🌍 Minecraft Server</h3>
-                        <p>Уникальный мир с кастомными механиками, собственной экономикой и стабильным онлайном. Оптимизированное ядро и самописные плагины.</p>
-                        <a href="#" class="btn btn-outline">Присоединиться</a>
-                    </div>
-                </div>
-                <div class="card glass-effect">
-                    <div class="card-content">
-                        <h3>🎮 Discord Community</h3>
-                        <p>Крупный сервер с настроенной системой ролей, автоматизацией через ботов и активным комьюнити. Безопасность и вовлеченность на высшем уровне.</p>
-                        <a href="#" class="btn btn-outline">Зайти на сервер</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="services" class="hidden">
-            <h2 class="section-title">Моя экспертиза</h2>
-            <div class="services-grid">
-                <div class="service-item glass-effect">
-                    <div class="icon">🤖</div>
-                    <h3>Telegram Боты</h3>
-                    <p>Разработка сложных ботов для бизнеса: магазины, интеграции с API, парсинг и автоматизация.</p>
-                </div>
-                <div class="service-item glass-effect">
-                    <div class="icon">💻</div>
-                    <h3>Web-разработка</h3>
-                    <p>Создание современных, быстрых и адаптивных сайтов с продуманным UI/UX дизайном.</p>
-                </div>
-                <div class="service-item glass-effect">
-                    <div class="icon">⚙️</div>
-                    <h3>Администрирование</h3>
-                    <p>Настройка серверов (Linux), деплой проектов, обеспечение безопасности и отказоустойчивости.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer id="contacts" class="hidden">
-        <div class="contact-panel glass-effect">
-            <h2>Свяжитесь со мной</h2>
-            <p>Готов обсудить ваш следующий проект. Выберите удобный способ связи:</p>
-            <div class="social-icons">
-                <a href="#" class="social-icon" title="Telegram"><img src="resources/tg-logo-nobg.png" alt="Telegram"></a>
-                <a href="#" class="social-icon" title="GitHub"><img src="resources/github.png" alt="GitHub"></a>
-                <a href="#" class="social-icon" title="Discord"><img src="resources/discord-logo.svg" alt="Discord"></a>
-                <a href="#" class="social-icon" title="Gmail"><img src="resources/Gmail_icon.png" alt="Gmail"></a>
-                <a href="#" class="social-icon" title="YouTube"><img src="resources/yt-logo.png" alt="YouTube"></a>
-            </div>
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">Kusok<span>Medi</span></div>
+        
+        <div class="footer-nav">
+            <a href="#skills">Навыки</a>
+            <a href="#projects">Проекты</a>
+            <a href="https://discord.gg/RSVEzBBbgq" target="_blank">Discord Сервер</a>
+            <a href="https://t.me/KusokMedi52" target="_blank">Личка</a>
         </div>
-    </footer>
 
-    <script src="main.js"></script>
+        <div class="socials">
+            <a href="https://t.me/KusokMedi52" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+            <a href="https://discord.gg/RSVEzBBbgq" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+            <a href="https://github.com/kusokmedi" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        </div>
+
+        <div class="copy-container">
+            <p class="copy">Designed & Developed by KusokMedi &copy; 2026. Premium Experience.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Random BG with Fallbacks
+    const bgContainer = document.getElementById('heroBg');
+    const fallbacks = [
+        'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=1932',
+        'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070'
+    ];
+
+    function setBg() {
+        const randomFallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        const testImage = new Image();
+        const customPath = `/bgs/bg${Math.floor(Math.random() * 5) + 1}.jpg`;
+        testImage.src = customPath;
+        testImage.onload = () => { bgContainer.style.backgroundImage = `url(${customPath})`; };
+        testImage.onerror = () => { bgContainer.style.backgroundImage = `url(${randomFallback})`; };
+    }
+
+    // Orb following mouse
+    const orb = document.getElementById('orb');
+    document.addEventListener('mousemove', (e) => {
+        orb.style.transform = `translate(${e.clientX - 250}px, ${e.clientY - 250}px)`;
+    });
+
+    // Logo Particles
+    const canvas = document.getElementById("logoCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function initLogo() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+        particles = [];
+        for (let i = 0; i < 15; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                size: Math.random() * 1.5 + 1
+            });
+        }
+    }
+
+    function animateLogo() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#00d4ff";
+        particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+            ctx.globalAlpha = 0.5;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        requestAnimationFrame(animateLogo);
+    }
+
+    window.onload = () => { setBg(); initLogo(); animateLogo(); };
+    window.onresize = initLogo;
+</script>
+
 </body>
 </html>
