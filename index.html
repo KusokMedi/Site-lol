@@ -10,28 +10,41 @@
 </head>
 <body>
 
-<div class="bg-container">
-    <div class="bg-particles"></div>
-    <div id="orb" class="liquid-orb"></div>
+<div id="loader" class="loader">
+    <div class="loader-content">
+        <img src="resources/logo.gif" alt="Loading...">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
 </div>
+
+<div class="bg-container"></div>
 
 <nav>
     <div class="nav-content">
         <div class="logo-wrapper">
             <canvas id="logoCanvas"></canvas>
+            <img src="resources/logo.gif" alt="Logo" class="logo-gif">
             <a href="#top" class="logo">Kusok<span>Medi</span></a>
         </div>
-        <div class="links">
-            <a href="#skills">Навыки</a>
-            <a href="#projects">Проекты</a>
-            <a href="https://discord.gg/RSVEzBBbgq" target="_blank">Discord</a>
-            <a href="https://t.me/KusokMedi52" target="_blank">Telegram</a>
+        
+        <div class="burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <div class="links" id="menu">
+            <a href="#top"><i class="fas fa-home"></i> Главная</a>
+            <a href="#skills"><i class="fas fa-bolt"></i> Навыки</a>
+            <a href="#projects"><i class="fas fa-folder"></i> Проекты</a>
+            <a href="#footer"><i class="fas fa-handshake"></i> Связаться</a>
         </div>
     </div>
 </nav>
 
 <header class="hero" id="top">
-    <div id="heroBg" class="hero-bg"></div>
     <h1>Kusok<span>Medi</span></h1>
     <p>Разработка ботов и автоматизация процессов на Python. Быстро, качественно и с вниманием к деталям.</p>
     <div class="btn-group">
@@ -90,35 +103,30 @@
     </div>
 </section>
 
-<section id="discuss">
-    <div class="cta-box">
-        <h2>Нужен крутой результат? 🤝</h2>
-        <p>Напиши мне, и мы обсудим твою идею. Я помогу реализовать проект любой сложности.</p>
-        <a href="https://t.me/KusokMedi52" target="_blank" class="tg-btn">
-            <i class="fab fa-telegram-plane"></i> Связаться в Telegram
-        </a>
-    </div>
-</section>
-
-<footer>
+<footer id="footer">
     <div class="footer-content">
         <div class="footer-logo">Kusok<span>Medi</span></div>
         
-        <div class="footer-nav">
-            <a href="#skills">Навыки</a>
-            <a href="#projects">Проекты</a>
-            <a href="https://discord.gg/RSVEzBBbgq" target="_blank">Discord Сервер</a>
-            <a href="https://t.me/KusokMedi52" target="_blank">Личка</a>
-        </div>
-
-        <div class="socials">
-            <a href="https://t.me/KusokMedi52" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
-            <a href="https://discord.gg/RSVEzBBbgq" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
-            <a href="https://github.com/kusokmedi" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <div class="footer-columns">
+            <div class="footer-nav">
+                <h3>Навигация</h3>
+                <a href="#top"><i class="fas fa-home"></i> Главная</a>
+                <a href="#skills"><i class="fas fa-bolt"></i> Навыки</a>
+                <a href="#projects"><i class="fas fa-folder"></i> Проекты</a>
+            </div>
+            
+            <div class="footer-socials">
+                <h3>Контакты</h3>
+                <div class="socials">
+                    <a href="https://t.me/KusokMedi52" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="https://discord.gg/RSVEzBBbgq" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://github.com/kusokmedi" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
         </div>
 
         <div class="copy-container">
-            <p class="copy">Designed & Developed by KusokMedi &copy; 2026. Premium Experience.</p>
+            <p class="copy">© 2026 KusokMedi</p>
         </div>
     </div>
 </footer>

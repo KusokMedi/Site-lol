@@ -1,61 +1,24 @@
-// Enhanced BG with Fallbacks - STATIC IMAGE
-const bgContainer = document.getElementById('heroBg');
+// Random background image
 const bgImages = [
-    '/bgs/photo_1_2026-04-26_16-16-29.jpg',
-    '/bgs/photo_2_2026-04-26_16-16-29.jpg',
-    '/bgs/photo_3_2026-04-26_16-16-29.jpg',
-    '/bgs/photo_4_2026-04-26_16-16-29.jpg'
+    'bgs/photo_1_2026-04-26_16-16-29.jpg',
+    'bgs/photo_2_2026-04-26_16-16-29.jpg',
+    'bgs/photo_3_2026-04-26_16-16-29.jpg',
+    'bgs/photo_4_2026-04-26_16-16-29.jpg'
 ];
 
-const fallbacks = [
-    'https://images.unsplash.com/photo-1635776062127-d379bfcba9f8?q=80&w=1932',
-    'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070'
-];
-
-function getRandomBg() {
-    return bgImages[Math.floor(Math.random() * bgImages.length)];
-}
-
-function setBg(imagePath = null) {
-    const path = imagePath || getRandomBg();
-    const fallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
-    
-    // Fade out
-    bgContainer.style.opacity = '0';
-    bgContainer.style.transition = 'opacity 0.8s ease-out';
+function setRandomBg() {
+    const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
+    const hero = document.querySelector('.hero');
+    hero.style.opacity = '0';
     
     setTimeout(() => {
-        const testImage = new Image();
-        testImage.src = path;
-        testImage.onload = () => {
-            bgContainer.style.backgroundImage = `url(${path})`;
-            bgContainer.style.opacity = '1';
-        };
-        testImage.onerror = () => {
-            bgContainer.style.backgroundImage = `url(${fallback})`;
-            bgContainer.style.opacity = '1';
-        };
-    }, 400);
+        hero.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
+        hero.style.backgroundSize = '125%';
+        hero.style.backgroundPosition = 'center';
+        hero.style.transition = 'opacity 1s ease, background-size 0.3s ease';
+        hero.style.opacity = '1';
+    }, 100);
 }
-
-// Orb following mouse with smooth easing
-const orb = document.getElementById('orb');
-let orbX = 0, orbY = 0;
-let targetOrbX = 0, targetOrbY = 0;
-
-document.addEventListener('mousemove', (e) => {
-    targetOrbX = e.clientX - 300;
-    targetOrbY = e.clientY - 300;
-});
-
-function animateOrb() {
-    orbX += (targetOrbX - orbX) * 0.1;
-    orbY += (targetOrbY - orbY) * 0.1;
-    orb.style.transform = `translate(${orbX}px, ${orbY}px)`;
-    requestAnimationFrame(animateOrb);
-}
-
-animateOrb();
 
 // Logo click to scroll to top
 const logoWrapper = document.querySelector('.logo-wrapper');
@@ -63,10 +26,11 @@ logoWrapper.addEventListener('click', (e) => {
     e.preventDefault();
     window.scrollTo({
         top: 0,
-        behavior: 'smooth',
-        duration: 1000
+        behavior: 'smooth'
     });
 });
+
+// Logo canvas animation
 const canvas = document.getElementById("logoCanvas");
 const ctx = canvas.getContext("2d");
 let particles = [];
@@ -75,14 +39,14 @@ function initLogo() {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     particles = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 15; i++) {
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.6,
-            vy: (Math.random() - 0.5) * 0.6,
-            size: Math.random() * 2 + 0.5,
-            opacity: Math.random() * 0.5 + 0.3,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            size: Math.random() * 1.5 + 0.5,
+            opacity: Math.random() * 0.4 + 0.2,
             life: Math.random() * 100 + 50
         });
     }
@@ -119,25 +83,6 @@ function animateLogo() {
 }
 
 
-// Enhanced Background particles with better animation
-function createBgParticles() {
-    const container = document.querySelector('.bg-particles');
-    if (!container) return;
-    
-    for (let i = 0; i < 80; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 15 + 's';
-        particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
-        const randomSize = Math.random() * 3 + 1;
-        particle.style.width = randomSize + 'px';
-        particle.style.height = randomSize + 'px';
-        container.appendChild(particle);
-    }
-}
-
 // Smooth scroll with offset for section navigation
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -148,55 +93,62 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const target = document.querySelector(href);
         if (!target) return;
         
-        const offset = 90; // Header height + padding
+        const offset = 90;
         const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
         const offsetPosition = elementPosition - offset;
 
         window.scrollTo({
             top: offsetPosition,
-            behavior: 'smooth',
-            duration: 1000
+            behavior: 'smooth'
         });
     });
 });
 
-// Advanced Intersection Observer for staggered animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
-            entry.target.classList.add('animated');
-            // Stagger animations
-            entry.target.style.animationDelay = (index * 0.1) + 's';
-        }
-    });
-}, observerOptions);
-
-// Observe all animated elements
-window.addEventListener('load', () => {
-    document.querySelectorAll('section, .glass-card, .cta-box, footer').forEach(el => {
-        observer.observe(el);
-    });
+// Scroll to top on page load/reload
+window.addEventListener('beforeunload', () => {
+    window.scrollTo(0, 0);
 });
 
 // Initialization on page load
 window.addEventListener('load', () => {
-    // Set initial background with fade in
-    bgContainer.style.opacity = '0';
-    setBg();
+    window.scrollTo(0, 0);
     
-    // Initialize logo animation
+    // Hide loader after 1 second
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('hidden');
+    }, 1000);
+    
+    setRandomBg();
     initLogo();
     animateLogo();
-    
-    // Create background particles
-    createBgParticles();
-    
-    // NOTE: BG rotation disabled - keeping static image
+});
+
+// Dynamic header on scroll
+window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+
+// Burger menu toggle
+const burger = document.getElementById('burger');
+const menu = document.getElementById('menu');
+
+burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    menu.classList.toggle('active');
+});
+
+// Close menu when clicking on link
+menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        burger.classList.remove('active');
+        menu.classList.remove('active');
+    });
 });
 
 // Reinitialize logo on window resize
