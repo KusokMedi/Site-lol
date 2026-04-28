@@ -1,9 +1,9 @@
 // Random background image
 const bgImages = [
-    'bgs/photo_1_2026-04-26_16-16-29.jpg',
-    'bgs/photo_2_2026-04-26_16-16-29.jpg',
-    'bgs/photo_3_2026-04-26_16-16-29.jpg',
-    'bgs/photo_4_2026-04-26_16-16-29.jpg'
+    'bgs/1.jpeg',
+    'bgs/2.jpeg',
+    'bgs/3.jpeg',
+    'bgs/4.jpeg'
 ];
 
 let currentBgIndex = -1;
@@ -21,37 +21,51 @@ function setRandomBg() {
     const randomImage = bgImages[currentBgIndex];
     const hero = document.querySelector('.hero');
     
-    // Создаем overlay для плавной смены
-    const overlay = document.createElement('div');
-    overlay.style.position = 'absolute';
-    overlay.style.inset = '0';
-    overlay.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
-    overlay.style.backgroundPosition = 'center';
-    overlay.style.backgroundSize = window.innerWidth <= 768 ? 'cover' : '125%';
-    overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity 1.5s ease-in-out';
-    overlay.style.zIndex = '0';
+    // Находим текущий фон или создаем первый
+    let currentBg = hero.querySelector('.hero-bg');
+    if (!currentBg) {
+        currentBg = document.createElement('div');
+        currentBg.className = 'hero-bg';
+        currentBg.style.position = 'absolute';
+        currentBg.style.inset = '0';
+        currentBg.style.filter = 'blur(3px)';
+        currentBg.style.zIndex = '0';
+        currentBg.style.opacity = '1';
+        hero.appendChild(currentBg);
+    }
     
-    hero.appendChild(overlay);
+    // Создаем новый слой поверх
+    const newBg = document.createElement('div');
+    newBg.style.position = 'absolute';
+    newBg.style.inset = '0';
+    newBg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
+    newBg.style.backgroundPosition = 'center';
+    newBg.style.backgroundSize = window.innerWidth <= 768 ? 'cover' : '125%';
+    newBg.style.filter = 'blur(3px)';
+    newBg.style.zIndex = '1';
+    newBg.style.opacity = '0';
+    newBg.style.transition = 'opacity 1s ease-in-out';
     
-    // Запускаем fade in
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '1';
-    });
+    hero.appendChild(newBg);
     
-    // После завершения анимации меняем основной фон и удаляем overlay
+    // Fade in нового фона
     setTimeout(() => {
-        hero.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('${randomImage}')`;
-        hero.style.backgroundPosition = 'center';
-        hero.style.backgroundSize = window.innerWidth <= 768 ? 'cover' : '125%';
-        overlay.remove();
-    }, 1500);
+        newBg.style.opacity = '1';
+    }, 50);
+    
+    // После анимации заменяем старый фон
+    setTimeout(() => {
+        currentBg.style.backgroundImage = newBg.style.backgroundImage;
+        currentBg.style.backgroundPosition = newBg.style.backgroundPosition;
+        currentBg.style.backgroundSize = newBg.style.backgroundSize;
+        newBg.remove();
+    }, 1000);
 }
 
 function startBgRotation() {
     setInterval(() => {
         setRandomBg();
-    }, Math.random() * 5000 + 5000); // 5-10 секунд
+    }, 3000); // 1s переход + 2s пауза
 }
 
 // Logo click to scroll to top
