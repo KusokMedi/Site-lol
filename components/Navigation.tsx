@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Terminal } from "lucide-react";
 
@@ -16,18 +16,34 @@ const navLinks = [
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(docHeight > 0 ? (scrollTop / docHeight) * 100 : 0);
-      setIsScrolled(scrollTop > 50);
+    const update = () => {
+      const lenis = window.__lenis;
+      if (lenis) {
+        const pct = Math.min(lenis.progress * 100, 100);
+        if (barRef.current) barRef.current.style.width = `${pct}%`;
+        setIsScrolled(lenis.scroll > 50);
+      }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
+
+    const lenis = window.__lenis;
+    if (lenis) {
+      lenis.on("scroll", update);
+      update();
+    } else {
+      const fallback = () => {
+        const top = window.scrollY;
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docH > 0 ? (top / docH) * 100 : 0;
+        if (barRef.current) barRef.current.style.width = `${pct}%`;
+        setIsScrolled(top > 50);
+      };
+      window.addEventListener("scroll", fallback, { passive: true });
+      fallback();
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -47,15 +63,22 @@ export default function Navigation() {
     sections.forEach((el) => el && observer.observe(el));
     return () => {
       observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
+      if (lenis) lenis.off("scroll", update);
     };
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    const el = document.querySelector(href) as HTMLElement | null;
+    if (el) {
+      const lenis = window.__lenis;
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -80, duration: 1.2 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -70,8 +93,9 @@ export default function Navigation() {
       }`}
     >
       <div
-        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent-400 to-accent-600 transition-all duration-200 ease-out will-change-[width]"
-        style={{ width: `${scrollProgress}%` }}
+        ref={barRef}
+        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent-400 to-accent-600 will-change-[width]"
+        style={{ width: "0%" }}
       />
 
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
