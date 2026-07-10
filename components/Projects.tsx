@@ -29,7 +29,7 @@ export default function Projects() {
             <span className="gradient-accent-text">работы</span>
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
-            Реальные проекты, созданные с нуля — каждый решает конкретные
+            Реальные проекты, созданные с нуля - каждый решает конкретные
             задачи с помощью правильных технологий.
           </p>
         </div>
@@ -49,10 +49,11 @@ export default function Projects() {
                 className={`relative h-44 sm:h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center overflow-hidden`}
               >
                 <div className="absolute inset-0 bg-dark-950/40" />
+                <div className="absolute inset-4 rounded-full bg-accent-500/20 blur-3xl" />
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="relative w-full h-full object-contain p-6 select-none"
+                  className="relative w-full h-full object-contain p-6 select-none drop-shadow-[0_0_20px_rgba(255,179,0,0.15)]"
                 />
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-dark-950 via-transparent to-transparent" />
               </div>

@@ -21,16 +21,16 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative h-dvh flex flex-col lg:items-center overflow-hidden"
+      className="relative min-h-dvh lg:h-dvh flex flex-col overflow-hidden"
     >
       <div className="absolute inset-0 grid-pattern opacity-40" />
 
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-accent-500/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-700/5 rounded-full blur-[120px]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full flex-1 flex flex-col">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-6 lg:gap-12 lg:items-center flex-1">
-          <div className="space-y-4 sm:space-y-5 pt-14 lg:pt-0">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full flex flex-col lg:flex-1 gap-6 md:gap-12 lg:justify-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 w-full lg:items-center">
+          <div className="space-y-5 pt-14 lg:pt-0">
             <div className="space-y-2">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
@@ -55,7 +55,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap gap-2 pt-1"
+              className="flex flex-wrap gap-3"
             >
               <button
                 onClick={() => scrollTo("#projects")}
@@ -85,7 +85,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="max-lg:scale-[0.85] max-lg:origin-top flex-1 flex items-center justify-center lg:block"
+            className="w-full max-w-md mx-auto lg:mx-0 lg:block"
           >
             <Terminal />
           </motion.div>

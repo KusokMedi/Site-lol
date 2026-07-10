@@ -39,9 +39,9 @@ export const highlights: Highlight[] = [
 ];
 
 export const mainSkills: Skill[] = [
-  { name: "Python", level: 100 },
-  { name: "Linux", level: 97 },
-  { name: "Backend", level: 90 },
+  { name: "Python Telebot SQLite", level: 100 },
+  { name: "Python Telebot SQLite", level: 97 },
+  { name: "Paper Java Linux", level: 90 },
   { name: "Git", level: 90 },
   { name: "Node.js", level: 85 },
   { name: "React", level: 85 },
@@ -94,10 +94,10 @@ export const projects: Project[] = [
   {
     title: "AnonSpeak",
     description:
-      "Бот для анонимных сообщений прямо в Telegram. Создай свою ссылку — любой, кто перейдёт по ней, сможет написать тебе анонимное сообщение.",
+      "Бот для анонимных сообщений прямо в Telegram. Создай свою ссылку - любой, кто перейдёт по ней, сможет написать тебе анонимное сообщение.",
     image: "/resources/AnonSpeak-logo.jpg",
-    gradient: "from-purple-600/20 to-pink-600/20",
-    tech: ["Python", "Aiogram", "PostgreSQL"],
+    gradient: "from-white/20 to-stone-300/20",
+    tech: ["Python Telebot SQLite"],
     features: [
       "Создание своей анонимной ссылки",
       "Ответ на анонимные сообщения",
@@ -113,8 +113,8 @@ export const projects: Project[] = [
     description:
       "Бот поддержки для Minecraft-студии BestDev. Закажи плагин, сборку, консультацию или готовое решение под ключ.",
     image: "/resources/BestDev-logo.jpg",
-    gradient: "from-blue-600/20 to-cyan-600/20",
-    tech: ["Python", "Aiogram", "SQL"],
+    gradient: "from-yellow-400/20 to-amber-500/20",
+    tech: ["Python Telebot SQLite"],
     features: [
       "Заказ плагинов и сборок под ключ",
       "Консультации по проектам",
@@ -128,18 +128,19 @@ export const projects: Project[] = [
   {
     title: "GridMC",
     description:
-      "Ванильный Minecraft-сервер 1.21.11 с экономикой. /sell, аукцион, TPA и никаких лишних дополнений — всё максимально как в ванилле.",
+      "Ванильный Minecraft-сервер 1.21.11 с экономикой. /sell, аукцион, TPA и никаких лишних дополнений - всё максимально как в ванилле.",
     image: "/resources/mc-1-21-11-logo.jpeg",
-    gradient: "from-green-600/20 to-emerald-600/20",
-    tech: ["Minecraft 1.21.11", "Paper", "Spigot"],
+    gradient: "from-sky-400/20 to-blue-500/20",
+    tech: ["Paper Java Linux"],
     features: [
       "Экономика с /sell и /ah (аукцион)",
-      "TPA без спавна",
+      "Без /spawn и лишнего мусора",
       "Один мир без правил",
       "Максимально ванильный геймплей",
+      "Написал несколько плагинов специально под сервер",
     ],
     href: "https://discord.kusokmedi.lat",
-    hrefLabel: "Зайти на Discord",
+    hrefLabel: "Зайти в Discord",
     github: null,
   },
 ];

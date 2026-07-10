@@ -23,13 +23,13 @@ export default function Contact() {
           </motion.div>
 
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Давайте создадим{" "}
-            <span className="gradient-accent-text">что-то</span> вместе
+            Давайте создадим что-то{" "}
+            <span className="gradient-accent-text">вместе</span>
           </h2>
 
           <p className="text-base sm:text-lg text-white/40 text-balance">
             Есть проект или просто хотите пообщаться? Напишите мне в Телеграмм
-            - я всегда открыт к новым идеям и возможностям.
+            - я всегда готов обсудить и реализовать именно ваш проект по отличной цене.
           </p>
 
           <motion.div

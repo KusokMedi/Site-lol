@@ -11,13 +11,12 @@ import {
 } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 
-const CACHE_KEY = "github-stats";
+const CACHE_KEY = "github-commits";
 const CACHE_DURATION = 60 * 60 * 1000;
 
 interface GitHubCache {
   timestamp: number;
   contributions: string | null;
-  repoCount: number | null;
 }
 
 const pinnedRepos = [
@@ -53,7 +52,6 @@ function SkeletonBlock() {
 
 export default function GitHubRepos() {
   const [contributions, setContributions] = useState<string | null>(null);
-  const [repoCount, setRepoCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -83,30 +81,11 @@ export default function GitHubRepos() {
       const cached = fetchFromCache();
       if (cached) {
         setContributions(cached.contributions);
-        setRepoCount(cached.repoCount);
         setLoading(false);
         return;
       }
 
       let contribs: string | null = null;
-      let repos: number | null = null;
-
-      try {
-        const userRes = await fetch(
-          "https://api.github.com/users/kusokmedi"
-        );
-        if (!userRes.ok) {
-          const text = await userRes.text();
-          console.warn("GitHub API user fetch failed:", userRes.status, text);
-          throw new Error(`GitHub API error: ${userRes.status}`);
-        }
-        const userData = await userRes.json();
-        repos = userData.public_repos;
-        setRepoCount(repos);
-      } catch (err) {
-        console.warn("Failed to fetch GitHub user:", err);
-        setError(true);
-      }
 
       try {
         const commitRes = await fetch(
@@ -124,9 +103,10 @@ export default function GitHubRepos() {
         }
       } catch (err) {
         console.warn("Failed to fetch commits:", err);
+        setError(true);
       }
 
-      saveToCache({ timestamp: Date.now(), contributions: contribs, repoCount: repos });
+      saveToCache({ timestamp: Date.now(), contributions: contribs });
       setLoading(false);
     }
 
@@ -137,7 +117,7 @@ export default function GitHubRepos() {
     {
       icon: BookOpen,
       label: "Репозитории",
-      value: repoCount ? `${repoCount}+` : "4+",
+      value: "10+",
     },
     {
       icon: Database,
@@ -146,8 +126,8 @@ export default function GitHubRepos() {
     },
     {
       icon: GitCommit,
-      label: "Вклад",
-      value: contributions || (error ? "N/A" : "Загрузка..."),
+      label: "Обновлений",
+      value: contributions ? `${contributions}+` : (error ? "N/A" : "Загрузка..."),
     },
   ];
 
