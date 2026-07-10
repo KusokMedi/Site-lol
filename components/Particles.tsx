@@ -21,11 +21,21 @@ export default function Particles() {
     }[] = [];
 
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const parent = canvas.parentElement;
+      if (!parent) return;
+      canvas.width = parent.offsetWidth;
+      canvas.height = parent.offsetHeight;
+
+      for (const p of particles) {
+        if (p.x > canvas.width) p.x = Math.random() * canvas.width;
+        if (p.y > canvas.height) p.y = Math.random() * canvas.height;
+      }
     };
-    resize();
+
+    const ro = new ResizeObserver(resize);
+    if (canvas.parentElement) ro.observe(canvas.parentElement);
     window.addEventListener("resize", resize);
+    resize();
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       particles.push({
@@ -67,6 +77,7 @@ export default function Particles() {
 
     return () => {
       cancelAnimationFrame(animId);
+      ro.disconnect();
       window.removeEventListener("resize", resize);
     };
   }, []);
@@ -74,7 +85,7 @@ export default function Particles() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[1]"
+      className="absolute inset-0 pointer-events-none z-[1]"
     />
   );
 }
