@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, FolderKanban } from "lucide-react";
+import { ExternalLink, FolderKanban } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import { projects } from "@/lib/data";
 
@@ -29,7 +29,7 @@ export default function Projects() {
             <span className="gradient-accent-text">работы</span>
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
-            Реальные проекты, созданные с нуля - каждый решает конкретные
+            Реальные проекты, созданные с нуля — каждый решает конкретные
             задачи с помощью правильных технологий.
           </p>
         </div>
@@ -43,19 +43,21 @@ export default function Projects() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
               whileHover={{ y: -8, scale: 1.01 }}
-              className="group relative overflow-hidden rounded-2xl glass gradient-border transition-all duration-500 hover:glow-sm"
+              className="group relative overflow-hidden rounded-2xl glass gradient-border transition-all duration-500 hover:glow-sm flex flex-col"
             >
               <div
                 className={`relative h-44 sm:h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center overflow-hidden`}
               >
-                <div className="absolute inset-0 bg-dark-950/60" />
-                <span className="relative text-6xl sm:text-7xl font-bold text-white/10 select-none">
-                  {project.image}
-                </span>
+                <div className="absolute inset-0 bg-dark-950/40" />
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="relative w-full h-full object-contain p-6 select-none"
+                />
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-dark-950 via-transparent to-transparent" />
               </div>
 
-              <div className="p-5 sm:p-6 space-y-3">
+              <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col">
                 <h3 className="text-lg font-semibold text-white group-hover:text-accent-400 transition-colors">
                   {project.title}
                 </h3>
@@ -74,35 +76,35 @@ export default function Projects() {
                   ))}
                 </div>
 
-                <div className="pt-1 text-xs text-accent-400/80 font-medium">
-                  {project.result}
-                </div>
+                <ul className="space-y-1.5 pt-1">
+                  {project.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-start gap-2 text-xs text-white/30"
+                    >
+                      <span className="text-accent-400/60 mt-0.5 shrink-0">
+                        ▹
+                      </span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
 
-                <div className="pt-3 text-xs text-white/30 italic leading-relaxed">
-                  Тестовый текст - заглушка. Скоро обновлю.
+                <div className="mt-auto pt-4">
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    {project.hrefLabel}
+                  </a>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="flex justify-center mt-10"
-        >
-          <a
-            href="https://github.com/kusokmedi"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl glass text-sm text-white/60 hover:text-white hover:bg-white/[0.08] transition-all duration-300"
-          >
-            Все проекты на GitHub
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </motion.div>
       </div>
     </AnimatedSection>
   );

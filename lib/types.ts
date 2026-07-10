@@ -6,9 +6,10 @@ export interface Project {
   image: string;
   gradient: string;
   tech: string[];
-  result: string;
-  github: string;
-  demo: string | null;
+  features: string[];
+  href: string;
+  hrefLabel: string;
+  github: string | null;
 }
 
 export interface Skill {
