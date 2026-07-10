@@ -55,7 +55,12 @@ function RadialProgress({ value, label }: { value: number; label: string }) {
 export default function Skills() {
   return (
     <AnimatedSection id="skills" className="relative py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-accent-500/3 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-accent-700/3 rounded-full blur-[140px]" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -83,6 +88,8 @@ export default function Skills() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05, duration: 0.4 }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-3 rounded-2xl gradient-border transition-all duration-300 hover:glow-sm"
             >
               <RadialProgress value={skill.level} label={skill.name} />
             </motion.div>

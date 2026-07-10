@@ -81,6 +81,12 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 1;
   }
 
   .glow {
@@ -113,6 +119,18 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes drift {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  10% { opacity: 0.3; }
+  90% { opacity: 0.3; }
+  100% { transform: translate(var(--dx, 100px), var(--dy, -50px)) scale(0.5); opacity: 0; }
+}
+
+@keyframes scroll-progress {
+  from { width: 0%; }
+  to { width: 100%; }
 }
 
 @keyframes pulse-glow {

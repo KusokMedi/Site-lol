@@ -153,7 +153,12 @@ export default function GitHubRepos() {
 
   return (
     <AnimatedSection id="github" className="relative py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-accent-500/3 rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/3 left-1/4 w-72 h-72 bg-accent-700/3 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -205,8 +210,8 @@ export default function GitHubRepos() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              whileHover={{ y: -2 }}
-              className="group p-4 rounded-xl glass glass-hover transition-all duration-300 w-full sm:w-auto sm:max-w-xs flex-1 basis-[200px]"
+              whileHover={{ y: -4, scale: 1.01 }}
+              className="group p-4 rounded-xl glass glass-hover gradient-border transition-all duration-300 w-full sm:w-auto sm:max-w-xs flex-1 basis-[200px] hover:glow-sm"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2 min-w-0">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Particles from "@/components/Particles";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -79,6 +80,7 @@ export default function RootLayout({
       </head>
       <body className="noise-overlay relative min-h-screen antialiased">
         {children}
+        <Particles />
       </body>
     </html>
   );

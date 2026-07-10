@@ -8,7 +8,12 @@ import { projects } from "@/lib/data";
 export default function Projects() {
   return (
     <AnimatedSection id="projects" className="relative py-24 sm:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/3 -left-32 w-80 h-80 bg-accent-500/3 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/3 -right-32 w-80 h-80 bg-accent-700/3 rounded-full blur-[140px]" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -37,8 +42,8 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-2xl glass transition-all duration-500"
+              whileHover={{ y: -8, scale: 1.01 }}
+              className="group relative overflow-hidden rounded-2xl glass gradient-border transition-all duration-500 hover:glow-sm"
             >
               <div
                 className={`relative h-44 sm:h-48 bg-gradient-to-br ${project.gradient} flex items-center justify-center overflow-hidden`}
