@@ -9,6 +9,8 @@ import {
   GitCommit,
   Database,
 } from "lucide-react";
+import SectionBadge from "./SectionBadge";
+import CountUp from "./CountUp";
 import AnimatedSection from "./AnimatedSection";
 
 const CACHE_KEY = "github-commits";
@@ -113,21 +115,27 @@ export default function GitHubRepos() {
     fetchData();
   }, [fetchFromCache, saveToCache]);
 
-  const stats = [
+  const stats: {
+    icon: typeof BookOpen;
+    label: string;
+    value: { num: number; suffix: string } | string;
+  }[] = [
     {
       icon: BookOpen,
       label: "Репозитории",
-      value: "10+",
+      value: { num: 10, suffix: "+" },
     },
     {
       icon: Database,
       label: "Технологии",
-      value: "20+",
+      value: { num: 20, suffix: "+" },
     },
     {
       icon: GitCommit,
       label: "Обновлений",
-      value: contributions ? `${contributions}+` : (error ? "N/A" : "Загрузка..."),
+      value: contributions
+        ? { num: parseInt(contributions.replace(/\D/g, "")) || 0, suffix: "+" }
+        : (error ? "N/A" : "Загрузка..."),
     },
   ];
 
@@ -140,15 +148,7 @@ export default function GitHubRepos() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-white/50 tracking-wide"
-          >
-            <Github className="w-3 h-3 text-accent-400" />
-            GitHub
-          </motion.div>
+          <SectionBadge icon={Github} label="GitHub" />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
             Открытый{" "}
             <span className="gradient-accent-text">код</span>
@@ -172,7 +172,11 @@ export default function GitHubRepos() {
                 >
                   <stat.icon className="w-4 h-4 text-accent-400 mx-auto mb-2" />
                   <div className="text-xl sm:text-2xl font-bold gradient-accent-text">
-                    {stat.value}
+                    {typeof stat.value === "object" ? (
+                      <CountUp value={stat.value.num} suffix={stat.value.suffix} />
+                    ) : (
+                      stat.value
+                    )}
                   </div>
                   <div className="text-xs text-white/40 mt-0.5">{stat.label}</div>
                 </motion.div>

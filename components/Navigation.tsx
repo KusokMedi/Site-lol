@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Terminal } from "lucide-react";
+import { scrollToTarget } from "@/lib/utils";
 
 const navLinks = [
   { label: "Главная", href: "#home" },
@@ -18,6 +19,8 @@ export default function Navigation() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef(false);
+  const activeRef = useRef("home");
 
   useEffect(() => {
     const update = () => {
@@ -25,7 +28,11 @@ export default function Navigation() {
       if (lenis) {
         const pct = Math.min(lenis.progress * 100, 100);
         if (barRef.current) barRef.current.style.width = `${pct}%`;
-        setIsScrolled(lenis.scroll > 50);
+        const newScrolled = lenis.scroll > 50;
+        if (newScrolled !== scrolledRef.current) {
+          scrolledRef.current = newScrolled;
+          setIsScrolled(newScrolled);
+        }
       }
     };
 
@@ -39,7 +46,11 @@ export default function Navigation() {
         const docH = document.documentElement.scrollHeight - window.innerHeight;
         const pct = docH > 0 ? (top / docH) * 100 : 0;
         if (barRef.current) barRef.current.style.width = `${pct}%`;
-        setIsScrolled(top > 50);
+        const newScrolled = top > 50;
+        if (newScrolled !== scrolledRef.current) {
+          scrolledRef.current = newScrolled;
+          setIsScrolled(newScrolled);
+        }
       };
       window.addEventListener("scroll", fallback, { passive: true });
       fallback();
@@ -49,7 +60,11 @@ export default function Navigation() {
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+            const id = entry.target.id;
+            if (id !== activeRef.current) {
+              activeRef.current = id;
+              setActiveSection(id);
+            }
           }
         }
       },
@@ -67,19 +82,11 @@ export default function Navigation() {
     };
   }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsOpen(false);
-    const el = document.querySelector(href) as HTMLElement | null;
-    if (el) {
-      const lenis = window.__lenis;
-      if (lenis) {
-        lenis.scrollTo(el, { offset: -80, duration: 1.2 });
-      } else {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
+    scrollToTarget(href);
+  }, []);
 
   return (
     <motion.header

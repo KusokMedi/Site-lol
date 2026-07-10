@@ -4,6 +4,15 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp } from "lucide-react";
 
+function scrollToTop() {
+  const lenis = window.__lenis;
+  if (lenis) {
+    lenis.scrollTo(0, { duration: 1.2 });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
 
@@ -21,7 +30,7 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10 }}
           transition={{ duration: 0.2 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={scrollToTop}
           className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-xl glass text-white/50 hover:text-accent-400 hover:border-accent-400/30 transition-all duration-300 border border-white/[0.06] cursor-pointer"
           title="Наверх"
         >

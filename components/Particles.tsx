@@ -15,6 +15,7 @@ export default function Particles() {
     if (!ctx) return;
 
     let animId: number;
+    let resizeTimer: ReturnType<typeof setTimeout>;
     const particles: {
       x: number; y: number; vx: number; vy: number;
       size: number; alpha: number; alphaDir: number;
@@ -25,16 +26,15 @@ export default function Particles() {
       if (!parent) return;
       canvas.width = parent.offsetWidth;
       canvas.height = parent.offsetHeight;
-
-      for (const p of particles) {
-        if (p.x > canvas.width) p.x = Math.random() * canvas.width;
-        if (p.y > canvas.height) p.y = Math.random() * canvas.height;
-      }
     };
 
-    const ro = new ResizeObserver(resize);
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 80);
+    };
+
+    const ro = new ResizeObserver(debouncedResize);
     if (canvas.parentElement) ro.observe(canvas.parentElement);
-    window.addEventListener("resize", resize);
     resize();
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -77,8 +77,8 @@ export default function Particles() {
 
     return () => {
       cancelAnimationFrame(animId);
+      clearTimeout(resizeTimer);
       ro.disconnect();
-      window.removeEventListener("resize", resize);
     };
   }, []);
 

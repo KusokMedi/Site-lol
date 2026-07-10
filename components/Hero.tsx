@@ -4,19 +4,9 @@ import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import Terminal from "./Terminal";
 import SocialLinks from "./SocialLinks";
+import { scrollToTarget } from "@/lib/utils";
 
 export default function Hero() {
-  const scrollTo = (id: string) => {
-    const el = document.querySelector(id);
-    if (el) {
-      const lenis = window.__lenis;
-      if (lenis) {
-        lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.2 });
-      } else {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
 
   return (
     <section
@@ -58,14 +48,14 @@ export default function Hero() {
               className="flex flex-wrap gap-3"
             >
               <button
-                onClick={() => scrollTo("#projects")}
+                onClick={() => scrollToTarget("#projects")}
                 className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
               >
                 Проекты
                 <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
               <button
-                onClick={() => scrollTo("#contact")}
+                onClick={() => scrollToTarget("#contact")}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl glass text-sm font-medium text-white/80 hover:text-white hover:bg-white/[0.08] transition-all duration-300"
               >
                 Связаться
@@ -99,7 +89,7 @@ export default function Hero() {
         className="absolute bottom-6 left-1/2 -translate-x-1/2"
       >
         <button
-          onClick={() => scrollTo("#about")}
+          onClick={() => scrollToTarget("#about")}
           className="flex flex-col items-center gap-1.5 text-white/20 hover:text-white/50 transition-colors duration-300 cursor-pointer"
         >
           <svg

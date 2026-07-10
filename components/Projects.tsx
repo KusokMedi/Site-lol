@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, FolderKanban } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
+import SectionBadge from "./SectionBadge";
 import { projects } from "@/lib/data";
 
 export default function Projects() {
@@ -15,15 +16,7 @@ export default function Projects() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-white/50 tracking-wide"
-          >
-            <FolderKanban className="w-3 h-3 text-accent-400" />
-            Проекты
-          </motion.div>
+          <SectionBadge icon={FolderKanban} label="Проекты" />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
             Избранные{" "}
             <span className="gradient-accent-text">работы</span>

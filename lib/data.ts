@@ -40,7 +40,7 @@ export const highlights: Highlight[] = [
 
 export const mainSkills: Skill[] = [
   { name: "Python Telebot SQLite", level: 100 },
-  { name: "Python Telebot SQLite", level: 97 },
+  { name: "Python", level: 97 },
   { name: "Paper Java Linux", level: 90 },
   { name: "Git", level: 90 },
   { name: "Node.js", level: 85 },

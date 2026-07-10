@@ -1,40 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
 import { User } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
+import SectionBadge from "./SectionBadge";
+import CountUp from "./CountUp";
 import { highlights } from "@/lib/data";
-
-function CountUp({ value, suffix }: { value: number; suffix: string }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    const duration = 1500;
-    const start = performance.now();
-
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
-  }, [isInView, value]);
-
-  return (
-    <span ref={ref}>
-      {count}{suffix}
-    </span>
-  );
-}
 
 export default function About() {
   return (
@@ -47,16 +18,7 @@ export default function About() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           <div className="space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-white/50 tracking-wide"
-            >
-              <User className="w-3 h-3 text-accent-400" />
-              Обо мне
-            </motion.div>
+            <SectionBadge icon={User} label="Обо мне" />
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.15]">
               Создаю{" "}
