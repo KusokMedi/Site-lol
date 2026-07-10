@@ -28,7 +28,7 @@ export default function Hero() {
       <div className="absolute top-1/4 -left-32 w-96 h-96 bg-accent-500/5 rounded-full blur-[120px]" />
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-700/5 rounded-full blur-[120px]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full flex flex-col lg:flex-1 gap-6 md:gap-12 lg:justify-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full flex flex-col lg:flex-1 gap-6 md:gap-12 justify-center">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 w-full lg:items-center">
           <div className="space-y-5 pt-14 lg:pt-0">
             <div className="space-y-2">
