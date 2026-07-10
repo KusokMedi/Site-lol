@@ -7,7 +7,15 @@ import SocialLinks from "./SocialLinks";
 
 export default function Hero() {
   const scrollTo = (id: string) => {
-    document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
+    const el = document.querySelector(id);
+    if (el) {
+      const lenis = window.__lenis;
+      if (lenis) {
+        lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.2 });
+      } else {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   return (
@@ -21,8 +29,8 @@ export default function Hero() {
       <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent-700/5 rounded-full blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="space-y-5">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+          <div className="space-y-4 sm:space-y-5">
             <div className="space-y-2">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
@@ -77,7 +85,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="hidden lg:block"
+            className="max-lg:scale-[0.85] max-lg:origin-top lg:block"
           >
             <Terminal />
           </motion.div>
