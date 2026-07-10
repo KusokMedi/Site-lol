@@ -75,7 +75,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="w-full max-w-md mx-auto lg:mx-0 lg:block"
+            className="w-full max-w-xl mx-auto lg:mx-0 lg:block"
           >
             <Terminal />
           </motion.div>

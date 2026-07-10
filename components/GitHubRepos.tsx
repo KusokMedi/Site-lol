@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Github,
+  Code,
   ExternalLink,
   BookOpen,
   GitCommit,
@@ -148,13 +149,13 @@ export default function GitHubRepos() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <SectionBadge icon={Github} label="GitHub" />
+          <SectionBadge icon={Code} label="Код" />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
             Открытый{" "}
             <span className="gradient-accent-text">код</span>
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
-            Мои проекты на GitHub.
+            Также я разрабатываю бесплатные проекты с открытым исходным кодом для сообщества и широкой аудитории.
           </p>
         </div>
 

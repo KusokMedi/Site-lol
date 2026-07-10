@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const fileContent = [
-  "KusokMedi - Программист.",
-  "",
-  "Стек: Python, React, Linux, Docker",
-  "Создаю сайты, ботов, автоматизацию",
-  "и цифровые решения под ключ.",
-  "",
-  "Писать в телеграм: @kusokmedi52",
+"Я - KusokMedi :)",
+"Разработчик, готовый воплотить вашу идею в код!",
+"",
+"Я могу создать для вас Бота, Сайт или Приложение,",
+"помочь с хостингом, улучшить текущий проект,",
+"интегрировать ИИ или другие сервисы в ваш продукт!",
+"",
+"Давайте создадим что-то крутое!"
 ];
 
 export default function Terminal({ className = "" }: { className?: string }) {

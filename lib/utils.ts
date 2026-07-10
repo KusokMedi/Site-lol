@@ -14,7 +14,7 @@ export function cn(...inputs: CnInput[]): string {
     .join(" ");
 }
 
-export function scrollToTarget(target: string | HTMLElement, offset = -80) {
+export function scrollToTarget(target: string | HTMLElement, offset = -20) {
   const el = typeof target === "string" ? (document.querySelector(target) as HTMLElement | null) : target;
   if (!el) return;
 

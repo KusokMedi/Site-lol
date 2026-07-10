@@ -24,7 +24,7 @@ export const highlights: Highlight[] = [
   {
     icon: Layers,
     label: "Проекты",
-    value: "10+",
+    value: "25+",
     desc: "Завершённых проектов в самых разных сферах: от Telegram-ботов до серверной инфраструктуры",
   },
   {

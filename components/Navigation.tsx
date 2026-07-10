@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Услуги", href: "#services" },
   { label: "Проекты", href: "#projects" },
   { label: "Навыки", href: "#skills" },
+  { label: "Код", href: "#github" },
   { label: "Контакты", href: "#contact" },
 ];
 
