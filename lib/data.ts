@@ -39,8 +39,8 @@ export const highlights: Highlight[] = [
 ];
 
 export const mainSkills: Skill[] = [
-  { name: "Python", level: 99 },
-  { name: "Linux", level: 99 },
+  { name: "Python", level: 100 },
+  { name: "Linux", level: 97 },
   { name: "Backend", level: 90 },
   { name: "Git", level: 90 },
   { name: "Node.js", level: 85 },
