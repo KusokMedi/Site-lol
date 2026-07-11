@@ -136,7 +136,7 @@ export default function GitHubRepos() {
       label: "Обновлений",
       value: contributions
         ? { num: parseInt(contributions.replace(/\D/g, "")) || 0, suffix: "+" }
-        : (error ? "—" : "Загрузка..."),
+        : (error || !loading ? "—" : "Загрузка..."),
     },
   ];
 
@@ -159,7 +159,7 @@ export default function GitHubRepos() {
           </p>
         </div>
 
-        <div className="flex justify-center gap-8 sm:gap-16 mb-12">
+        <div className="flex justify-center gap-6 sm:gap-16 mb-12">
           {loading
             ? Array.from({ length: 3 }).map((_, i) => <SkeletonBlock key={i} />)
             : stats.map((stat, i) => (
