@@ -2,12 +2,19 @@
 
 import { useEffect, useRef } from "react";
 
-const PARTICLE_COUNT = 35;
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
 
 export default function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    if (isTouchDevice()) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -37,7 +44,7 @@ export default function Particles() {
     if (canvas.parentElement) ro.observe(canvas.parentElement);
     resize();
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let i = 0; i < 35; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,

@@ -175,3 +175,13 @@
   outline: 2px solid #ffd700;
   outline-offset: 2px;
 }
+
+a, button, [role="button"] {
+  touch-action: manipulation;
+}
+
+@media (pointer: coarse) {
+  .noise-overlay::after {
+    display: none;
+  }
+}

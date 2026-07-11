@@ -136,7 +136,7 @@ export default function GitHubRepos() {
       label: "Обновлений",
       value: contributions
         ? { num: parseInt(contributions.replace(/\D/g, "")) || 0, suffix: "+" }
-        : (error ? "N/A" : "Загрузка..."),
+        : (error ? "—" : "Загрузка..."),
     },
   ];
 

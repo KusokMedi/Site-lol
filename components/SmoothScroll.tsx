@@ -9,12 +9,21 @@ declare global {
   }
 }
 
+function isTouchDevice() {
+  return (
+    "ontouchstart" in window ||
+    window.matchMedia("(pointer: coarse)").matches
+  );
+}
+
 export default function SmoothScroll() {
   const once = useRef(false);
 
   useEffect(() => {
     if (once.current) return;
     once.current = true;
+
+    if (isTouchDevice()) return;
 
     const lenis = new Lenis({
       duration: 1.2,
