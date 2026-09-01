@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
+import LocaleHandler from "@/components/LocaleHandler";
 
 const siteUrl = "https://kusok-medi.ru";
 
