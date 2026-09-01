@@ -3,6 +3,7 @@ import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -69,6 +70,10 @@ export default function RootLayout({
     <html lang="ru" className="dark">
       <head>
         <link rel="canonical" href={siteUrl} />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link
@@ -81,10 +86,12 @@ export default function RootLayout({
         />
       </head>
       <body className="noise-overlay relative min-h-screen antialiased">
-        {children}
-        <Particles />
-        <SmoothScroll />
-        <Analytics />
+        <ThemeProvider>
+          {children}
+          <Particles />
+          <SmoothScroll />
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

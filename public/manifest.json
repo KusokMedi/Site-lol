@@ -1,0 +1,16 @@
+{
+  "name": "KusokMedi Portfolio",
+  "short_name": "KusokMedi",
+  "description": "Разработчик сайтов, ботов, автоматизации и цифровых решений",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#ffd700",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
