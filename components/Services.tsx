@@ -5,8 +5,11 @@ import { ArrowRight, Zap } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { services } from "@/lib/data";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Services() {
+  const { t } = useLanguage();
+
   return (
     <AnimatedSection id="services" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 overflow-hidden">
@@ -16,14 +19,12 @@ export default function Services() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <SectionBadge icon={Zap} label="Услуги" />
+          <SectionBadge icon={Zap} label={t("services.title")} />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Что я{" "}
-            <span className="gradient-accent-text">могу</span> для вас сделать
+            {t("services.heading")}
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
-            Полный цикл разработки - от концепции до деплоя. Работаю со всем
-            стеком, чтобы создать готовое решение.
+            {t("services.description")}
           </p>
         </div>
 

@@ -4,6 +4,7 @@ import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -87,10 +88,13 @@ export default function RootLayout({
       </head>
       <body className="noise-overlay relative min-h-screen antialiased">
         <ThemeProvider>
-          {children}
-          <Particles />
-          <SmoothScroll />
-          <Analytics />
+          <LanguageProvider>
+            <LocaleHandler />
+            {children}
+            <Particles />
+            <SmoothScroll />
+            <Analytics />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

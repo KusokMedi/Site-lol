@@ -6,8 +6,11 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import CountUp from "./CountUp";
 import { highlights } from "@/lib/data";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function About() {
+  const { t } = useLanguage();
+
   return (
     <AnimatedSection id="about" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 overflow-hidden">
@@ -18,25 +21,18 @@ export default function About() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           <div className="space-y-6">
-            <SectionBadge icon={User} label="Обо мне" />
+            <SectionBadge icon={User} label={t("about.title")} />
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.15]">
-              Создаю{" "}
-              <span className="gradient-accent-text">цифровые продукты</span>,
-              которые имеют значение
+              {t("about.heading")}
             </h2>
 
             <div className="space-y-4 text-white/40 leading-relaxed">
               <p className="text-base sm:text-lg">
-                Я разработчик, который не ограничивается одним стеком. Сайты,
-                Telegram-боты, API, серверная инфраструктура - я разбираюсь и
-                делаю. Быстро вхожу в контекст и приступаю к работе.
+                {t("about.text1")}
               </p>
               <p className="text-base sm:text-lg">
-                Специализируюсь на Python, React, Node.js и Linux. Беру проект
-                от концепции до продакшена, работаю с полным стеком. Мой
-                подход: понять проблему, выбрать правильные инструменты и
-                построить то, что надежно работает.
+                {t("about.text2")}
               </p>
             </div>
           </div>

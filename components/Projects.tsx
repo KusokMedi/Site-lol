@@ -5,8 +5,11 @@ import { ExternalLink, FolderKanban } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { projects } from "@/lib/data";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Projects() {
+  const { t } = useLanguage();
+
   return (
     <AnimatedSection id="projects" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 overflow-hidden">
@@ -16,14 +19,12 @@ export default function Projects() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16 space-y-4">
-          <SectionBadge icon={FolderKanban} label="Проекты" />
+          <SectionBadge icon={FolderKanban} label={t("projects.title")} />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Избранные{" "}
-            <span className="gradient-accent-text">работы</span>
+            {t("projects.heading")}
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
-            Реальные проекты, созданные с нуля - каждый решает конкретные
-            задачи с помощью правильных технологий.
+            {t("projects.description")}
           </p>
         </div>
 

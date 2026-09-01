@@ -5,8 +5,10 @@ import { ExternalLink } from "lucide-react";
 import Terminal from "./Terminal";
 import SocialLinks from "./SocialLinks";
 import { scrollToTarget } from "@/lib/utils";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Hero() {
+  const { t } = useLanguage();
 
   return (
     <section
@@ -37,7 +39,7 @@ export default function Hero() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-sm sm:text-base text-white/40 max-w-lg leading-relaxed text-balance"
               >
-                Создаю сайты, автоматизацию, ботов и цифровые решения.
+                {t("hero.description")}
               </motion.p>
             </div>
 
@@ -51,14 +53,14 @@ export default function Hero() {
                 onClick={() => scrollToTarget("#projects")}
                 className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
               >
-                Проекты
+                {t("hero.cta")}
                 <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </button>
               <button
                 onClick={() => scrollToTarget("#contact")}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl glass text-sm font-medium text-white/80 hover:text-white hover:bg-white/[0.08] transition-all duration-300"
               >
-                Связаться
+                {t("contact.title")}
               </button>
             </motion.div>
 

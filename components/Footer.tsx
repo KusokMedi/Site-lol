@@ -1,8 +1,11 @@
 "use client";
 
 import { Terminal } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="border-t border-white/[0.04] py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -16,7 +19,7 @@ export default function Footer() {
           </span>
         </a>
         <p className="text-[11px] text-white/20 text-center">
-          Все права защищены. KusokMedi {new Date().getFullYear()}
+          {t("footer.rights")} KusokMedi {new Date().getFullYear()}
         </p>
       </div>
     </footer>

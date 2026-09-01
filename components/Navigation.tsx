@@ -5,25 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Terminal, Sun, Moon } from "lucide-react";
 import { scrollToTarget } from "@/lib/utils";
 import { useTheme } from "@/components/ThemeProvider";
-
-const navLinks = [
-  { label: "Главная", href: "#home" },
-  { label: "Обо мне", href: "#about" },
-  { label: "Услуги", href: "#services" },
-  { label: "Проекты", href: "#projects" },
-  { label: "Навыки", href: "#skills" },
-  { label: "Код", href: "#github" },
-  { label: "Контакты", href: "#contact" },
-];
+import { useLanguage } from "@/components/LanguageProvider";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLanguage();
   const barRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef(false);
   const activeRef = useRef("home");
+
+  const navLinks = [
+    { label: t("nav.home"), href: "#home" },
+    { label: t("nav.about"), href: "#about" },
+    { label: t("nav.services"), href: "#services" },
+    { label: t("nav.projects"), href: "#projects" },
+    { label: t("nav.code"), href: "#github" },
+    { label: t("nav.contacts"), href: "#contact" },
+  ];
 
   useEffect(() => {
     const update = () => {
@@ -180,6 +182,8 @@ export default function Navigation() {
               )}
             </AnimatePresence>
           </button>
+
+          <LanguageSwitcher />
         </div>
       </nav>
 

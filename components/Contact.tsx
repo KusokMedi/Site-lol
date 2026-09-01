@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import { Send, ArrowRight, MessageCircle } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Contact() {
+  const { t } = useLanguage();
+
   return (
     <AnimatedSection id="contact" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 grid-pattern opacity-30" />
@@ -13,16 +16,14 @@ export default function Contact() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center space-y-8">
-          <SectionBadge icon={MessageCircle} label="Контакты" />
+          <SectionBadge icon={MessageCircle} label={t("contact.title")} />
 
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Давайте создадим что-то{" "}
-            <span className="gradient-accent-text">вместе</span>
+            {t("contact.heading")}
           </h2>
 
           <p className="text-base sm:text-lg text-white/40 text-balance">
-            Есть проект или просто хотите пообщаться? Напишите мне в Телеграм
-            - я всегда готов обсудить и реализовать именно ваш проект по отличной цене.
+            {t("contact.text")}
           </p>
 
           <motion.div
@@ -38,7 +39,7 @@ export default function Contact() {
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-accent text-dark-950 font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
             >
               <Send className="w-5 h-5" />
-              Написать в Телеграм
+              {t("contact.button")}
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </motion.div>
