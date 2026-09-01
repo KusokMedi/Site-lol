@@ -6,24 +6,9 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import CountUp from "./CountUp";
 import { useLanguage } from "@/components/LanguageProvider";
+import { parseGradientText } from "./GradientText";
 
 const icons = [Briefcase, Layers, Code2, GitCommit];
-
-function GradientText({ text }: { text: string }) {
-  return (
-    <span className="gradient-accent-text">{text}</span>
-  );
-}
-
-function parseGradientText(text: string): React.ReactNode[] {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return <GradientText key={i} text={part.slice(2, -2)} />;
-    }
-    return part;
-  });
-}
 
 export default function About() {
   const { t } = useLanguage();

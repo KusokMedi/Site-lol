@@ -5,6 +5,7 @@ import { ExternalLink, FolderKanban } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
+import { parseGradientText } from "./GradientText";
 
 const projectKeys = ["anonspeak", "bestdev", "gridmc"];
 
@@ -22,7 +23,7 @@ export default function Projects() {
         <div className="text-center mb-16 space-y-4">
           <SectionBadge icon={FolderKanban} label={t("projects.title")} />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            {t("projects.heading")}
+            {parseGradientText(t("projects.heading"))}
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
             {t("projects.description")}

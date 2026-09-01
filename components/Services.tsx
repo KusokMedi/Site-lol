@@ -5,6 +5,7 @@ import { ArrowRight, Zap, Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wr
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
+import { parseGradientText } from "./GradientText";
 
 const serviceKeys = ["web", "bots", "backend", "linux", "programs", "audit", "hosting", "support", "api"];
 const iconsByKey: Record<string, React.ElementType> = {
@@ -33,7 +34,7 @@ export default function Services() {
         <div className="text-center mb-16 space-y-4">
           <SectionBadge icon={Zap} label={t("services.title")} />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            {t("services.heading")}
+            {parseGradientText(t("services.heading"))}
           </h2>
           <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
             {t("services.description")}

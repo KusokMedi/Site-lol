@@ -5,6 +5,7 @@ import { Send, ArrowRight, MessageCircle } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
+import { parseGradientText } from "./GradientText";
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -19,7 +20,7 @@ export default function Contact() {
           <SectionBadge icon={MessageCircle} label={t("contact.title")} />
 
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            {t("contact.heading")}
+            {parseGradientText(t("contact.heading"))}
           </h2>
 
           <p className="text-base sm:text-lg text-white/40 text-balance">
