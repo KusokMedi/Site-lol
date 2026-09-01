@@ -296,7 +296,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       setLangState(newLang);
       localStorage.setItem("lang", newLang);
-      setTimeout(() => setIsChanging(false), 2000);
+      setTimeout(() => setIsChanging(false), 2500);
     }, 1000);
   };
 

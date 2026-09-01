@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Terminal({ className = "" }: { className?: string }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [showFile, setShowFile] = useState(false);
   const [visibleLines, setVisibleLines] = useState(0);
 
@@ -25,7 +25,7 @@ export default function Terminal({ className = "" }: { className?: string }) {
     setShowFile(false);
     const fileTimer = setTimeout(() => setShowFile(true), 1200);
     return () => clearTimeout(fileTimer);
-  }, [t("terminal.line1")]);
+  }, [lang]);
 
   useEffect(() => {
     if (!showFile) return;
