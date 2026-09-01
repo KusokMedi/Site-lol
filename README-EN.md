@@ -57,5 +57,3 @@ Deployed to Vercel via GitHub Actions. Push to main — site updates automatical
 - Telegram: [@kusokmedi52](https://t.me/kusokmedi52)
 - GitHub: [@kusokmedi](https://github.com/kusokmedi)
 - YouTube: [@kusokmedi](https://youtube.com/@kusokmedi)
-
-[Русская версия](README.md)

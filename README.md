@@ -57,5 +57,3 @@ npm run lint
 - Telegram: [@kusokmedi52](https://t.me/kusokmedi52)
 - GitHub: [@kusokmedi](https://github.com/kusokmedi)
 - YouTube: [@kusokmedi](https://youtube.com/@kusokmedi)
-
-[English version](README-EN.md)
