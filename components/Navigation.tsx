@@ -124,7 +124,7 @@ export default function Navigation() {
             </span>
           </a>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => {
               const isActive = activeSection === link.href.slice(1);
               return (
@@ -145,45 +145,47 @@ export default function Navigation() {
             })}
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/70 hover:text-white transition-colors"
-            aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
-          >
-            {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/70 hover:text-white transition-colors"
+              aria-label={theme === "dark" ? "Светлая тема" : "Тёмная тема"}
+            >
+              <AnimatePresence mode="wait">
+                {theme === "dark" ? (
+                  <motion.div
+                    key="sun"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Sun className="w-4 h-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="moon"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Moon className="w-4 h-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
 
-          <button
-            onClick={toggleTheme}
-            className="relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/70 hover:text-white transition-colors"
-            aria-label={theme === "dark" ? "Светлая тема" : "Тёмная тема"}
-          >
-            <AnimatePresence mode="wait">
-              {theme === "dark" ? (
-                <motion.div
-                  key="sun"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Sun className="w-4 h-4" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="moon"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Moon className="w-4 h-4" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </button>
+            <LanguageSwitcher />
 
-          <LanguageSwitcher />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/70 hover:text-white transition-colors"
+              aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+            >
+              {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
       </nav>
 
