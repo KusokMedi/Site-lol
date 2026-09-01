@@ -8,6 +8,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 const languages = [
   { code: "en", label: "English" },
   { code: "ru", label: "Русский" },
+  { code: "lv", label: "Latviešu" },
   { code: "zh", label: "中文" },
   { code: "es", label: "Español" },
   { code: "hi", label: "हिन्दी" },
