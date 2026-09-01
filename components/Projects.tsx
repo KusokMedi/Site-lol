@@ -34,12 +34,12 @@ export default function Projects() {
             const gradients = ["from-white/20 to-stone-300/20", "from-yellow-400/20 to-amber-500/20", "from-sky-400/20 to-blue-500/20"];
             const images = ["/resources/AnonSpeak-logo.jpg", "/resources/BestDev-logo.jpg", "/resources/mc-1-21-11-logo.jpeg"];
             const techs = [["Python", "Telebot", "SQLite"], ["Python", "Telebot", "SQLite"], ["Paper", "Java", "Linux"]];
-            const features = [
-              ["Создание своей анонимной ссылки", "Ответ на анонимные сообщения", "Блокировка нежелательных пользователей", "Статистика сообщений"],
-              ["Заказ плагинов и сборок под ключ", "Консультации по проектам", "Заявки в команду разработки", "Готовые товары и решения"],
-              ["Экономика с /sell и /ah", "Без /spawn и лишнего мусора", "Один мир без правил", "Максимально ванильный геймплей"],
-            ];
             const links = ["https://t.me/AnonSpeakKM_bot", "https://t.me/bestdevsbot", "https://discord.kusokmedi.lat"];
+            const projectFeatures = [
+              [t("project.anonspeak.feat1"), t("project.anonspeak.feat2"), t("project.anonspeak.feat3"), t("project.anonspeak.feat4")],
+              [t("project.bestdev.feat1"), t("project.bestdev.feat2"), t("project.bestdev.feat3"), t("project.bestdev.feat4")],
+              [t("project.gridmc.feat1"), t("project.gridmc.feat2"), t("project.gridmc.feat3"), t("project.gridmc.feat4")],
+            ];
 
             return (
               <motion.div
@@ -84,7 +84,7 @@ export default function Projects() {
                   </div>
 
                   <ul className="space-y-1.5 pt-1">
-                    {features[i].map((f) => (
+                    {projectFeatures[i].map((f) => (
                       <li
                         key={f}
                         className="flex items-start gap-2 text-xs text-white/30"
