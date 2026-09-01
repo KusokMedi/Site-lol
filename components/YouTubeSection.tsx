@@ -16,9 +16,11 @@ export default function YouTubeSection() {
     async function fetchLatestVideo() {
       try {
         const channel = lang === "ru" ? "kusokmedi" : "kexbytes";
-        const res = await fetch(`/api/youtube?channel=${channel}`);
-        const data = await res.json();
-        if (data.videoId) setVideoId(data.videoId);
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.youtube.com/@${channel}/videos`)}`;
+        const res = await fetch(proxyUrl);
+        const html = await res.text();
+        const match = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+        if (match) setVideoId(match[1]);
       } catch (error) {
         console.error("Failed to fetch video:", error);
       } finally {
