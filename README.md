@@ -1,6 +1,6 @@
 # KusokMedi Portfolio
 
-[**Russian**](/README.md) | [English](/README-EN.md)
+**Russian** | [English](/README-EN.md)
 
 Личный сайт-портфолио разработчика.
 
