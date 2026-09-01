@@ -7,7 +7,6 @@ import AnimatedSection from "@/components/AnimatedSection";
 const About = dynamic(() => import("@/components/About"));
 const Services = dynamic(() => import("@/components/Services"));
 const Projects = dynamic(() => import("@/components/Projects"));
-const YouTubeSection = dynamic(() => import("@/components/YouTubeSection"));
 const Contact = dynamic(() => import("@/components/Contact"));
 const ScrollToTop = dynamic(() => import("@/components/ScrollToTop"));
 
@@ -20,7 +19,6 @@ export default function Home() {
         <AnimatedSection><About /></AnimatedSection>
         <AnimatedSection><Services /></AnimatedSection>
         <AnimatedSection><Projects /></AnimatedSection>
-        <AnimatedSection><YouTubeSection /></AnimatedSection>
         <AnimatedSection><Contact /></AnimatedSection>
         <Footer />
       </main>

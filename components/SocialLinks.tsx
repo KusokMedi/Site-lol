@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Send, Youtube, Globe } from "lucide-react";
+import { Github, Send, Globe } from "lucide-react";
+import YouTubeSelector from "./YouTubeSelector";
 
 const socials = [
   {
@@ -21,12 +22,6 @@ const socials = [
     url: "https://t.me/kusokmedi52",
     icon: Send,
     color: "hover:text-[#0088cc]",
-  },
-  {
-    name: "YouTube",
-    url: "https://youtube.com/@kusokmedi",
-    icon: Youtube,
-    color: "hover:text-[#FF0000]",
   },
 ];
 
@@ -50,6 +45,7 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
           <social.icon className="w-4 h-4" />
         </motion.a>
       ))}
+      <YouTubeSelector />
     </div>
   );
 }
