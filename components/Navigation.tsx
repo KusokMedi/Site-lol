@@ -25,6 +25,13 @@ export default function Navigation() {
     { label: t("nav.contacts"), href: "#contact" },
   ];
 
+  const mobileNavLinks = [
+    { label: t("nav.home"), href: "#home" },
+    { label: t("nav.about"), href: "#about" },
+    { label: t("nav.projects"), href: "#projects" },
+    { label: t("nav.contacts"), href: "#contact" },
+  ];
+
   useEffect(() => {
     const update = () => {
       const lenis = window.__lenis;
@@ -167,7 +174,7 @@ export default function Navigation() {
             className="md:hidden border-t border-white/[0.04] bg-dark-950/95 backdrop-blur-xl overflow-hidden"
           >
             <div className="px-4 py-4 space-y-1">
-              {navLinks.map((link, i) => {
+              {mobileNavLinks.map((link, i) => {
                 const isActive = activeSection === link.href.slice(1);
                 return (
                   <motion.a

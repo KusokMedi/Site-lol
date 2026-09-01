@@ -9,7 +9,7 @@ import LocaleHandler from "@/components/LocaleHandler";
 const siteUrl = "https://kusok-medi.ru";
 
 export const metadata: Metadata = {
-  title: "KusokMedi | Портфолио",
+  title: "KusokMedi",
   description:
     "Разработчик сайтов, ботов, автоматизации и цифровых решений. Специализация: Python, React, Node.js, Linux.",
   metadataBase: new URL(siteUrl),
