@@ -146,6 +146,8 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitcher />
+
             <button
               onClick={toggleTheme}
               className="relative w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/70 hover:text-white transition-colors"
@@ -175,8 +177,6 @@ export default function Navigation() {
                 )}
               </AnimatePresence>
             </button>
-
-            <LanguageSwitcher />
 
             <button
               onClick={() => setIsOpen(!isOpen)}

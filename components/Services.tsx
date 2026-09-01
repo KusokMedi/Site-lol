@@ -1,11 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Zap, Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wrench, Plug } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
-import { services } from "@/lib/data";
 import { useLanguage } from "@/components/LanguageProvider";
+
+const serviceKeys = ["web", "bots", "backend", "linux", "programs", "audit", "hosting", "support", "api"];
+const icons = [Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wrench, Plug];
 
 export default function Services() {
   const { t } = useLanguage();
@@ -29,9 +31,9 @@ export default function Services() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-          {services.map((service, i) => (
+          {serviceKeys.map((key, i) => (
             <motion.div
-              key={service.title}
+              key={key}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -39,19 +41,19 @@ export default function Services() {
               whileHover={{ y: -6, scale: 1.01 }}
               className="group p-6 sm:p-7 rounded-2xl glass glass-hover gradient-border transition-all duration-300 cursor-default hover:glow-sm"
             >
-              <service.icon className="w-6 h-6 text-accent-400 mb-4" />
+              <icons[i] className="w-6 h-6 text-accent-400 mb-4" />
               <h3 className="text-lg font-semibold text-white mb-1.5">
-                {service.title}
+                {t(`service.${key}.title`)}
               </h3>
-              <p className="text-sm text-white/40 mb-4">{service.description}</p>
+              <p className="text-sm text-white/40 mb-4">{t(`service.${key}.desc`)}</p>
               <ul className="space-y-1.5">
-                {service.details.map((detail) => (
+                {[1, 2, 3, 4].map((n) => (
                   <li
-                    key={detail}
+                    key={n}
                     className="flex items-center gap-2 text-xs text-white/30"
                   >
                     <ArrowRight className="w-3 h-3 text-accent-400/60" />
-                    {detail}
+                    {t(`service.${key}.detail${n}`)}
                   </li>
                 ))}
               </ul>

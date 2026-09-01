@@ -1,15 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User } from "lucide-react";
+import { User, Briefcase, Layers, Code2, GitCommit } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import CountUp from "./CountUp";
-import { highlights } from "@/lib/data";
 import { useLanguage } from "@/components/LanguageProvider";
+
+const icons = [Briefcase, Layers, Code2, GitCommit];
 
 export default function About() {
   const { t } = useLanguage();
+
+  const highlights = [
+    { key: "experience", icon: Briefcase },
+    { key: "projects", icon: Layers },
+    { key: "tech", icon: Code2 },
+    { key: "commits", icon: GitCommit },
+  ];
 
   return (
     <AnimatedSection id="about" className="relative py-24 sm:py-32">
@@ -39,13 +47,14 @@ export default function About() {
 
           <div className="grid grid-cols-2 gap-3">
             {highlights.map((item, i) => {
-              const match = item.value.match(/^(\d+)(.*)$/);
+              const value = t(`highlight.${item.key}.value`);
+              const match = value.match(/^(\d+)(.*)$/);
               const num = match ? parseInt(match[1]) : 0;
-              const suffix = match ? match[2] : item.value;
+              const suffix = match ? match[2] : "";
 
               return (
                 <motion.div
-                  key={item.label}
+                  key={item.key}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -59,9 +68,9 @@ export default function About() {
                       <CountUp value={num} suffix={suffix} />
                     </div>
                     <div className="text-sm font-medium text-white/80">
-                      {item.label}
+                      {t(`highlight.${item.key}`)}
                     </div>
-                    <div className="text-xs text-white/30">{item.desc}</div>
+                    <div className="text-xs text-white/30">{t(`highlight.${item.key}.desc`)}</div>
                   </div>
                 </motion.div>
               );
