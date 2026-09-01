@@ -2,26 +2,30 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const fileContent = [
-"Я - KusokMedi :)",
-"Разработчик, готовый воплотить вашу идею в код!",
-"",
-"Я могу создать для вас Бота, Сайт или Приложение,",
-"помочь с хостингом, улучшить текущий проект,",
-"интегрировать ИИ или другие сервисы в ваш продукт!",
-"",
-"Давайте создадим что-то крутое!"
-];
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Terminal({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
   const [showFile, setShowFile] = useState(false);
   const [visibleLines, setVisibleLines] = useState(0);
 
+  const fileContent = [
+    t("terminal.line1"),
+    t("terminal.line2"),
+    t("terminal.line3"),
+    t("terminal.line4"),
+    t("terminal.line5"),
+    t("terminal.line6"),
+    t("terminal.line7"),
+    t("terminal.line8"),
+  ];
+
   useEffect(() => {
+    setVisibleLines(0);
+    setShowFile(false);
     const fileTimer = setTimeout(() => setShowFile(true), 1200);
     return () => clearTimeout(fileTimer);
-  }, []);
+  }, [t("terminal.line1")]);
 
   useEffect(() => {
     if (!showFile) return;
@@ -32,7 +36,7 @@ export default function Terminal({ className = "" }: { className?: string }) {
       );
       return () => clearTimeout(lineTimer);
     }
-  }, [showFile, visibleLines]);
+  }, [showFile, visibleLines, fileContent.length]);
 
   return (
     <motion.div

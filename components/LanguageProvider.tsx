@@ -26,6 +26,14 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.title": "Developer / Programmer",
     "hero.description": "I create websites, bots, automation and digital solutions. Specialization: Python, React, Node.js, Linux.",
     "hero.cta": "View Projects",
+    "terminal.line1": "I'm KusokMedi :)",
+    "terminal.line2": "Developer ready to turn your idea into code!",
+    "terminal.line3": "",
+    "terminal.line4": "I can create a Bot, Website or Application for you,",
+    "terminal.line5": "help with hosting, improve your current project,",
+    "terminal.line6": "integrate AI or other services into your product!",
+    "terminal.line7": "",
+    "terminal.line8": "Let's create something cool!",
     "about.title": "About Me",
     "about.subtitle": "Who I am",
     "about.heading": "I create digital products that matter",
@@ -150,6 +158,14 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.title": "Разработчик / Программист",
     "hero.description": "Создаю сайты, ботов, автоматизацию и цифровые решения. Специализация: Python, React, Node.js, Linux.",
     "hero.cta": "Смотреть проекты",
+    "terminal.line1": "Я - KusokMedi :)",
+    "terminal.line2": "Разработчик, готовый воплотить вашу идею в код!",
+    "terminal.line3": "",
+    "terminal.line4": "Я могу создать для вас Бота, Сайт или Приложение,",
+    "terminal.line5": "помочь с хостингом, улучшить текущий проект,",
+    "terminal.line6": "интегрировать ИИ или другие сервисы в ваш продукт!",
+    "terminal.line7": "",
+    "terminal.line8": "Давайте создадим что-то крутое!",
     "about.title": "Обо мне",
     "about.subtitle": "Кто я",
     "about.heading": "Создаю цифровые продукты, которые имеют значение",
@@ -280,8 +296,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       setLangState(newLang);
       localStorage.setItem("lang", newLang);
-      setTimeout(() => setIsChanging(false), 50);
-    }, 150);
+      setTimeout(() => setIsChanging(false), 2000);
+    }, 1000);
   };
 
   const t = (key: string): string => {
@@ -296,15 +312,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
             className="fixed inset-0 z-[9999] pointer-events-none"
           >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="absolute inset-0 bg-dark-950/50 backdrop-blur-sm"
+              initial={{ backdropFilter: "blur(0px)" }}
+              animate={{ backdropFilter: "blur(16px)" }}
+              exit={{ backdropFilter: "blur(0px)" }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+              className="absolute inset-0 bg-dark-950/30"
             />
           </motion.div>
         )}
