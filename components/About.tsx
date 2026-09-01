@@ -9,6 +9,22 @@ import { useLanguage } from "@/components/LanguageProvider";
 
 const icons = [Briefcase, Layers, Code2, GitCommit];
 
+function GradientText({ text }: { text: string }) {
+  return (
+    <span className="gradient-accent-text">{text}</span>
+  );
+}
+
+function parseGradientText(text: string): React.ReactNode[] {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <GradientText key={i} text={part.slice(2, -2)} />;
+    }
+    return part;
+  });
+}
+
 export default function About() {
   const { t } = useLanguage();
 
@@ -32,7 +48,7 @@ export default function About() {
             <SectionBadge icon={User} label={t("about.title")} />
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.15]">
-              {t("about.heading")}
+              {parseGradientText(t("about.heading"))}
             </h2>
 
             <div className="space-y-4 text-white/40 leading-relaxed">
