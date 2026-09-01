@@ -7,47 +7,27 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const channelHandles: Record<string, string> = {
-  kusokmedi: "@kusokmedi",
-  kexbytes: "@kexbytes",
-};
-
-const INVIDIOUS = "https://inv.nadeko.net";
-
 export default function YouTubeSection() {
   const { t, lang } = useLanguage();
   const [videoId, setVideoId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const channelKey = lang === "ru" ? "kusokmedi" : "kexbytes";
-
   useEffect(() => {
     async function fetchLatestVideo() {
       try {
-        const channelRes = await fetch(
-          `${INVIDIOUS}/api/v1/channels?q=${channelHandles[channelKey]}`
-        );
-        const channelData = await channelRes.json();
-        const channelId = channelData[0]?.id;
-
-        if (channelId) {
-          const videosRes = await fetch(
-            `${INVIDIOUS}/api/v1/channels/${channelId}/videos`
-          );
-          const videos = await videosRes.json();
-          if (videos[0]?.videoId) {
-            setVideoId(videos[0].videoId);
-          }
-        }
+        const channel = lang === "ru" ? "kusokmedi" : "kexbytes";
+        const res = await fetch(`/api/youtube?channel=${channel}`);
+        const data = await res.json();
+        if (data.videoId) setVideoId(data.videoId);
       } catch (error) {
-        console.error("Failed to fetch latest video:", error);
+        console.error("Failed to fetch video:", error);
       } finally {
         setLoading(false);
       }
     }
 
     fetchLatestVideo();
-  }, [channelKey]);
+  }, [lang]);
 
   return (
     <AnimatedSection id="youtube" className="relative py-24 sm:py-32">
