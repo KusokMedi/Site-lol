@@ -1,5 +1,7 @@
 # KusokMedi Portfolio
 
+[**English**](/README-EN.md) | [Russian](/README.md)
+
 Personal developer portfolio website.
 
 ## Stack

@@ -1,5 +1,7 @@
 # KusokMedi Portfolio
 
+[**Russian**](/README.md) | [English](/README-EN.md)
+
 Личный сайт-портфолио разработчика.
 
 ## Стек
