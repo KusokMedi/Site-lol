@@ -301,30 +301,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   const t = (key: string): string => {
-    return translations[lang][key] || key;
+    const value = translations[lang][key];
+    return value !== undefined ? value : key;
   };
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
-      <AnimatePresence>
-        {isChanging && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            className="fixed inset-0 z-[9999] pointer-events-none"
-          >
-            <motion.div
-              initial={{ backdropFilter: "blur(0px)" }}
-              animate={{ backdropFilter: "blur(16px)" }}
-              exit={{ backdropFilter: "blur(0px)" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-              className="absolute inset-0 bg-dark-950/30"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isChanging && (
+        <div className="fixed inset-0 z-[9999] pointer-events-none transition-all duration-1000 ease-in-out backdrop-blur-xl" />
+      )}
       {children}
     </LanguageContext.Provider>
   );
