@@ -283,6 +283,7 @@ const translations: Record<Language, Record<string, string>> = {
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>("en");
   const [isChanging, setIsChanging] = useState(false);
+  const [contentOpacity, setContentOpacity] = useState(true);
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Language | null;
@@ -292,12 +293,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setLang = (newLang: Language) => {
-    setIsChanging(true);
+    setContentOpacity(false);
     setTimeout(() => {
       setLangState(newLang);
       localStorage.setItem("lang", newLang);
-      setTimeout(() => setIsChanging(false), 2500);
-    }, 1000);
+      setTimeout(() => setContentOpacity(true), 100);
+    }, 500);
   };
 
   const t = (key: string): string => {
@@ -307,10 +308,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
-      {isChanging && (
-        <div className="fixed inset-0 z-[9999] pointer-events-none transition-all duration-1000 ease-in-out backdrop-blur-xl" />
-      )}
-      {children}
+      <div
+        className={`transition-opacity duration-500 ${contentOpacity ? "opacity-100" : "opacity-0"}`}
+      >
+        {children}
+      </div>
     </LanguageContext.Provider>
   );
 }
