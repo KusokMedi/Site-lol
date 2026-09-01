@@ -1,35 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Youtube } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 
+const channelPlaylists: Record<string, string> = {
+  kusokmedi: "UUWjY0sSFM4z_xLClJFKsXig",
+  kexbytes: "UUsomeotherid",
+};
+
 export default function YouTubeSection() {
   const { t, lang } = useLanguage();
-  const [videoId, setVideoId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchLatestVideo() {
-      try {
-        const channel = lang === "ru" ? "kusokmedi" : "kexbytes";
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://www.youtube.com/@${channel}/videos`)}`;
-        const res = await fetch(proxyUrl);
-        const html = await res.text();
-        const match = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
-        if (match) setVideoId(match[1]);
-      } catch (error) {
-        console.error("Failed to fetch video:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchLatestVideo();
-  }, [lang]);
+  const channelKey = lang === "ru" ? "kusokmedi" : "kexbytes";
+  const playlistId = channelPlaylists[channelKey];
 
   return (
     <AnimatedSection id="youtube" className="relative py-24 sm:py-32">
@@ -53,25 +38,15 @@ export default function YouTubeSection() {
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto"
         >
-          {loading ? (
-            <div className="aspect-video rounded-2xl glass flex items-center justify-center">
-              <div className="text-white/40">Loading...</div>
-            </div>
-          ) : videoId ? (
-            <div className="relative aspect-video rounded-2xl overflow-hidden glass gradient-border">
-              <iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
-                title="Latest video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              />
-            </div>
-          ) : (
-            <div className="aspect-video rounded-2xl glass flex items-center justify-center">
-              <div className="text-white/40">Video not available</div>
-            </div>
-          )}
+          <div className="relative aspect-video rounded-2xl overflow-hidden glass gradient-border">
+            <iframe
+              src={`https://www.youtube.com/embed/videoseries?list=${playlistId}`}
+              title="Latest video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            />
+          </div>
         </motion.div>
       </div>
     </AnimatedSection>
