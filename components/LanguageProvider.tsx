@@ -280,8 +280,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       setLangState(newLang);
       localStorage.setItem("lang", newLang);
-      setTimeout(() => setIsChanging(false), 100);
-    }, 300);
+      setTimeout(() => setIsChanging(false), 50);
+    }, 150);
   };
 
   const t = (key: string): string => {
@@ -296,15 +296,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 z-[9999] pointer-events-none"
           >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-dark-950"
+              transition={{ duration: 0.15 }}
+              className="absolute inset-0 bg-dark-950/50 backdrop-blur-sm"
             />
           </motion.div>
         )}

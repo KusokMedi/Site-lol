@@ -25,17 +25,22 @@ export default function ScrollToTop() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.button
+        <motion.div
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 10 }}
           transition={{ duration: 0.2 }}
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-xl glass text-white/50 hover:text-accent-400 hover:border-accent-400/30 transition-all duration-300 border border-white/[0.06] cursor-pointer"
-          title="Наверх"
+          className="fixed bottom-6 right-6 z-50"
         >
-          <ChevronUp className="w-4 h-4" />
-        </motion.button>
+          <div className="absolute inset-0 -z-10 rounded-2xl bg-dark-950/80 backdrop-blur-xl blur-sm" />
+          <button
+            onClick={scrollToTop}
+            className="relative flex items-center justify-center w-10 h-10 rounded-xl glass text-white/50 hover:text-accent-400 hover:border-accent-400/30 transition-all duration-300 border border-white/[0.06] cursor-pointer"
+            title="Наверх"
+          >
+            <ChevronUp className="w-4 h-4" />
+          </button>
+        </motion.div>
       )}
     </AnimatePresence>
   );

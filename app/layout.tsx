@@ -3,7 +3,6 @@ import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
 
@@ -69,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className="dark">
+    <html lang="ru">
       <head>
         <link rel="canonical" href={siteUrl} />
         <link rel="manifest" href="/manifest.json" />
@@ -88,15 +87,13 @@ export default function RootLayout({
         />
       </head>
       <body className="noise-overlay relative min-h-screen antialiased">
-        <ThemeProvider>
-          <LanguageProvider>
-            <LocaleHandler />
-            {children}
-            <Particles />
-            <SmoothScroll />
-            <Analytics />
-          </LanguageProvider>
-        </ThemeProvider>
+        <LanguageProvider>
+          <LocaleHandler />
+          {children}
+          <Particles />
+          <SmoothScroll />
+          <Analytics />
+        </LanguageProvider>
       </body>
     </html>
   );
