@@ -1,20 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Youtube } from "lucide-react";
+import { Youtube, ExternalLink } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const channelPlaylists: Record<string, string> = {
-  kusokmedi: "UUWjY0sSFM4z_xLClJFKsXig",
-  kexbytes: "UUsomeotherid",
+const channelLinks: Record<string, string> = {
+  kusokmedi: "https://www.youtube.com/@kusokmedi",
+  kexbytes: "https://www.youtube.com/@kexbytes",
 };
 
 export default function YouTubeSection() {
   const { t, lang } = useLanguage();
   const channelKey = lang === "ru" ? "kusokmedi" : "kexbytes";
-  const playlistId = channelPlaylists[channelKey];
 
   return (
     <AnimatedSection id="youtube" className="relative py-24 sm:py-32">
@@ -38,15 +37,31 @@ export default function YouTubeSection() {
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="relative aspect-video rounded-2xl overflow-hidden glass gradient-border">
-            <iframe
-              src={`https://www.youtube.com/embed/videoseries?list=${playlistId}`}
-              title="Latest video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-            />
-          </div>
+          <a
+            href={channelLinks[channelKey]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block group relative overflow-hidden rounded-2xl glass gradient-border p-8 sm:p-12 text-center transition-all duration-300 hover:bg-white/[0.05]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative space-y-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/10 text-red-500 group-hover:scale-110 transition-transform duration-300">
+                <Youtube className="w-8 h-8" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-lg sm:text-xl font-semibold text-white/90">
+                  {t("youtube.watch")}
+                </p>
+                <p className="text-sm text-white/40">
+                  {t("youtube.channel")}
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 text-accent-400 text-sm font-medium">
+                {t("youtube.open")}
+                <ExternalLink className="w-4 h-4" />
+              </div>
+            </div>
+          </a>
         </motion.div>
       </div>
     </AnimatedSection>
