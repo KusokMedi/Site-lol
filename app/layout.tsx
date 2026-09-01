@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
+import { Analytics } from "@vercel/analytics/next";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -83,6 +84,7 @@ export default function RootLayout({
         {children}
         <Particles />
         <SmoothScroll />
+        <Analytics />
       </body>
     </html>
   );
