@@ -50,7 +50,7 @@ export default function Hero() {
               className="flex flex-wrap gap-3"
             >
               <button
-                onClick={() => scrollToTarget("#projects")}
+                onClick={() => scrollToTarget("#services")}
                 className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
               >
                 {t("hero.cta")}
