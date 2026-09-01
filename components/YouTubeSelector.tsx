@@ -7,12 +7,12 @@ import { useLanguage } from "@/components/LanguageProvider";
 
 const youtubeChannels = [
   {
-    name: "KusokMedi",
+    name: "@kusokmedi",
     url: "https://youtube.com/@kusokmedi",
     lang: "ru",
   },
   {
-    name: "KexBytes",
+    name: "@kexbytes",
     url: "https://youtube.com/@kexbytes",
     lang: "en",
   },
@@ -70,7 +70,7 @@ export default function YouTubeSelector({ className = "" }: { className?: string
                     <Youtube className="w-4 h-4 text-[#FF0000]" />
                     <span>{channel.name}</span>
                     <span className="ml-auto text-xs text-white/30">
-                      {channel.lang === "ru" ? "RU" : "EN"}
+                      [{channel.lang.toUpperCase()}]
                     </span>
                   </a>
                 ))}
