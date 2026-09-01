@@ -17,9 +17,22 @@ export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setVisible(window.scrollY > 400);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const lenis = window.__lenis;
+
+    if (lenis) {
+      // Bug #9 fixed: use Lenis scroll event instead of window.scrollY,
+      // which is unreliable when Lenis intercepts native scroll.
+      const handleLenisScroll = ({ scroll }: { scroll: number }) => {
+        setVisible(scroll > 400);
+      };
+      lenis.on("scroll", handleLenisScroll);
+      return () => lenis.off("scroll", handleLenisScroll);
+    } else {
+      // Fallback for when Lenis is not active (touch devices etc.)
+      const handleScroll = () => setVisible(window.scrollY > 400);
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   return (

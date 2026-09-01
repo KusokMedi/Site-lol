@@ -18,16 +18,27 @@ export default function CountUp({ value, suffix = "" }: CountUpProps) {
 
     const duration = 1500;
     const start = performance.now();
+    let rafId: number;
+    // Guard against calling setState on an unmounted component
+    let cancelled = false;
 
     const tick = (now: number) => {
+      if (cancelled) return;
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) {
+        rafId = requestAnimationFrame(tick);
+      }
     };
 
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafId);
+    };
   }, [isInView, value]);
 
   return (

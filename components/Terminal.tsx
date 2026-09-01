@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
@@ -9,7 +9,9 @@ export default function Terminal({ className = "" }: { className?: string }) {
   const [showFile, setShowFile] = useState(false);
   const [visibleLines, setVisibleLines] = useState(0);
 
-  const fileContent = [
+  // Bug #7 fixed: memoize fileContent so the array reference is stable across
+  // re-renders and the line-by-line timer effect only re-runs when lang changes.
+  const fileContent = useMemo(() => [
     t("terminal.line1"),
     t("terminal.line2"),
     t("terminal.line3"),
@@ -18,7 +20,8 @@ export default function Terminal({ className = "" }: { className?: string }) {
     t("terminal.line6"),
     t("terminal.line7"),
     t("terminal.line8"),
-  ];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [lang]);
 
   useEffect(() => {
     setVisibleLines(0);

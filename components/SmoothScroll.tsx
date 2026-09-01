@@ -2,18 +2,12 @@
 
 import { useEffect, useRef } from "react";
 import Lenis from "lenis";
+import { isTouchDevice } from "@/lib/isTouchDevice";
 
 declare global {
   interface Window {
     __lenis?: Lenis;
   }
-}
-
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    window.matchMedia("(pointer: coarse)").matches
-  );
 }
 
 export default function SmoothScroll() {
@@ -36,14 +30,17 @@ export default function SmoothScroll() {
 
     window.__lenis = lenis;
 
+    let animId: number;
+
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      animId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    animId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(animId);
       lenis.destroy();
       delete window.__lenis;
     };

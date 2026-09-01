@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -7,6 +7,15 @@ import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
 
 const siteUrl = "https://kusok-medi.ru";
+
+// #4: Explicit viewport export — gives us viewport-fit=cover for iOS notch
+// and control over initial-scale. Next.js 14+ reads this as the <meta viewport> tag.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#0a0a0a",
+};
 
 export const metadata: Metadata = {
   title: "KusokMedi",
@@ -32,9 +41,6 @@ export const metadata: Metadata = {
     title: "KusokMedi | Портфолио",
     description:
       "Разработчик сайтов, ботов, автоматизации и цифровых решений.",
-  },
-  other: {
-    "theme-color": "#0a0a0a",
   },
 };
 
@@ -68,15 +74,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru">
+    // lang="en" is the safe SSR default; LocaleHandler updates it on the client
+    <html lang="en">
       <head>
         <link rel="canonical" href={siteUrl} />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon.svg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        {/* Preconnect first, then preload the stylesheet to reduce render-blocking */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        {/* #6: preload hint so the browser fetches the CSS before render */}
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
           rel="stylesheet"

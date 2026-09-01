@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef, ReactNode } from "react";
 
 interface Props {
@@ -13,6 +12,7 @@ interface Props {
 
 export default function AnimatedSection({ children, id, className = "", delay = 0 }: Props) {
   const ref = useRef(null);
+  // framer-motion v12 uses "margin" (maps to IntersectionObserver rootMargin internally)
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (

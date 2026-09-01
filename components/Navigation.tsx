@@ -24,46 +24,59 @@ export default function Navigation() {
     { label: t("nav.contacts"), href: "#contact" },
   ];
 
+  // Bug #8 fixed: added #services to mobileNavLinks
   const mobileNavLinks = [
     { label: t("nav.home"), href: "#home" },
     { label: t("nav.about"), href: "#about" },
+    { label: t("nav.services"), href: "#services" },
     { label: t("nav.projects"), href: "#projects" },
     { label: t("nav.contacts"), href: "#contact" },
   ];
 
   useEffect(() => {
-    const update = () => {
-      const lenis = window.__lenis;
-      if (lenis) {
-        const pct = Math.min(lenis.progress * 100, 100);
-        if (barRef.current) barRef.current.style.width = `${pct}%`;
-        const newScrolled = lenis.scroll > 50;
-        if (newScrolled !== scrolledRef.current) {
-          scrolledRef.current = newScrolled;
-          setIsScrolled(newScrolled);
+    // Progress bar width is a direct DOM write on every scroll event — no re-render.
+    // setIsScrolled (React re-render) is throttled: only fires when the boolean
+    // actually flips, and is batched through rAF to run at most once per frame.
+    let rafPending = false;
+
+    const handleScroll = (scrollY: number, progress: number) => {
+      if (barRef.current) barRef.current.style.width = `${Math.min(progress * 100, 100)}%`;
+
+      const newScrolled = scrollY > 50;
+      if (newScrolled !== scrolledRef.current) {
+        scrolledRef.current = newScrolled;
+        if (!rafPending) {
+          rafPending = true;
+          requestAnimationFrame(() => {
+            rafPending = false;
+            setIsScrolled(newScrolled);
+          });
         }
       }
     };
 
     const lenis = window.__lenis;
+    let fallback: (() => void) | null = null;
+
     if (lenis) {
-      lenis.on("scroll", update);
-      update();
+      const onLenisScroll = () => handleScroll(lenis.scroll, lenis.progress);
+      lenis.on("scroll", onLenisScroll);
+      onLenisScroll();
+      // Store unsub fn so cleanup can reach it
+      (lenis as unknown as Record<string, unknown>).__navUnsub = () => lenis.off("scroll", onLenisScroll);
     } else {
-      const fallback = () => {
+      fallback = () => {
         const top = window.scrollY;
         const docH = document.documentElement.scrollHeight - window.innerHeight;
-        const pct = docH > 0 ? (top / docH) * 100 : 0;
-        if (barRef.current) barRef.current.style.width = `${pct}%`;
-        const newScrolled = top > 50;
-        if (newScrolled !== scrolledRef.current) {
-          scrolledRef.current = newScrolled;
-          setIsScrolled(newScrolled);
-        }
+        handleScroll(top, docH > 0 ? top / docH : 0);
       };
       window.addEventListener("scroll", fallback, { passive: true });
       fallback();
     }
+
+    // Bug #2 fixed: look up section IDs inside the effect so the observer
+    // always reflects the current navLinks (also re-runs when t() changes).
+    const sectionIds = navLinks.map(({ href }) => href.slice(1));
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -80,16 +93,25 @@ export default function Navigation() {
       { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
     );
 
-    const sections = navLinks
-      .map(({ href }) => document.getElementById(href.slice(1)))
-      .filter(Boolean);
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
 
-    sections.forEach((el) => el && observer.observe(el));
+    sections.forEach((el) => observer.observe(el));
+
     return () => {
       observer.disconnect();
-      if (lenis) lenis.off("scroll", update);
+      if (lenis) {
+        const unsub = (lenis as unknown as Record<string, unknown>).__navUnsub as (() => void) | undefined;
+        unsub?.();
+        delete (lenis as unknown as Record<string, unknown>).__navUnsub;
+      } else if (fallback) {
+        window.removeEventListener("scroll", fallback);
+      }
     };
-  }, []);
+  // Bug #2 fixed: re-run when the language changes so sections are re-observed
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t]);
 
   const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();

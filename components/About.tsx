@@ -49,9 +49,15 @@ export default function About() {
           <div className="grid grid-cols-2 gap-3">
             {highlights.map((item, i) => {
               const value = t(`highlight.${item.key}.value`);
-              const match = value.match(/^(\d+)(.*)$/);
-              const num = match ? parseInt(match[1]) : 0;
-              const suffix = match ? match[2] : "";
+              // Bug #12 fixed: extract the first run of digits anywhere in the
+              // string, so translations like "3+ years" or "más de 25" still
+              // resolve to a valid number. Falls back to 0 only if truly absent.
+              const digitMatch = value.match(/(\d+)/);
+              const num = digitMatch ? parseInt(digitMatch[1], 10) : 0;
+              // Capture everything after the digits as the suffix (e.g. "+")
+              const suffix = digitMatch
+                ? value.slice(digitMatch.index! + digitMatch[1].length)
+                : "";
 
               return (
                 <motion.div

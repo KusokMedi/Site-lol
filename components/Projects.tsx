@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ExternalLink, FolderKanban } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
@@ -7,7 +8,32 @@ import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
 
-const projectKeys = ["anonspeak", "bestdev", "gridmc"];
+const projectKeys = ["anonspeak", "bestdev", "gridmc"] as const;
+type ProjectKey = typeof projectKeys[number];
+
+const gradients: Record<ProjectKey, string> = {
+  anonspeak: "from-white/20 to-stone-300/20",
+  bestdev: "from-yellow-400/20 to-amber-500/20",
+  gridmc: "from-sky-400/20 to-blue-500/20",
+};
+
+const images: Record<ProjectKey, string> = {
+  anonspeak: "/resources/AnonSpeak-logo.jpg",
+  bestdev: "/resources/BestDev-logo.jpg",
+  gridmc: "/resources/mc-1-21-11-logo.jpeg",
+};
+
+const techs: Record<ProjectKey, string[]> = {
+  anonspeak: ["Python", "Telebot", "SQLite"],
+  bestdev: ["Python", "Telebot", "SQLite"],
+  gridmc: ["Paper", "Java", "Linux"],
+};
+
+const links: Record<ProjectKey, string> = {
+  anonspeak: "https://t.me/AnonSpeakKM_bot",
+  bestdev: "https://t.me/bestdevsbot",
+  gridmc: "https://discord.kusokmedi.lat",
+};
 
 export default function Projects() {
   const { t } = useLanguage();
@@ -32,15 +58,7 @@ export default function Projects() {
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {projectKeys.map((key, i) => {
-            const gradients = ["from-white/20 to-stone-300/20", "from-yellow-400/20 to-amber-500/20", "from-sky-400/20 to-blue-500/20"];
-            const images = ["/resources/AnonSpeak-logo.jpg", "/resources/BestDev-logo.jpg", "/resources/mc-1-21-11-logo.jpeg"];
-            const techs = [["Python", "Telebot", "SQLite"], ["Python", "Telebot", "SQLite"], ["Paper", "Java", "Linux"]];
-            const links = ["https://t.me/AnonSpeakKM_bot", "https://t.me/bestdevsbot", "https://discord.kusokmedi.lat"];
-            const projectFeatures = [
-              [t("project.anonspeak.feat1"), t("project.anonspeak.feat2"), t("project.anonspeak.feat3"), t("project.anonspeak.feat4")],
-              [t("project.bestdev.feat1"), t("project.bestdev.feat2"), t("project.bestdev.feat3"), t("project.bestdev.feat4")],
-              [t("project.gridmc.feat1"), t("project.gridmc.feat2"), t("project.gridmc.feat3"), t("project.gridmc.feat4")],
-            ];
+            const feats = [1, 2, 3, 4].map((n) => t(`project.${key}.feat${n}`));
 
             return (
               <motion.div
@@ -53,16 +71,19 @@ export default function Projects() {
                 className="group relative overflow-hidden rounded-2xl glass gradient-border transition-all duration-500 hover:glow-sm flex flex-col"
               >
                 <div
-                  className={`relative h-44 sm:h-48 bg-gradient-to-br ${gradients[i]} flex items-center justify-center overflow-hidden`}
+                  className={`relative h-44 sm:h-48 bg-gradient-to-br ${gradients[key]} overflow-hidden`}
                 >
-                  <div className="absolute inset-0 bg-dark-950/40" />
-                  <div className="absolute inset-4 rounded-full bg-accent-500/20 blur-3xl" />
-                  <img
-                    src={images[i]}
+                  <div className="absolute inset-0 bg-dark-950/40 z-10" />
+                  <div className="absolute inset-4 rounded-full bg-accent-500/20 blur-3xl z-0" />
+                  {/* next/image: auto lazy loading, WebP conversion, no layout shift */}
+                  <Image
+                    src={images[key]}
                     alt={t(`project.${key}.title`)}
-                    className="relative w-full h-full object-contain p-6 select-none drop-shadow-[0_0_20px_rgba(255,179,0,0.15)]"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                    className="object-contain p-6 select-none drop-shadow-[0_0_20px_rgba(255,179,0,0.15)]"
                   />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-dark-950 via-transparent to-transparent" />
+                  <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-dark-950 via-transparent to-transparent" />
                 </div>
 
                 <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col">
@@ -74,25 +95,23 @@ export default function Projects() {
                   </p>
 
                   <div className="flex flex-wrap gap-1.5">
-                    {techs[i].map((t) => (
+                    {techs[key].map((tech) => (
                       <span
-                        key={t}
+                        key={tech}
                         className="px-2 py-0.5 text-[11px] font-mono rounded-md bg-white/[0.04] text-white/40 border border-white/[0.06]"
                       >
-                        {t}
+                        {tech}
                       </span>
                     ))}
                   </div>
 
                   <ul className="space-y-1.5 pt-1">
-                    {projectFeatures[i].map((f) => (
+                    {feats.map((f) => (
                       <li
                         key={f}
                         className="flex items-start gap-2 text-xs text-white/30"
                       >
-                        <span className="text-accent-400/60 mt-0.5 shrink-0">
-                          ▹
-                        </span>
+                        <span className="text-accent-400/60 mt-0.5 shrink-0">▹</span>
                         {f}
                       </li>
                     ))}
@@ -100,7 +119,7 @@ export default function Projects() {
 
                   <div className="mt-auto pt-4">
                     <a
-                      href={links[i]}
+                      href={links[key]}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"

@@ -80,6 +80,8 @@ export default function GitHubRepos() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
+      // Bug #6 fixed: reset error state at the start of every fetch attempt
+      setError(false);
 
       const cached = fetchFromCache();
       if (cached) {
@@ -107,6 +109,10 @@ export default function GitHubRepos() {
       } catch (err) {
         console.warn("Failed to fetch commits:", err);
         setError(true);
+        // Bug #7 fixed: only cache on success so a transient error doesn't
+        // freeze a null value for the full CACHE_DURATION window.
+        setLoading(false);
+        return;
       }
 
       saveToCache({ timestamp: Date.now(), contributions: contribs });

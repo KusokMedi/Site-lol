@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-function isTouchDevice() {
-  return (
-    "ontouchstart" in window ||
-    window.matchMedia("(pointer: coarse)").matches
-  );
-}
+import { isTouchDevice } from "@/lib/isTouchDevice";
 
 export default function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
