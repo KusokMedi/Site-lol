@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Language = "en" | "ru";
 
@@ -265,6 +266,7 @@ const translations: Record<Language, Record<string, string>> = {
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>("en");
+  const [isChanging, setIsChanging] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Language | null;
@@ -274,8 +276,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setLang = (newLang: Language) => {
-    setLangState(newLang);
-    localStorage.setItem("lang", newLang);
+    setIsChanging(true);
+    setTimeout(() => {
+      setLangState(newLang);
+      localStorage.setItem("lang", newLang);
+      setTimeout(() => setIsChanging(false), 100);
+    }, 300);
   };
 
   const t = (key: string): string => {
@@ -284,6 +290,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>
+      <AnimatePresence>
+        {isChanging && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[9999] pointer-events-none"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 bg-dark-950"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       {children}
     </LanguageContext.Provider>
   );
