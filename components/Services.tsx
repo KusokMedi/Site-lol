@@ -35,7 +35,6 @@ export default function Services() {
           style={{ background: "radial-gradient(circle, rgba(255,106,0,0.05) 0%, transparent 65%)", filter: "blur(90px)" }}
         />
         <div className="absolute inset-0 grid-pattern opacity-10" />
-        <div className="absolute top-0 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

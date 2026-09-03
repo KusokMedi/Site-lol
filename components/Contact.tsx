@@ -1,16 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowRight, MessageCircle, Clock, CheckCircle2 } from "lucide-react";
+import { Send, ArrowRight, MessageCircle } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
-
-const perks = [
-  { icon: Clock,        key: "response" },
-  { icon: CheckCircle2, key: "quality" },
-];
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -32,8 +27,6 @@ export default function Contact() {
           style={{ background: "radial-gradient(circle, rgba(255,140,0,0.06) 0%, transparent 65%)", filter: "blur(60px)" }}
         />
         <div className="absolute inset-0 grid-pattern opacity-20" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,19 +59,6 @@ export default function Contact() {
               {t("contact.button")}
               <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
-          </div>
-
-          {/* Subtle social proof / perks */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <div className="flex items-center gap-2 text-sm text-white/30">
-              <Clock className="w-3.5 h-3.5 text-accent-400/50" />
-              <span>Отвечаю в течение дня</span>
-            </div>
-            <span className="w-px h-4 bg-white/[0.08]" />
-            <div className="flex items-center gap-2 text-sm text-white/30">
-              <CheckCircle2 className="w-3.5 h-3.5 text-accent-400/50" />
-              <span>Бесплатная консультация</span>
-            </div>
           </div>
         </motion.div>
       </div>

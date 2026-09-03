@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Terminal from "./Terminal";
 import SocialLinks from "./SocialLinks";
 import { scrollToTarget } from "@/lib/utils";
@@ -116,7 +116,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator — mouse icon */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -125,11 +125,30 @@ export default function Hero() {
       >
         <button
           onClick={() => scrollToTarget("#about")}
-          className="flex flex-col items-center gap-1 text-white/20 hover:text-white/50 transition-colors duration-300"
+          className="flex items-center justify-center text-white/20 hover:text-white/50 transition-colors duration-300"
           aria-label="Scroll down"
         >
-          <span className="text-[10px] font-mono tracking-widest uppercase">scroll</span>
-          <ChevronDown className="w-4 h-4 animate-float" />
+          <svg
+            width="20"
+            height="32"
+            viewBox="0 0 20 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="1.5"
+              y="1.5"
+              width="17"
+              height="29"
+              rx="8.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <circle cx="10" cy="9" r="2" fill="currentColor">
+              <animate attributeName="cy" values="9;15;9" dur="1.8s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="1;0.2;1" dur="1.8s" repeatCount="indefinite" />
+            </circle>
+          </svg>
         </button>
       </motion.div>
     </section>

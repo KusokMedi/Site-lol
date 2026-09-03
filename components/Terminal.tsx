@@ -172,18 +172,6 @@ export default function Terminal({ className = "" }: { className?: string }) {
         </div>
       </div>
 
-      {/* Nano statusbar */}
-      <div className="px-3 py-1.5 font-mono text-[10px] border-t border-white/[0.05] flex items-center justify-between"
-        style={{ background: "rgba(255,255,255,0.02)" }}
-      >
-        <div className="flex items-center gap-3 text-white/25">
-          <span><span className="text-white/40">^G</span> Help</span>
-          <span><span className="text-white/40">^X</span> Exit</span>
-          <span><span className="text-white/40">^O</span> Write</span>
-          <span><span className="text-white/40">^W</span> Search</span>
-        </div>
-        <span className="text-white/20">about.txt</span>
-      </div>
     </motion.div>
   );
 }
