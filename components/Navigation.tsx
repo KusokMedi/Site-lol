@@ -40,7 +40,11 @@ export default function Navigation() {
     let rafPending = false;
 
     const handleScroll = (scrollY: number, progress: number) => {
-      if (barRef.current) barRef.current.style.width = `${Math.min(progress * 100, 100)}%`;
+      if (barRef.current) {
+        const pct = Math.min(progress * 100, 100);
+        barRef.current.style.width = `${pct}%`;
+        barRef.current.style.opacity = pct > 0 ? "1" : "0";
+      }
 
       const newScrolled = scrollY > 50;
       if (newScrolled !== scrolledRef.current) {
@@ -132,8 +136,8 @@ export default function Navigation() {
     >
       <div
         ref={barRef}
-        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent-400 to-accent-600 will-change-[width]"
-        style={{ width: "0%" }}
+        className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-accent-400 to-accent-600 will-change-[width] transition-opacity duration-300"
+        style={{ width: "0%", opacity: 0 }}
       />
 
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
