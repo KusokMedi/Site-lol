@@ -1,16 +1,46 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { motion } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
+
+// Keywords to highlight in accent color
+const ACCENT_WORDS = ["KusokMedi", "Python", "React", "Node.js", "Linux", "Bot", "Bota", "Botu", "AI", "ШІ"];
+
+function highlightLine(line: string) {
+  const parts: { text: string; accent: boolean }[] = [];
+  let remaining = line;
+
+  while (remaining.length > 0) {
+    let earliest = -1;
+    let matchedWord = "";
+
+    for (const word of ACCENT_WORDS) {
+      const idx = remaining.indexOf(word);
+      if (idx !== -1 && (earliest === -1 || idx < earliest)) {
+        earliest = idx;
+        matchedWord = word;
+      }
+    }
+
+    if (earliest === -1) {
+      parts.push({ text: remaining, accent: false });
+      break;
+    }
+
+    if (earliest > 0) {
+      parts.push({ text: remaining.slice(0, earliest), accent: false });
+    }
+    parts.push({ text: matchedWord, accent: true });
+    remaining = remaining.slice(earliest + matchedWord.length);
+  }
+
+  return parts;
+}
 
 export default function Terminal({ className = "" }: { className?: string }) {
   const { t, lang } = useLanguage();
-  const [showFile, setShowFile] = useState(false);
-  const [visibleLines, setVisibleLines] = useState(0);
 
-  // Bug #7 fixed: memoize fileContent so the array reference is stable across
-  // re-renders and the line-by-line timer effect only re-runs when lang changes.
   const fileContent = useMemo(() => [
     t("terminal.line1"),
     t("terminal.line2"),
@@ -23,105 +53,136 @@ export default function Terminal({ className = "" }: { className?: string }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ], [lang]);
 
+  // Flat array of all characters across all lines: { char, lineIdx, charIdx }
+  const allChars = useMemo(() => {
+    const chars: { char: string; lineIdx: number }[] = [];
+    fileContent.forEach((line, li) => {
+      if (line === "") {
+        chars.push({ char: "", lineIdx: li }); // empty line marker
+      } else {
+        for (const ch of line) {
+          chars.push({ char: ch, lineIdx: li });
+        }
+      }
+    });
+    return chars;
+  }, [fileContent]);
+
+  const [revealedCount, setRevealedCount] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    setVisibleLines(0);
-    setShowFile(false);
-    const fileTimer = setTimeout(() => setShowFile(true), 1200);
-    return () => clearTimeout(fileTimer);
+    setRevealedCount(0);
   }, [lang]);
 
   useEffect(() => {
-    if (!showFile) return;
-    if (visibleLines < fileContent.length) {
-      const lineTimer = setTimeout(
-        () => setVisibleLines((v) => v + 1),
-        100 + visibleLines * 30
-      );
-      return () => clearTimeout(lineTimer);
+    if (revealedCount >= allChars.length) return;
+    // Speed: ~18ms per char, but empty lines skip instantly
+    const next = allChars[revealedCount];
+    const delay = next.char === "" ? 40 : 16;
+    timerRef.current = setTimeout(() => {
+      setRevealedCount((v) => v + 1);
+    }, delay);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+  }, [revealedCount, allChars]);
+
+  // Build per-line revealed text
+  const lineTexts = useMemo(() => {
+    const lines: string[] = Array(fileContent.length).fill("");
+    let i = 0;
+    for (const { char, lineIdx } of allChars) {
+      if (i >= revealedCount) break;
+      if (char === "") {
+        // empty line already ""
+      } else {
+        lines[lineIdx] += char;
+      }
+      i++;
     }
-  }, [showFile, visibleLines, fileContent.length]);
+    return lines;
+  }, [revealedCount, allChars, fileContent.length]);
+
+  const isTyping = revealedCount < allChars.length;
+  // Which line is currently being typed
+  const currentLineIdx = isTyping ? allChars[revealedCount]?.lineIdx ?? fileContent.length - 1 : fileContent.length - 1;
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-      className={`relative overflow-hidden rounded-xl border border-white/[0.08] bg-dark-800/50 backdrop-blur-sm ${className}`}
+      transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className={`relative overflow-hidden rounded-2xl ${className}`}
+      style={{
+        background: "rgba(6,6,6,0.85)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.04)",
+        backdropFilter: "blur(32px)",
+      }}
     >
-      <div className="flex items-center px-3 py-2 border-b border-white/[0.06] bg-dark-900/50">
-        <div className="flex-1 flex items-center justify-center gap-2">
-          <span className="text-[10px] text-white/30 font-mono">nano</span>
-          <span className="text-[10px] text-white/20">-</span>
-          <span className="text-[10px] text-white/40 font-mono truncate">/home/kusokmedi/about.txt</span>
+      {/* Title bar */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05]"
+        style={{ background: "rgba(255,255,255,0.02)" }}
+      >
+        {/* Traffic lights */}
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-3 rounded-full bg-[#ff5f57]/80" />
+          <div className="w-3 h-3 rounded-full bg-[#febc2e]/80" />
+          <div className="w-3 h-3 rounded-full bg-[#28c840]/80" />
         </div>
-        <div className="flex items-center gap-1">
-          <svg width="10" height="10" viewBox="0 0 10 10"><line x1="2" y1="5" x2="8" y2="5" stroke="rgba(255,255,255,0.25)" strokeWidth="1" strokeLinecap="round"/></svg>
-          <svg width="10" height="10" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" rx="1" stroke="rgba(255,255,255,0.25)" strokeWidth="1" fill="none"/></svg>
-          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 2L8 8M8 2L2 8" stroke="rgba(255,255,255,0.25)" strokeWidth="1" strokeLinecap="round"/></svg>
+        <div className="flex-1 flex items-center justify-center">
+          <span className="text-[11px] text-white/30 font-mono">nano — about.txt</span>
         </div>
       </div>
-      <div className="p-3 sm:p-4">
-        <AnimatePresence mode="wait">
-          {!showFile ? (
-            <motion.div
-              key="cmd"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="font-mono text-xs sm:text-sm"
-            >
-              <span className="text-green-400/70">kusokmedi@archlinux</span>
-              <span className="text-white/20">:</span>
-              <span className="text-blue-400/70">~</span>
-              <span className="text-white/20">$ </span>
-              <span className="text-white/70">nano /home/kusokmedi/about.txt</span>
-              <motion.span
-                className="inline-block w-2 h-4 bg-white/60 ml-0.5 align-middle"
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.6, repeat: Infinity }}
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="file"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-0"
-            >
-              
-              {fileContent.slice(0, visibleLines).map((line, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -4 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex items-start gap-3 font-mono text-xs sm:text-sm leading-relaxed"
-                >
-                  <span className="text-white/[0.1] select-none shrink-0 w-4 text-right">
-                    {i + 1}
+
+      {/* Editor body — fixed height so terminal never jumps */}
+      <div className="px-0 py-0" style={{ minHeight: "260px" }}>
+        {/* Line numbers + content */}
+        <div className="p-4 space-y-0.5">
+          {fileContent.map((_, li) => {
+            const text = lineTexts[li];
+            const isEmpty = fileContent[li] === "";
+            const isCurrentLine = isTyping && li === currentLineIdx;
+
+            return (
+              <div key={li} className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]">
+                <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
+                  {li + 1}
+                </span>
+                {isEmpty ? (
+                  <span className="text-white/[0.06] select-none">~</span>
+                ) : (
+                  <span>
+                    {highlightLine(text).map((part, pi) =>
+                      part.accent
+                        ? <span key={pi} className="text-accent-400">{part.text}</span>
+                        : <span key={pi} className="text-white/60">{part.text}</span>
+                    )}
+                    {isCurrentLine && (
+                      <motion.span
+                        className="inline-block w-[7px] h-[13px] bg-accent-400/80 align-middle ml-px"
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ duration: 0.5, repeat: Infinity }}
+                      />
+                    )}
                   </span>
-                  {line === "" ? (
-                    <span className="text-white/[0.02] select-none">~</span>
-                  ) : (
-                    <span className="text-white/70">{line}</span>
-                  )}
-                </motion.div>
-              ))}
-              {visibleLines >= fileContent.length && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-start gap-3 pt-0.5"
-                >
-                  <span className="text-white/[0.1] select-none shrink-0 w-4 text-right font-mono text-xs">
-                    {fileContent.length + 1}
-                  </span>
-                  <span className="w-2 h-4 bg-white/50 animate-pulse-glow" />
-                </motion.div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Nano statusbar */}
+      <div className="px-3 py-1.5 font-mono text-[10px] border-t border-white/[0.05] flex items-center justify-between"
+        style={{ background: "rgba(255,255,255,0.02)" }}
+      >
+        <div className="flex items-center gap-3 text-white/25">
+          <span><span className="text-white/40">^G</span> Help</span>
+          <span><span className="text-white/40">^X</span> Exit</span>
+          <span><span className="text-white/40">^O</span> Write</span>
+          <span><span className="text-white/40">^W</span> Search</span>
+        </div>
+        <span className="text-white/20">about.txt</span>
       </div>
     </motion.div>
   );

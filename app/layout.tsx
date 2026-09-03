@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
+import CustomCursor from "@/components/CustomCursor";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -109,6 +110,7 @@ export default function RootLayout({
           <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-accent-500/4 rounded-full blur-[160px]" />
         </div>
         <LanguageProvider>
+          <CustomCursor />
           <LocaleHandler />
           {children}
           <Particles />

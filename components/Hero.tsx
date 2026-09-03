@@ -20,7 +20,6 @@ export default function Hero() {
       <div className="absolute top-1/4 -left-40 w-[500px] h-[500px] bg-accent-500/8 rounded-full blur-[100px]" />
       <div className="absolute bottom-1/4 -right-40 w-[500px] h-[500px] bg-accent-700/6 rounded-full blur-[100px]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[300px] bg-accent-600/3 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/20 to-transparent" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 w-full">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">

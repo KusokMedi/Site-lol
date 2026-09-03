@@ -11,7 +11,7 @@ export default function Contact() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="contact" className="relative py-32 section-fade">
+    <AnimatedSection id="contact" className="relative py-32">
       <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-500/5 rounded-full blur-[130px]" />

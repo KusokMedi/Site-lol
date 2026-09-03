@@ -150,23 +150,7 @@
     background-size: 28px 28px;
   }
 
-  /* Seamless section fade — top and bottom gradient masks */
-  .section-fade {
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 8%,
-      black 92%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      black 8%,
-      black 92%,
-      transparent 100%
-    );
-  }
+  /* Seamless section fade — REMOVED (made edges blurry/ugly) */
 
   .divider-glow {
     height: 1px;
@@ -191,6 +175,28 @@
     );
     background-size: 200% 100%;
     animation: shimmer 2s ease-in-out infinite;
+  }
+
+  /* Ripple effect — add .ripple class to any button/element */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,215,0,0.18) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .ripple:active::after {
+    opacity: 1;
+    transition: opacity 0s;
   }
 }
 

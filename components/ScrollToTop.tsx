@@ -18,42 +18,40 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const lenis = window.__lenis;
-
     if (lenis) {
-      // Bug #9 fixed: use Lenis scroll event instead of window.scrollY,
-      // which is unreliable when Lenis intercepts native scroll.
-      const handleLenisScroll = ({ scroll }: { scroll: number }) => {
-        setVisible(scroll > 400);
-      };
-      lenis.on("scroll", handleLenisScroll);
-      return () => lenis.off("scroll", handleLenisScroll);
+      const handler = ({ scroll }: { scroll: number }) => setVisible(scroll > 400);
+      lenis.on("scroll", handler);
+      return () => lenis.off("scroll", handler);
     } else {
-      // Fallback for when Lenis is not active (touch devices etc.)
-      const handleScroll = () => setVisible(window.scrollY > 400);
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => window.removeEventListener("scroll", handleScroll);
+      const handler = () => setVisible(window.scrollY > 400);
+      window.addEventListener("scroll", handler, { passive: true });
+      return () => window.removeEventListener("scroll", handler);
     }
   }, []);
 
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+        <motion.button
+          initial={{ opacity: 0, scale: 0.7, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 10 }}
-          transition={{ duration: 0.2 }}
-          className="fixed bottom-6 right-6 z-50"
+          exit={{ opacity: 0, scale: 0.7, y: 12 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          whileHover={{ scale: 1.08, y: -2 }}
+          whileTap={{ scale: 0.92 }}
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-2xl flex items-center justify-center cursor-pointer"
+          style={{
+            background: "rgba(10,10,10,0.8)",
+            border: "1px solid rgba(255,179,0,0.2)",
+            boxShadow: "0 0 20px rgba(255,179,0,0.1), 0 8px 32px rgba(0,0,0,0.5)",
+            backdropFilter: "blur(20px)",
+            color: "rgba(255,215,0,0.7)",
+          }}
+          title="Наверх"
         >
-          <div className="absolute inset-0 -z-10 rounded-2xl bg-dark-950/80 backdrop-blur-xl blur-sm" />
-          <button
-            onClick={scrollToTop}
-            className="relative flex items-center justify-center w-10 h-10 rounded-xl glass text-white/50 hover:text-accent-400 hover:border-accent-400/30 transition-all duration-300 border border-white/[0.06] cursor-pointer"
-            title="Наверх"
-          >
-            <ChevronUp className="w-4 h-4" />
-          </button>
-        </motion.div>
+          <ChevronUp className="w-4 h-4" />
+        </motion.button>
       )}
     </AnimatePresence>
   );

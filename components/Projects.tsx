@@ -17,7 +17,7 @@ export default function Projects() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="projects" className="relative py-32 section-fade">
+    <AnimatedSection id="projects" className="relative py-32">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-accent-500/7 rounded-full blur-[110px]" />
         <div className="absolute bottom-1/3 -right-40 w-[500px] h-[500px] bg-accent-700/5 rounded-full blur-[110px]" />
