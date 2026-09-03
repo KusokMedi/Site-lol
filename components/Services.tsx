@@ -24,7 +24,7 @@ export default function Services() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="services" className="relative py-24 sm:py-32">
+    <AnimatedSection id="services" className="relative py-32 section-fade">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 -right-40 w-[500px] h-[500px] bg-accent-500/6 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 -left-40 w-[500px] h-[500px] bg-accent-700/5 rounded-full blur-[120px]" />

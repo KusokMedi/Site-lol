@@ -7,7 +7,8 @@ export default function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="border-t border-white/[0.04] py-8">
+    <footer className="relative py-6">
+      <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
         <a
           href="#home"

@@ -101,6 +101,13 @@ export default function RootLayout({
         />
       </head>
       <body className="noise-overlay relative min-h-screen antialiased">
+        {/* Global ambient glow — single continuous layer behind all sections */}
+        <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
+          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-accent-500/4 rounded-full blur-[160px]" />
+          <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-accent-700/3 rounded-full blur-[160px]" />
+          <div className="absolute top-2/3 -left-32 w-[500px] h-[500px] bg-accent-600/3 rounded-full blur-[160px]" />
+          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-accent-500/4 rounded-full blur-[160px]" />
+        </div>
         <LanguageProvider>
           <LocaleHandler />
           {children}

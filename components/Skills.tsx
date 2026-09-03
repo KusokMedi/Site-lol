@@ -64,7 +64,7 @@ export default function Skills() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="skills" className="relative py-24 sm:py-32">
+    <AnimatedSection id="skills" className="relative py-32 section-fade">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 -left-40 w-[450px] h-[450px] bg-accent-500/7 rounded-full blur-[110px]" />
         <div className="absolute bottom-1/3 -right-40 w-[450px] h-[450px] bg-accent-600/5 rounded-full blur-[110px]" />

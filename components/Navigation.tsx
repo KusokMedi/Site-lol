@@ -101,9 +101,11 @@ export default function Navigation() {
 
     return () => {
       if (lenis) {
-        (lenis as unknown as Record<string, unknown>).__navUnsub?.();
+        const unsub = (lenis as unknown as Record<string, unknown>).__navUnsub;
+        if (typeof unsub === "function") unsub();
         delete (lenis as unknown as Record<string, unknown>).__navUnsub;
-        (lenis as unknown as Record<string, unknown>).__navActiveSub?.();
+        const activeSub = (lenis as unknown as Record<string, unknown>).__navActiveSub;
+        if (typeof activeSub === "function") activeSub();
         delete (lenis as unknown as Record<string, unknown>).__navActiveSub;
       } else {
         if (fallback) window.removeEventListener("scroll", fallback);

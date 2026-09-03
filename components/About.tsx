@@ -21,7 +21,7 @@ export default function About() {
   ];
 
   return (
-    <AnimatedSection id="about" className="relative py-24 sm:py-32">
+    <AnimatedSection id="about" className="relative py-32 section-fade">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-40 w-96 h-96 bg-accent-500/8 rounded-full blur-[100px]" />
         <div className="absolute bottom-1/4 -right-40 w-96 h-96 bg-accent-700/6 rounded-full blur-[100px]" />
