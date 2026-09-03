@@ -45,7 +45,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-2xl glass gradient-border flex flex-col"
+              className="group relative overflow-hidden rounded-2xl glass gradient-border flex flex-col glow-card"
             >
               {/* Image area */}
               <div className={`relative h-44 sm:h-48 bg-gradient-to-br ${p.gradient} overflow-hidden`}>
@@ -67,16 +67,16 @@ export default function Projects() {
               <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col">
                 {/* Title skeleton */}
                 <div className="space-y-2">
-                  <div className="h-4 w-32 rounded-full bg-white/[0.06]" />
-                  <div className="h-3 w-full rounded-full bg-white/[0.04]" />
-                  <div className="h-3 w-3/4 rounded-full bg-white/[0.04]" />
+                  <div className="h-4 w-32 rounded-full shimmer" />
+                  <div className="h-3 w-full rounded-full shimmer" style={{ animationDelay: "0.1s" }} />
+                  <div className="h-3 w-3/4 rounded-full shimmer" style={{ animationDelay: "0.2s" }} />
                 </div>
 
                 {/* Tech tags skeleton */}
                 <div className="flex gap-1.5">
-                  <div className="h-5 w-14 rounded-md bg-white/[0.04] border border-white/[0.06]" />
-                  <div className="h-5 w-16 rounded-md bg-white/[0.04] border border-white/[0.06]" />
-                  <div className="h-5 w-12 rounded-md bg-white/[0.04] border border-white/[0.06]" />
+                  <div className="h-5 w-14 rounded-md shimmer border border-white/[0.06]" />
+                  <div className="h-5 w-16 rounded-md shimmer border border-white/[0.06]" style={{ animationDelay: "0.1s" }} />
+                  <div className="h-5 w-12 rounded-md shimmer border border-white/[0.06]" style={{ animationDelay: "0.2s" }} />
                 </div>
 
                 {/* Features skeleton */}
@@ -85,8 +85,8 @@ export default function Projects() {
                     <li key={j} className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-accent-400/20 shrink-0" />
                       <div
-                        className="h-2.5 rounded-full bg-white/[0.04]"
-                        style={{ width: `${w}%` }}
+                        className="h-2.5 rounded-full shimmer"
+                        style={{ width: `${w}%`, animationDelay: `${j * 0.1}s` }}
                       />
                     </li>
                   ))}
@@ -94,7 +94,7 @@ export default function Projects() {
 
                 {/* CTA skeleton */}
                 <div className="mt-auto pt-4">
-                  <div className="h-9 w-28 rounded-xl bg-white/[0.04] border border-white/[0.06]" />
+                  <div className="h-9 w-28 rounded-xl shimmer border border-white/[0.06]" />
                 </div>
               </div>
 
