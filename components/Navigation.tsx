@@ -82,35 +82,52 @@ export default function Navigation() {
     // always reflects the current navLinks (also re-runs when t() changes).
     const sectionIds = navLinks.map(({ href }) => href.slice(1));
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            const id = entry.target.id;
-            if (id !== activeRef.current) {
-              activeRef.current = id;
-              setActiveSection(id);
-            }
-          }
+    const updateActiveSection = () => {
+      const sections = sectionIds
+        .map((id) => document.getElementById(id))
+        .filter(Boolean) as HTMLElement[];
+
+      // Find the section whose top is closest to (but not past) 40% of viewport height
+      const threshold = window.innerHeight * 0.4;
+      let active = sections[0]?.id ?? "home";
+
+      for (const section of sections) {
+        const top = section.getBoundingClientRect().top;
+        if (top <= threshold) {
+          active = section.id;
         }
-      },
-      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-    );
+      }
 
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
+      if (active !== activeRef.current) {
+        activeRef.current = active;
+        setActiveSection(active);
+      }
+    };
 
-    sections.forEach((el) => observer.observe(el));
+    // Run on every scroll event (already throttled via lenis/rAF above)
+    const lenisCb = window.__lenis;
+    if (lenisCb) {
+      lenisCb.on("scroll", updateActiveSection);
+      updateActiveSection();
+      const prevUnsub = (lenisCb as unknown as Record<string, unknown>).__navActiveSub as (() => void) | undefined;
+      prevUnsub?.();
+      (lenisCb as unknown as Record<string, unknown>).__navActiveSub = () => lenisCb.off("scroll", updateActiveSection);
+    } else {
+      window.addEventListener("scroll", updateActiveSection, { passive: true });
+      updateActiveSection();
+    }
 
     return () => {
-      observer.disconnect();
       if (lenis) {
         const unsub = (lenis as unknown as Record<string, unknown>).__navUnsub as (() => void) | undefined;
         unsub?.();
         delete (lenis as unknown as Record<string, unknown>).__navUnsub;
-      } else if (fallback) {
-        window.removeEventListener("scroll", fallback);
+        const activeSub = (lenis as unknown as Record<string, unknown>).__navActiveSub as (() => void) | undefined;
+        activeSub?.();
+        delete (lenis as unknown as Record<string, unknown>).__navActiveSub;
+      } else {
+        if (fallback) window.removeEventListener("scroll", fallback);
+        window.removeEventListener("scroll", updateActiveSection);
       }
     };
   // Bug #2 fixed: re-run when the language changes so sections are re-observed
