@@ -111,57 +111,5 @@ export const services: Service[] = [
   },
 ];
 
-export const projects: Project[] = [
-  {
-    title: "AnonSpeak",
-    description:
-      "Бот для анонимных сообщений прямо в Telegram. Создай свою ссылку - любой, кто перейдёт по ней, сможет написать тебе анонимное сообщение.",
-    image: "/resources/AnonSpeak-logo.jpg",
-    gradient: "from-white/20 to-stone-300/20",
-    tech: ["Python Telebot SQLite"],
-    features: [
-      "Создание своей анонимной ссылки",
-      "Ответ на анонимные сообщения",
-      "Блокировка нежелательных пользователей",
-      "Статистика сообщений",
-    ],
-    href: "https://t.me/AnonSpeakKM_bot",
-    hrefLabel: "Открыть бота",
-    github: "https://github.com/kusokmedi",
-  },
-  {
-    title: "BestDev Support Bot",
-    description:
-      "Бот поддержки для Minecraft-студии BestDev. Закажи плагин, сборку, консультацию или готовое решение под ключ.",
-    image: "/resources/BestDev-logo.jpg",
-    gradient: "from-yellow-400/20 to-amber-500/20",
-    tech: ["Python Telebot SQLite"],
-    features: [
-      "Заказ плагинов и сборок под ключ",
-      "Консультации по проектам",
-      "Заявки в команду разработки",
-      "Готовые товары и решения",
-    ],
-    href: "https://t.me/bestdevsbot",
-    hrefLabel: "Открыть бота",
-    github: null,
-  },
-  {
-    title: "GridMC",
-    description:
-      "Ванильный Minecraft-сервер 1.21.11 с экономикой. /sell, аукцион, TPA и никаких лишних дополнений - всё максимально как в ванилле.",
-    image: "/resources/mc-1-21-11-logo.jpeg",
-    gradient: "from-sky-400/20 to-blue-500/20",
-    tech: ["Paper Java Linux"],
-    features: [
-      "Экономика с /sell и /ah (аукцион)",
-      "Без /spawn и лишнего мусора",
-      "Один мир без правил",
-      "Максимально ванильный геймплей",
-      "Написал несколько плагинов специально под сервер",
-    ],
-    href: "https://discord.kusokmedi.lat",
-    hrefLabel: "Зайти в Discord",
-    github: null,
-  },
-];
+export const projects: Project[] = [];
+

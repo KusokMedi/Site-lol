@@ -1,46 +1,24 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { ExternalLink, FolderKanban } from "lucide-react";
+import { FolderKanban, Lock } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
 
-const projectKeys = ["anonspeak", "bestdev", "gridmc"] as const;
-type ProjectKey = typeof projectKeys[number];
-
-const gradients: Record<ProjectKey, string> = {
-  anonspeak: "from-white/20 to-stone-300/20",
-  bestdev: "from-yellow-400/20 to-amber-500/20",
-  gridmc: "from-sky-400/20 to-blue-500/20",
-};
-
-const images: Record<ProjectKey, string> = {
-  anonspeak: "/resources/AnonSpeak-logo.jpg",
-  bestdev: "/resources/BestDev-logo.jpg",
-  gridmc: "/resources/mc-1-21-11-logo.jpeg",
-};
-
-const techs: Record<ProjectKey, string[]> = {
-  anonspeak: ["Python", "Telebot", "SQLite"],
-  bestdev: ["Python", "Telebot", "SQLite"],
-  gridmc: ["Paper", "Java", "Linux"],
-};
-
-const links: Record<ProjectKey, string> = {
-  anonspeak: "https://t.me/AnonSpeakKM_bot",
-  bestdev: "https://t.me/bestdevsbot",
-  gridmc: "https://discord.kusokmedi.lat",
-};
+const placeholders = [
+  { gradient: "from-accent-500/10 to-accent-700/10", blur: "bg-accent-500/10" },
+  { gradient: "from-violet-500/10 to-purple-700/10", blur: "bg-violet-500/10" },
+  { gradient: "from-sky-500/10 to-blue-700/10", blur: "bg-sky-500/10" },
+];
 
 export default function Projects() {
   const { t } = useLanguage();
 
   return (
     <AnimatedSection id="projects" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 -left-32 w-80 h-80 bg-accent-500/3 rounded-full blur-[140px]" />
         <div className="absolute bottom-1/3 -right-32 w-80 h-80 bg-accent-700/3 rounded-full blur-[140px]" />
       </div>
@@ -57,81 +35,72 @@ export default function Projects() {
         </div>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-          {projectKeys.map((key, i) => {
-            const feats = [1, 2, 3, 4].map((n) => t(`project.${key}.feat${n}`));
-
-            return (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                whileHover={{ y: -8, scale: 1.01 }}
-                className="group relative overflow-hidden rounded-2xl glass gradient-border transition-all duration-500 hover:glow-sm flex flex-col"
-              >
-                <div
-                  className={`relative h-44 sm:h-48 bg-gradient-to-br ${gradients[key]} overflow-hidden`}
-                >
-                  <div className="absolute inset-0 bg-dark-950/40 z-10" />
-                  <div className="absolute inset-4 rounded-full bg-accent-500/20 blur-3xl z-0" />
-                  {/* next/image: auto lazy loading, WebP conversion, no layout shift */}
-                  <Image
-                    src={images[key]}
-                    alt={t(`project.${key}.title`)}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                    className="object-contain p-6 select-none drop-shadow-[0_0_20px_rgba(255,179,0,0.15)]"
-                  />
-                  <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-t from-dark-950 via-transparent to-transparent" />
-                </div>
-
-                <div className="p-5 sm:p-6 space-y-3 flex-1 flex flex-col">
-                  <h3 className="text-lg font-semibold text-white group-hover:text-accent-400 transition-colors">
-                    {t(`project.${key}.title`)}
-                  </h3>
-                  <p className="text-sm text-white/40 leading-relaxed">
-                    {t(`project.${key}.desc`)}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5">
-                    {techs[key].map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 text-[11px] font-mono rounded-md bg-white/[0.04] text-white/40 border border-white/[0.06]"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  <ul className="space-y-1.5 pt-1">
-                    {feats.map((f) => (
-                      <li
-                        key={f}
-                        className="flex items-start gap-2 text-xs text-white/30"
-                      >
-                        <span className="text-accent-400/60 mt-0.5 shrink-0">▹</span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto pt-4">
-                    <a
-                      href={links[key]}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      {t(`project.${key}.cta`)}
-                    </a>
+          {placeholders.map((p, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="group relative overflow-hidden rounded-2xl glass gradient-border flex flex-col"
+            >
+              {/* Image area */}
+              <div className={`relative h-44 sm:h-48 bg-gradient-to-br ${p.gradient} overflow-hidden`}>
+                <div className={`absolute inset-6 rounded-full ${p.blur} blur-3xl`} />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex flex-col items-center gap-3 select-none">
+                    <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+                      <Lock className="w-6 h-6 text-white/20" />
+                    </div>
+                    <div className="space-y-1.5 text-center px-6">
+                      <div className="h-2.5 w-28 rounded-full bg-white/[0.06] mx-auto" />
+                      <div className="h-2 w-20 rounded-full bg-white/[0.04] mx-auto" />
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+              </div>
+
+              {/* Content area */}
+              <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col">
+                {/* Title skeleton */}
+                <div className="space-y-2">
+                  <div className="h-4 w-32 rounded-full bg-white/[0.06]" />
+                  <div className="h-3 w-full rounded-full bg-white/[0.04]" />
+                  <div className="h-3 w-3/4 rounded-full bg-white/[0.04]" />
+                </div>
+
+                {/* Tech tags skeleton */}
+                <div className="flex gap-1.5">
+                  <div className="h-5 w-14 rounded-md bg-white/[0.04] border border-white/[0.06]" />
+                  <div className="h-5 w-16 rounded-md bg-white/[0.04] border border-white/[0.06]" />
+                  <div className="h-5 w-12 rounded-md bg-white/[0.04] border border-white/[0.06]" />
+                </div>
+
+                {/* Features skeleton */}
+                <ul className="space-y-2 pt-1">
+                  {[70, 55, 65, 50].map((w, j) => (
+                    <li key={j} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent-400/20 shrink-0" />
+                      <div
+                        className="h-2.5 rounded-full bg-white/[0.04]"
+                        style={{ width: `${w}%` }}
+                      />
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA skeleton */}
+                <div className="mt-auto pt-4">
+                  <div className="h-9 w-28 rounded-xl bg-white/[0.04] border border-white/[0.06]" />
+                </div>
+              </div>
+
+              {/* Coming soon overlay badge */}
+              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-dark-950/80 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-white/30">
+                soon
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </AnimatedSection>
