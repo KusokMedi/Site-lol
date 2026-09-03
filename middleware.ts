@@ -5,7 +5,7 @@ const SUPPORTED_LANGS = ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Match exactly /{lang} — single path segment, no trailing slash needed
+  // Match exactly /{lang} — single path segment
   const segment = pathname.slice(1); // e.g. "lv" from "/lv"
 
   if (SUPPORTED_LANGS.includes(segment)) {
@@ -19,6 +19,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Run only on /{segment} paths, skip _next, api, static files
   matcher: ["/((?!_next|api|.*\\..*).*)"],
 };
