@@ -4,56 +4,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
-const ACCENT_WORDS = ["KusokMedi", "Python", "React", "Node.js", "Linux", "Bot", "Bota", "Botu", "AI", "ШІ"];
-
-function highlightLine(line: string) {
-  const parts: { text: string; accent: boolean }[] = [];
-  let remaining = line;
-
-  while (remaining.length > 0) {
-    let earliest = -1;
-    let matchedWord = "";
-
-    for (const word of ACCENT_WORDS) {
-      const idx = remaining.indexOf(word);
-      if (idx !== -1 && (earliest === -1 || idx < earliest)) {
-        earliest = idx;
-        matchedWord = word;
-      }
-    }
-
-    if (earliest === -1) {
-      parts.push({ text: remaining, accent: false });
-      break;
-    }
-    if (earliest > 0) {
-      parts.push({ text: remaining.slice(0, earliest), accent: false });
-    }
-    parts.push({ text: matchedWord, accent: true });
-    remaining = remaining.slice(earliest + matchedWord.length);
-  }
-
-  return parts;
-}
-
-export default function Terminal({ className = "" }: { className?: string }) {
-  const { t, lang } = useLanguage();
-
-  // Snapshot of file lines — keyed by lang so it only changes when lang does
-  const fileContent = useMemo(() => [
-    t("terminal.line1"),
-    t("terminal.line2"),
-    t("terminal.line3"),
-    t("terminal.line4"),
-    t("terminal.line5"),
-    t("terminal.line6"),
-    t("terminal.line7"),
-    t("terminal.line8"),
-  // t changes together with lang, lang is the stable dep
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [lang]);
-
-  // Flat char list derived from fileContent
+// Inner component — re-mounts completely when `key` changes (lang switch)
+function TypingContent({ fileContent }: { fileContent: string[] }) {
   const allChars = useMemo(() => {
     const chars: { char: string; lineIdx: number }[] = [];
     fileContent.forEach((line, li) => {
@@ -71,33 +23,14 @@ export default function Terminal({ className = "" }: { className?: string }) {
   const [revealedCount, setRevealedCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Reset animation whenever the content changes (lang switch)
-  const prevLangRef = useRef(lang);
-  useEffect(() => {
-    if (prevLangRef.current !== lang) {
-      prevLangRef.current = lang;
-      if (timerRef.current) clearTimeout(timerRef.current);
-      setRevealedCount(0);
-    }
-  }, [lang]);
-
-  // Typing timer
   useEffect(() => {
     if (revealedCount >= allChars.length) return;
-
     const next = allChars[revealedCount];
-    const delay = next.char === "" ? 35 : 15;
-
-    timerRef.current = setTimeout(() => {
-      setRevealedCount((v) => v + 1);
-    }, delay);
-
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
+    const delay = next.char === "" ? 30 : 14;
+    timerRef.current = setTimeout(() => setRevealedCount((v) => v + 1), delay);
+    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
   }, [revealedCount, allChars]);
 
-  // Build revealed text per line
   const lineTexts = useMemo(() => {
     const lines: string[] = Array(fileContent.length).fill("");
     for (let i = 0; i < Math.min(revealedCount, allChars.length); i++) {
@@ -111,6 +44,57 @@ export default function Terminal({ className = "" }: { className?: string }) {
   const currentLineIdx = isTyping
     ? (allChars[revealedCount]?.lineIdx ?? fileContent.length - 1)
     : fileContent.length - 1;
+
+  return (
+    <div className="p-4 space-y-0.5">
+      {fileContent.map((_, li) => {
+        const text = lineTexts[li];
+        const isEmpty = fileContent[li] === "";
+        const isCurrentLine = isTyping && li === currentLineIdx;
+
+        return (
+          <div
+            key={li}
+            className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]"
+          >
+            <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
+              {li + 1}
+            </span>
+            {isEmpty ? (
+              <span className="text-white/[0.06] select-none">~</span>
+            ) : (
+              <span className="text-white/60">
+                {text}
+                {isCurrentLine && (
+                  <motion.span
+                    className="inline-block w-[7px] h-[13px] bg-white/50 align-middle ml-px"
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                  />
+                )}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function Terminal({ className = "" }: { className?: string }) {
+  const { t, lang } = useLanguage();
+
+  const fileContent = useMemo(() => [
+    t("terminal.line1"),
+    t("terminal.line2"),
+    t("terminal.line3"),
+    t("terminal.line4"),
+    t("terminal.line5"),
+    t("terminal.line6"),
+    t("terminal.line7"),
+    t("terminal.line8"),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [lang]);
 
   return (
     <motion.div
@@ -141,50 +125,9 @@ export default function Terminal({ className = "" }: { className?: string }) {
         </div>
       </div>
 
-      {/* Content */}
+      {/* key=lang forces full remount on language change — guaranteed clean reset */}
       <div style={{ minHeight: "260px" }}>
-        <div className="p-4 space-y-0.5">
-          {fileContent.map((_, li) => {
-            const text = lineTexts[li];
-            const isEmpty = fileContent[li] === "";
-            const isCurrentLine = isTyping && li === currentLineIdx;
-
-            return (
-              <div
-                key={li}
-                className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]"
-              >
-                <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
-                  {li + 1}
-                </span>
-                {isEmpty ? (
-                  <span className="text-white/[0.06] select-none">~</span>
-                ) : (
-                  <span>
-                    {highlightLine(text).map((part, pi) =>
-                      part.accent ? (
-                        <span key={pi} className="text-accent-400">
-                          {part.text}
-                        </span>
-                      ) : (
-                        <span key={pi} className="text-white/60">
-                          {part.text}
-                        </span>
-                      )
-                    )}
-                    {isCurrentLine && (
-                      <motion.span
-                        className="inline-block w-[7px] h-[13px] bg-accent-400/80 align-middle ml-px"
-                        animate={{ opacity: [1, 0] }}
-                        transition={{ duration: 0.5, repeat: Infinity }}
-                      />
-                    )}
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <TypingContent key={lang} fileContent={fileContent} />
       </div>
     </motion.div>
   );
