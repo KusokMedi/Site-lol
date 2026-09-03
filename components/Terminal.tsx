@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
-// Keywords to highlight in accent color
 const ACCENT_WORDS = ["KusokMedi", "Python", "React", "Node.js", "Linux", "Bot", "Bota", "Botu", "AI", "ШІ"];
 
 function highlightLine(line: string) {
@@ -27,7 +26,6 @@ function highlightLine(line: string) {
       parts.push({ text: remaining, accent: false });
       break;
     }
-
     if (earliest > 0) {
       parts.push({ text: remaining.slice(0, earliest), accent: false });
     }
@@ -41,6 +39,7 @@ function highlightLine(line: string) {
 export default function Terminal({ className = "" }: { className?: string }) {
   const { t, lang } = useLanguage();
 
+  // Snapshot of file lines — keyed by lang so it only changes when lang does
   const fileContent = useMemo(() => [
     t("terminal.line1"),
     t("terminal.line2"),
@@ -50,15 +49,16 @@ export default function Terminal({ className = "" }: { className?: string }) {
     t("terminal.line6"),
     t("terminal.line7"),
     t("terminal.line8"),
+  // t changes together with lang, lang is the stable dep
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ], [lang]);
 
-  // Flat array of all characters across all lines: { char, lineIdx, charIdx }
+  // Flat char list derived from fileContent
   const allChars = useMemo(() => {
     const chars: { char: string; lineIdx: number }[] = [];
     fileContent.forEach((line, li) => {
       if (line === "") {
-        chars.push({ char: "", lineIdx: li }); // empty line marker
+        chars.push({ char: "", lineIdx: li });
       } else {
         for (const ch of line) {
           chars.push({ char: ch, lineIdx: li });
@@ -71,40 +71,46 @@ export default function Terminal({ className = "" }: { className?: string }) {
   const [revealedCount, setRevealedCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Reset animation whenever the content changes (lang switch)
+  const prevLangRef = useRef(lang);
   useEffect(() => {
-    setRevealedCount(0);
+    if (prevLangRef.current !== lang) {
+      prevLangRef.current = lang;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setRevealedCount(0);
+    }
   }, [lang]);
 
+  // Typing timer
   useEffect(() => {
     if (revealedCount >= allChars.length) return;
-    // Speed: ~18ms per char, but empty lines skip instantly
+
     const next = allChars[revealedCount];
-    const delay = next.char === "" ? 40 : 16;
+    const delay = next.char === "" ? 35 : 15;
+
     timerRef.current = setTimeout(() => {
       setRevealedCount((v) => v + 1);
     }, delay);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, [revealedCount, allChars]);
 
-  // Build per-line revealed text
+  // Build revealed text per line
   const lineTexts = useMemo(() => {
     const lines: string[] = Array(fileContent.length).fill("");
-    let i = 0;
-    for (const { char, lineIdx } of allChars) {
-      if (i >= revealedCount) break;
-      if (char === "") {
-        // empty line already ""
-      } else {
-        lines[lineIdx] += char;
-      }
-      i++;
+    for (let i = 0; i < Math.min(revealedCount, allChars.length); i++) {
+      const { char, lineIdx } = allChars[i];
+      if (char !== "") lines[lineIdx] += char;
     }
     return lines;
   }, [revealedCount, allChars, fileContent.length]);
 
   const isTyping = revealedCount < allChars.length;
-  // Which line is currently being typed
-  const currentLineIdx = isTyping ? allChars[revealedCount]?.lineIdx ?? fileContent.length - 1 : fileContent.length - 1;
+  const currentLineIdx = isTyping
+    ? (allChars[revealedCount]?.lineIdx ?? fileContent.length - 1)
+    : fileContent.length - 1;
 
   return (
     <motion.div
@@ -115,28 +121,28 @@ export default function Terminal({ className = "" }: { className?: string }) {
       style={{
         background: "rgba(6,6,6,0.85)",
         border: "1px solid rgba(255,255,255,0.08)",
-        boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.04)",
+        boxShadow:
+          "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.04)",
         backdropFilter: "blur(32px)",
       }}
     >
       {/* Title bar */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05]"
+      <div
+        className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.05]"
         style={{ background: "rgba(255,255,255,0.02)" }}
       >
-        {/* Traffic lights */}
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full bg-[#ff5f57]/80" />
           <div className="w-3 h-3 rounded-full bg-[#febc2e]/80" />
           <div className="w-3 h-3 rounded-full bg-[#28c840]/80" />
         </div>
         <div className="flex-1 flex items-center justify-center">
-          <span className="text-[11px] text-white/30 font-mono">nano — about.txt</span>
+          <span className="text-[11px] text-white/30 font-mono">about.txt</span>
         </div>
       </div>
 
-      {/* Editor body — fixed height so terminal never jumps */}
-      <div className="px-0 py-0" style={{ minHeight: "260px" }}>
-        {/* Line numbers + content */}
+      {/* Content */}
+      <div style={{ minHeight: "260px" }}>
         <div className="p-4 space-y-0.5">
           {fileContent.map((_, li) => {
             const text = lineTexts[li];
@@ -144,7 +150,10 @@ export default function Terminal({ className = "" }: { className?: string }) {
             const isCurrentLine = isTyping && li === currentLineIdx;
 
             return (
-              <div key={li} className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]">
+              <div
+                key={li}
+                className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]"
+              >
                 <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
                   {li + 1}
                 </span>
@@ -153,9 +162,15 @@ export default function Terminal({ className = "" }: { className?: string }) {
                 ) : (
                   <span>
                     {highlightLine(text).map((part, pi) =>
-                      part.accent
-                        ? <span key={pi} className="text-accent-400">{part.text}</span>
-                        : <span key={pi} className="text-white/60">{part.text}</span>
+                      part.accent ? (
+                        <span key={pi} className="text-accent-400">
+                          {part.text}
+                        </span>
+                      ) : (
+                        <span key={pi} className="text-white/60">
+                          {part.text}
+                        </span>
+                      )
                     )}
                     {isCurrentLine && (
                       <motion.span
@@ -171,7 +186,6 @@ export default function Terminal({ className = "" }: { className?: string }) {
           })}
         </div>
       </div>
-
     </motion.div>
   );
 }

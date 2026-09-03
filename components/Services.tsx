@@ -26,14 +26,6 @@ export default function Services() {
   return (
     <AnimatedSection id="services" className="relative py-28 sm:py-36">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-0 -right-32 w-[500px] h-[500px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,179,0,0.06) 0%, transparent 65%)", filter: "blur(90px)" }}
-        />
-        <div
-          className="absolute bottom-0 -left-32 w-[500px] h-[500px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,106,0,0.05) 0%, transparent 65%)", filter: "blur(90px)" }}
-        />
         <div className="absolute inset-0 grid-pattern opacity-10" />
       </div>
 

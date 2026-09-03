@@ -208,7 +208,7 @@ export default function Navigation() {
               {/* Mobile burger */}
               <motion.button
                 onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden relative w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/55 hover:text-white hover:bg-white/[0.07] transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-400/50"
+                className="md:hidden relative w-9 h-9 flex items-center justify-center rounded-xl btn-glass text-white/55 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-400/50"
                 aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
                 aria-expanded={isOpen}
                 whileTap={{ scale: 0.9 }}

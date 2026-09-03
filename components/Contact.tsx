@@ -14,18 +14,6 @@ export default function Contact() {
     <AnimatedSection id="contact" className="relative py-28 sm:py-36">
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full"
-          style={{ background: "radial-gradient(ellipse, rgba(255,179,0,0.055) 0%, transparent 60%)", filter: "blur(80px)" }}
-        />
-        <div
-          className="absolute top-[20%] -left-24 w-64 h-64 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 65%)", filter: "blur(60px)" }}
-        />
-        <div
-          className="absolute bottom-[20%] -right-24 w-64 h-64 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,140,0,0.06) 0%, transparent 65%)", filter: "blur(60px)" }}
-        />
         <div className="absolute inset-0 grid-pattern opacity-20" />
       </div>
 

@@ -22,14 +22,6 @@ export default function About() {
     <AnimatedSection id="about" className="relative py-28 sm:py-36">
       {/* Section decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-[20%] -left-32 w-[420px] h-[420px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,179,0,0.07) 0%, transparent 65%)", filter: "blur(80px)" }}
-        />
-        <div
-          className="absolute bottom-[20%] -right-32 w-[420px] h-[420px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,106,0,0.05) 0%, transparent 65%)", filter: "blur(80px)" }}
-        />
         <div className="absolute inset-0 grid-pattern opacity-15" />
       </div>
 

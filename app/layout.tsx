@@ -102,49 +102,63 @@ export default function RootLayout({
       </head>
       <body className="noise-overlay relative min-h-screen antialiased overflow-x-hidden">
         {/*
-          Global ambient glow — fixed layer behind all content.
-          Uses multiple orbs at different depths for a layered, premium look.
-          Opacity is intentionally very low to stay subtle and not overpower the content.
+          Global ambient glow — fixed layer, covers entire page.
+          Strong left/right edge orbs visible in every section.
         */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden>
-          {/* Primary warm orb — top left */}
+          {/* LEFT EDGE — top */}
           <div
-            className="absolute -top-32 left-[15%] w-[700px] h-[700px] rounded-full"
+            className="absolute top-[5%] -left-40 w-[520px] h-[520px] rounded-full"
             style={{
-              background: "radial-gradient(circle, rgba(255,179,0,0.055) 0%, rgba(255,140,0,0.02) 50%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(255,179,0,0.1) 0%, rgba(255,140,0,0.04) 45%, transparent 70%)",
+              filter: "blur(70px)",
+            }}
+          />
+          {/* LEFT EDGE — mid */}
+          <div
+            className="absolute top-[38%] -left-32 w-[480px] h-[480px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%)",
               filter: "blur(80px)",
-              willChange: "transform",
             }}
           />
-          {/* Secondary cool orb — right edge mid */}
+          {/* LEFT EDGE — bottom */}
           <div
-            className="absolute top-[30%] -right-24 w-[500px] h-[500px] rounded-full"
+            className="absolute top-[70%] -left-36 w-[460px] h-[460px] rounded-full"
             style={{
-              background: "radial-gradient(circle, rgba(255,106,0,0.04) 0%, transparent 65%)",
-              filter: "blur(100px)",
+              background: "radial-gradient(circle, rgba(255,179,0,0.07) 0%, transparent 65%)",
+              filter: "blur(80px)",
             }}
           />
-          {/* Tertiary orb — lower left */}
+          {/* RIGHT EDGE — top */}
           <div
-            className="absolute top-[65%] -left-24 w-[500px] h-[500px] rounded-full"
+            className="absolute top-[10%] -right-40 w-[520px] h-[520px] rounded-full"
             style={{
-              background: "radial-gradient(circle, rgba(255,140,0,0.035) 0%, transparent 65%)",
-              filter: "blur(100px)",
+              background: "radial-gradient(circle, rgba(255,106,0,0.09) 0%, rgba(255,179,0,0.03) 45%, transparent 70%)",
+              filter: "blur(70px)",
             }}
           />
-          {/* Bottom right warm orb */}
+          {/* RIGHT EDGE — mid */}
           <div
-            className="absolute -bottom-24 right-[15%] w-[600px] h-[600px] rounded-full"
+            className="absolute top-[45%] -right-32 w-[480px] h-[480px] rounded-full"
             style={{
-              background: "radial-gradient(circle, rgba(255,179,0,0.045) 0%, rgba(255,140,0,0.015) 50%, transparent 70%)",
-              filter: "blur(90px)",
+              background: "radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%)",
+              filter: "blur(80px)",
             }}
           />
-          {/* Dead center subtle glow */}
+          {/* RIGHT EDGE — bottom */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[400px] rounded-full"
+            className="absolute top-[75%] -right-36 w-[460px] h-[460px] rounded-full"
             style={{
-              background: "radial-gradient(ellipse, rgba(255,179,0,0.02) 0%, transparent 60%)",
+              background: "radial-gradient(circle, rgba(255,179,0,0.07) 0%, transparent 65%)",
+              filter: "blur(80px)",
+            }}
+          />
+          {/* Center ambient — very subtle */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] rounded-full"
+            style={{
+              background: "radial-gradient(ellipse, rgba(255,179,0,0.018) 0%, transparent 60%)",
               filter: "blur(60px)",
             }}
           />

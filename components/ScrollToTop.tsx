@@ -40,13 +40,10 @@ export default function ScrollToTop() {
           whileHover={{ scale: 1.08, y: -2 }}
           whileTap={{ scale: 0.92 }}
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-2xl flex items-center justify-center cursor-pointer"
+          className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-2xl flex items-center justify-center cursor-pointer btn-glass text-accent-400/70 hover:text-accent-400"
           style={{
-            background: "rgba(10,10,10,0.8)",
-            border: "1px solid rgba(255,179,0,0.2)",
-            boxShadow: "0 0 20px rgba(255,179,0,0.1), 0 8px 32px rgba(0,0,0,0.5)",
-            backdropFilter: "blur(20px)",
-            color: "rgba(255,215,0,0.7)",
+            boxShadow: "0 0 20px rgba(255,179,0,0.12), 0 8px 32px rgba(0,0,0,0.5)",
+            borderColor: "rgba(255,179,0,0.2)",
           }}
           title="Наверх"
         >

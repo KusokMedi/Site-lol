@@ -31,14 +31,6 @@ export default function Projects() {
   return (
     <AnimatedSection id="projects" className="relative py-28 sm:py-36">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className="absolute top-[25%] -left-32 w-[480px] h-[480px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,179,0,0.065) 0%, transparent 65%)", filter: "blur(80px)" }}
-        />
-        <div
-          className="absolute bottom-[25%] -right-32 w-[480px] h-[480px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(255,106,0,0.05) 0%, transparent 65%)", filter: "blur(80px)" }}
-        />
         <div className="absolute inset-0 grid-pattern opacity-10" />
       </div>
 

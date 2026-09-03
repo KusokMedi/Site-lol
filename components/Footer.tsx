@@ -1,6 +1,6 @@
 "use client";
 
-import { Terminal, ArrowUp } from "lucide-react";
+import { Terminal } from "lucide-react";
 import { scrollToTarget } from "@/lib/utils";
 
 export default function Footer() {
@@ -32,15 +32,6 @@ export default function Footer() {
           <p className="text-[11px] text-white/20 font-mono tracking-wide text-center sm:text-right order-last sm:order-none">
             © {year} KusokMedi. Visas tiesības aizsargātas.
           </p>
-
-          {/* Back to top button */}
-          <button
-            onClick={() => scrollToTarget("#home")}
-            className="w-8 h-8 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/[0.07] hover:border-accent-400/20 transition-all duration-300 shrink-0"
-            aria-label="Наверх"
-          >
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
     </footer>

@@ -18,22 +18,6 @@ export default function Hero() {
       {/* Background grid */}
       <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
 
-      {/* Local orbs — stronger than global to anchor the hero */}
-      <div
-        className="absolute top-[10%] left-[-10%] w-[480px] h-[480px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(255,179,0,0.09) 0%, transparent 65%)",
-          filter: "blur(60px)",
-        }}
-      />
-      <div
-        className="absolute bottom-[10%] right-[-10%] w-[420px] h-[420px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, rgba(255,106,0,0.07) 0%, transparent 65%)",
-          filter: "blur(70px)",
-        }}
-      />
-
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-16 items-center min-h-[calc(100dvh-64px)] lg:min-h-0 justify-center pt-20 lg:pt-0">
 
@@ -77,7 +61,7 @@ export default function Hero() {
 
               <button
                 onClick={() => scrollToTarget("#contact")}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl glass glass-hover text-sm font-medium text-white/60 hover:text-white transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-glass text-sm font-medium text-white/60 hover:text-white"
               >
                 {t("contact.title")}
               </button>
