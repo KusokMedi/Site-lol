@@ -65,9 +65,12 @@ export default function Skills() {
 
   return (
     <AnimatedSection id="skills" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-accent-500/3 rounded-full blur-[140px]" />
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-accent-700/3 rounded-full blur-[140px]" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/3 -left-40 w-[450px] h-[450px] bg-accent-500/7 rounded-full blur-[110px]" />
+        <div className="absolute bottom-1/3 -right-40 w-[450px] h-[450px] bg-accent-600/5 rounded-full blur-[110px]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/10 to-transparent" />
+        <div className="absolute inset-0 grid-pattern opacity-20" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -22,9 +22,15 @@ export default function About() {
 
   return (
     <AnimatedSection id="about" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 -left-32 w-72 h-72 bg-accent-500/3 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 -right-32 w-72 h-72 bg-accent-700/3 rounded-full blur-[120px]" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-40 w-96 h-96 bg-accent-500/8 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 -right-40 w-96 h-96 bg-accent-700/6 rounded-full blur-[100px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-accent-600/3 rounded-full blur-[120px]" />
+        {/* Subtle grid */}
+        <div className="absolute inset-0 grid-pattern opacity-20" />
+        {/* Thin glowing line */}
+        <div className="absolute top-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-accent-400/20 to-transparent" />
+        <div className="absolute bottom-0 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-accent-400/10 to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

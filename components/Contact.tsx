@@ -12,8 +12,14 @@ export default function Contact() {
 
   return (
     <AnimatedSection id="contact" className="relative py-24 sm:py-32">
-      <div className="absolute inset-0 grid-pattern opacity-30" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-500/3 rounded-full blur-[150px]" />
+      <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-500/5 rounded-full blur-[130px]" />
+        <div className="absolute top-1/4 -left-32 w-72 h-72 bg-accent-400/6 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 -right-32 w-72 h-72 bg-accent-600/6 rounded-full blur-[100px]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/25 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/10 to-transparent" />
+      </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center space-y-8">
