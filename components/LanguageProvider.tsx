@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import en from "@/lib/locales/en.json";
 import ru from "@/lib/locales/ru.json";
 import lv from "@/lib/locales/lv.json";
+import uk from "@/lib/locales/uk.json";
 import zh from "@/lib/locales/zh.json";
 import es from "@/lib/locales/es.json";
 import hi from "@/lib/locales/hi.json";
@@ -14,10 +15,10 @@ import de from "@/lib/locales/de.json";
 import ja from "@/lib/locales/ja.json";
 import ko from "@/lib/locales/ko.json";
 
-export type Language = "en" | "ru" | "lv" | "zh" | "es" | "hi" | "pt" | "fr" | "de" | "ja" | "ko";
+export type Language = "en" | "ru" | "lv" | "uk" | "zh" | "es" | "hi" | "pt" | "fr" | "de" | "ja" | "ko";
 
 const translations: Record<Language, Record<string, string>> = {
-  en, ru, lv, zh, es, hi, pt, fr, de, ja, ko,
+  en, ru, lv, uk, zh, es, hi, pt, fr, de, ja, ko,
 };
 
 interface LanguageContextType {

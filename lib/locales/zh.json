@@ -124,12 +124,12 @@
   "contact.title": "联系",
   "contact.subtitle": "联系我们",
   "contact.heading": "让我们一起**创造**一些东西",
-  "contact.text": "有项目还是只是想聊聊？在Telegram上给我写消息——我总是准备好以很好的价格讨论和实现你的项目。",
-  "contact.button": "写Telegram",
+  "contact.text": "有项目想聊，或者只是想随便说说？在Telegram上给我发消息 — 我随时都在，愿意以合理的价格帮你把想法变成现实。",
+  "contact.button": "在Telegram上联系我",
   "github.title": "代码",
   "github.subtitle": "GitHub仓库",
   "footer.rights": "版权所有。",
   "notFound.title": "页面未找到",
   "notFound.text": "此页面不存在。可能已被移动或删除。",
-  "notFound.button": "回家"
+  "notFound.button": "返回首页"
 }
