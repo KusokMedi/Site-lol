@@ -34,6 +34,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [contentOpacity, setContentOpacity] = useState(true);
 
   useEffect(() => {
+    // 1. Check URL query param first (set by middleware redirect from /lv etc.)
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get("lang") as Language | null;
+    if (urlLang && urlLang in translations) {
+      setLangState(urlLang);
+      localStorage.setItem("lang", urlLang);
+      // Clean up ?lang= from URL so it looks tidy
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState(null, "", cleanUrl);
+      return;
+    }
+    // 2. Fall back to localStorage
     const saved = localStorage.getItem("lang") as Language | null;
     if (saved && saved in translations) {
       setLangState(saved);
