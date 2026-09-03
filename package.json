@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "lint": "next lint"
+    "start": "next start",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -21,12 +22,18 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.1.4",
     "@types/node": "^22.14.1",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "eslint": "^10.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
+    "@typescript-eslint/parser": "^8.69.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.2.4",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3"
   }

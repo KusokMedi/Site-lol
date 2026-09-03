@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Globe } from "lucide-react";
-import { useLanguage } from "@/components/LanguageProvider";
+import { useLanguage, type Language } from "@/components/LanguageProvider";
 
 const languages = [
   { code: "en", label: "English" },
@@ -63,7 +63,7 @@ export default function LanguageSwitcher() {
             {languages.map((item, i) => (
               <motion.button
                 key={item.code}
-                onClick={() => { setLang(item.code as any); setIsOpen(false); }}
+                onClick={() => { setLang(item.code as Language); setIsOpen(false); }}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.03, duration: 0.2 }}

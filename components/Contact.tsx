@@ -38,7 +38,7 @@ export default function Contact() {
           {/* CTA button */}
           <div className="pt-2">
             <a
-              href="https://t.me/kusokmedi52"
+              href={process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52"}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-accent text-dark-950 font-semibold text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] glow ripple"

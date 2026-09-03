@@ -111,5 +111,10 @@
   "notFound.button": "Retour à l'accueil",
   "skills.badge": "Compétences",
   "skills.heading": "Ma **boîte à outils**",
-  "skills.description": "20+ technologies et langages. Voici mes points les plus forts."
+  "skills.description": "20+ technologies et langages. Voici mes points les plus forts.",
+  "aria.scrollToTop": "Retour en haut",
+  "aria.goHome": "Aller à l'accueil",
+  "aria.scrollDown": "Faire défiler vers le bas",
+  "aria.openMenu": "Ouvrir le menu",
+  "aria.closeMenu": "Fermer le menu"
 }

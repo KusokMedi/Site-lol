@@ -111,5 +111,10 @@
   "notFound.button": "होम पर जाएं",
   "skills.badge": "कौशल",
   "skills.heading": "मेरा **टूलकिट**",
-  "skills.description": "20+ प्रौद्योगिकियां और भाषाएं। यहां मेरे सबसे मजबूत क्षेत्र हैं।"
+  "skills.description": "20+ प्रौद्योगिकियां और भाषाएं। यहां मेरे सबसे मजबूत क्षेत्र हैं।",
+  "aria.scrollToTop": "ऊपर जाएं",
+  "aria.goHome": "होम पर जाएं",
+  "aria.scrollDown": "नीचे स्क्रॉल करें",
+  "aria.openMenu": "मेनू खोलें",
+  "aria.closeMenu": "मेनू बंद करें"
 }

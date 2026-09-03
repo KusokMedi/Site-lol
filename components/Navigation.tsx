@@ -160,7 +160,7 @@ export default function Navigation() {
               href="#home"
               onClick={(e) => handleNavClick(e, "#home")}
               className="flex items-center gap-2.5 group shrink-0"
-              aria-label="На главную"
+              aria-label={t("aria.goHome")}
             >
               <div className="w-8 h-8 rounded-lg bg-accent-500/8 border border-accent-400/18 flex items-center justify-center group-hover:bg-accent-500/18 group-hover:border-accent-400/35 transition-all duration-300">
                 <Terminal className="w-4 h-4 text-accent-400" />
@@ -209,7 +209,7 @@ export default function Navigation() {
               <motion.button
                 onClick={() => setIsOpen(!isOpen)}
                 className="md:hidden relative w-9 h-9 flex items-center justify-center rounded-xl btn-glass text-white/55 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-400/50"
-                aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+                aria-label={isOpen ? t("aria.closeMenu") : t("aria.openMenu")}
                 aria-expanded={isOpen}
                 whileTap={{ scale: 0.9 }}
               >

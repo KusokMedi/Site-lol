@@ -2,9 +2,11 @@
 
 import { Terminal } from "lucide-react";
 import { scrollToTarget } from "@/lib/utils";
+import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="relative py-8 sm:py-10">
@@ -18,7 +20,7 @@ export default function Footer() {
           <button
             onClick={() => scrollToTarget("#home")}
             className="flex items-center gap-2 group"
-            aria-label="Наверх"
+            aria-label={t("aria.goHome")}
           >
             <div className="w-7 h-7 rounded-lg bg-accent-500/8 border border-accent-400/15 flex items-center justify-center group-hover:bg-accent-500/15 group-hover:border-accent-400/30 transition-all duration-300">
               <Terminal className="w-3.5 h-3.5 text-accent-400" />
@@ -30,7 +32,7 @@ export default function Footer() {
 
           {/* Copyright — right side on desktop */}
           <p className="text-[11px] text-white/20 font-mono tracking-wide text-center sm:text-right order-last sm:order-none">
-            © {year} KusokMedi. Visas tiesības aizsargātas.
+            © {year} KusokMedi. {t("footer.rights")}
           </p>
         </div>
       </div>

@@ -10,8 +10,8 @@
   --color-accent-500: #ffb300;
   --color-accent-600: #ff8c00;
   --color-accent-700: #ff6a00;
-  --font-sans: "Inter", "SF Pro Display", "Geist", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+  --font-sans: var(--font-inter), "SF Pro Display", "Geist", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "SF Mono", monospace;
 }
 
 @layer base {

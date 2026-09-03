@@ -111,5 +111,10 @@
   "footer.rights": "版权所有。",
   "notFound.title": "页面未找到",
   "notFound.text": "此页面不存在。可能已被移动或删除。",
-  "notFound.button": "返回首页"
+  "notFound.button": "返回首页",
+  "aria.scrollToTop": "滚动到顶部",
+  "aria.goHome": "回到首页",
+  "aria.scrollDown": "向下滚动",
+  "aria.openMenu": "打开菜单",
+  "aria.closeMenu": "关闭菜单"
 }

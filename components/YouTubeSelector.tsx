@@ -8,19 +8,19 @@ import { useLanguage } from "@/components/LanguageProvider";
 const youtubeChannels = [
   {
     name: "@kusokmedi",
-    url: "https://youtube.com/@kusokmedi",
+    url: process.env.NEXT_PUBLIC_YOUTUBE_MAIN_URL ?? "https://youtube.com/@kusokmedi",
     lang: "ru",
   },
   {
     name: "@kexbytes",
-    url: "https://youtube.com/@kexbytes",
+    url: process.env.NEXT_PUBLIC_YOUTUBE_EN_URL ?? "https://youtube.com/@kexbytes",
     lang: "en",
   },
 ];
 
 export default function YouTubeSelector({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
 
   return (
     <div className={`relative ${className}`}>
@@ -32,6 +32,8 @@ export default function YouTubeSelector({ className = "" }: { className?: string
         whileHover={{ scale: 1.1, y: -2 }}
         whileTap={{ scale: 0.95 }}
         className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/60 transition-all duration-300 hover:text-[#FF0000] hover:bg-white/[0.08] hover:border-white/[0.12]"
+        aria-label="YouTube"
+        aria-expanded={isOpen}
         title="YouTube"
       >
         <Youtube className="w-4 h-4" />
@@ -46,6 +48,7 @@ export default function YouTubeSelector({ className = "" }: { className?: string
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-40"
               onClick={() => setIsOpen(false)}
+              aria-hidden="true"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -53,10 +56,11 @@ export default function YouTubeSelector({ className = "" }: { className?: string
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
               transition={{ duration: 0.2 }}
               className="absolute bottom-full left-0 mb-2 z-50 min-w-[160px] rounded-xl bg-dark-800/95 backdrop-blur-xl border border-white/[0.08] shadow-xl overflow-hidden"
+              role="menu"
             >
               <div className="p-2">
                 <p className="px-3 py-2 text-xs text-white/40 font-medium">
-                  {lang === "ru" ? "Выберите канал" : "Select channel"}
+                  {t("nav.code")}
                 </p>
                 {youtubeChannels.map((channel) => (
                   <a
@@ -65,6 +69,7 @@ export default function YouTubeSelector({ className = "" }: { className?: string
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}
+                    role="menuitem"
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/[0.06] transition-all duration-200"
                   >
                     <Youtube className="w-4 h-4 text-[#FF0000]" />

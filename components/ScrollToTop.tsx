@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronUp } from "lucide-react";
+import { useLanguage } from "@/components/LanguageProvider";
 
 function scrollToTop() {
   const lenis = window.__lenis;
@@ -15,6 +16,7 @@ function scrollToTop() {
 
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const lenis = window.__lenis;
@@ -45,7 +47,8 @@ export default function ScrollToTop() {
             boxShadow: "0 0 20px rgba(255,179,0,0.12), 0 8px 32px rgba(0,0,0,0.5)",
             borderColor: "rgba(255,179,0,0.2)",
           }}
-          title="Наверх"
+          title={t("aria.scrollToTop")}
+          aria-label={t("aria.scrollToTop")}
         >
           <ChevronUp className="w-4 h-4" />
         </motion.button>

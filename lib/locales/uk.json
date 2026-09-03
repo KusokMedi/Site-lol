@@ -109,6 +109,11 @@
   "github.title": "Код",
   "github.subtitle": "GitHub репозиторії",
   "footer.rights": "Всі права захищені.",
+  "aria.scrollToTop": "Нагору",
+  "aria.goHome": "На головну",
+  "aria.scrollDown": "Прокрутити вниз",
+  "aria.openMenu": "Відкрити меню",
+  "aria.closeMenu": "Закрити меню",
   "notFound.title": "Сторінку не знайдено",
   "notFound.text": "Такої сторінки не існує. Можливо, її було переміщено або видалено.",
   "notFound.button": "На головну"

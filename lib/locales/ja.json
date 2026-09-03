@@ -111,5 +111,10 @@
   "notFound.button": "ホームに戻る",
   "skills.badge": "スキル",
   "skills.heading": "私の**ツールキット**",
-  "skills.description": "20+の技術と言語。ここに私の最強の分野があります。"
+  "skills.description": "20+の技術と言語。ここに私の最強の分野があります。",
+  "aria.scrollToTop": "トップへ",
+  "aria.goHome": "ホームへ",
+  "aria.scrollDown": "下にスクロール",
+  "aria.openMenu": "メニューを開く",
+  "aria.closeMenu": "メニューを閉じる"
 }

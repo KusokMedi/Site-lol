@@ -22,6 +22,7 @@ export function scrollToTarget(target: string | HTMLElement, offset = -20) {
   if (lenis) {
     lenis.scrollTo(el, { offset, duration: 1.2 });
   } else {
-    el.scrollIntoView({ behavior: "smooth" });
+    const top = el.getBoundingClientRect().top + window.scrollY + offset;
+    window.scrollTo({ top, behavior: "smooth" });
   }
 }

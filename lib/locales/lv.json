@@ -109,6 +109,11 @@
   "github.title": "Kods",
   "github.subtitle": "GitHub repozitoriji",
   "footer.rights": "Visas tiesības aizsargātas.",
+  "aria.scrollToTop": "Uz augšu",
+  "aria.goHome": "Uz sākumlapu",
+  "aria.scrollDown": "Ritināt uz leju",
+  "aria.openMenu": "Atvērt izvēlni",
+  "aria.closeMenu": "Aizvērt izvēlni",
   "notFound.title": "Lapa nav atrasta",
   "notFound.text": "Šāda lapa neeksistē. Iespējams, tā ir pārvietota vai izdzēsta.",
   "notFound.button": "Uz sākumu"

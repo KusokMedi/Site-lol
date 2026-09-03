@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-dvh flex flex-col justify-center overflow-hidden"
+      className="relative min-h-screen min-h-dvh flex flex-col justify-center overflow-hidden"
     >
       {/* Background grid */}
       <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
@@ -54,6 +54,7 @@ export default function Hero() {
               <button
                 onClick={() => scrollToTarget("#services")}
                 className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] glow ripple"
+                aria-label={t("hero.cta")}
               >
                 {t("hero.cta")}
                 <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -62,6 +63,7 @@ export default function Hero() {
               <button
                 onClick={() => scrollToTarget("#contact")}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-glass text-sm font-medium text-white/60 hover:text-white"
+                aria-label={t("contact.title")}
               >
                 {t("contact.title")}
               </button>
@@ -99,7 +101,7 @@ export default function Hero() {
         <button
           onClick={() => scrollToTarget("#about")}
           className="flex items-center justify-center text-white/20 hover:text-white/50 transition-colors duration-300"
-          aria-label="Scroll down"
+          aria-label={t("aria.scrollDown")}
         >
           <svg
             width="20"

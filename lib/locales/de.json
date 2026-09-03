@@ -111,5 +111,10 @@
   "notFound.button": "Zur Startseite",
   "skills.badge": "Fähigkeiten",
   "skills.heading": "Mein **Werkzeugkasten**",
-  "skills.description": "20+ Technologien und Sprachen. Hier sind meine stärksten Bereiche."
+  "skills.description": "20+ Technologien und Sprachen. Hier sind meine stärksten Bereiche.",
+  "aria.scrollToTop": "Nach oben",
+  "aria.goHome": "Zur Startseite",
+  "aria.scrollDown": "Nach unten scrollen",
+  "aria.openMenu": "Menü öffnen",
+  "aria.closeMenu": "Menü schließen"
 }

@@ -12,9 +12,13 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   basePath: "",
   images: {
-    unoptimized: true,
+    unoptimized: false,
   },
-  devIndicators: false,
+  devIndicators: {
+    appIsrStatus: process.env.NODE_ENV === "development",
+    buildActivity: process.env.NODE_ENV === "development",
+    buildActivityPosition: "bottom-right",
+  },
 };
 
 export default withPWA(nextConfig);

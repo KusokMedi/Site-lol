@@ -111,5 +111,10 @@
   "notFound.button": "홈으로 가기",
   "skills.badge": "기술",
   "skills.heading": "나의 **도구함**",
-  "skills.description": "20+가지 기술과 언어. 내 가장 강한 분야들입니다."
+  "skills.description": "20+가지 기술과 언어. 내 가장 강한 분야들입니다.",
+  "aria.scrollToTop": "맨 위로",
+  "aria.goHome": "홈으로",
+  "aria.scrollDown": "아래로 스크롤",
+  "aria.openMenu": "메뉴 열기",
+  "aria.closeMenu": "메뉴 닫기"
 }

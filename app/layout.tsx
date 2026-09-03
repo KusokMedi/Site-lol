@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -6,10 +7,26 @@ import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
 
-const siteUrl = "https://kusok-medi.ru";
+// ─── Local fonts via next/font (no CDN, no render-blocking) ───────────────────
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
-// #4: Explicit viewport export — gives us viewport-fit=cover for iOS notch
-// and control over initial-scale. Next.js 14+ reads this as the <meta viewport> tag.
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kusok-medi.ru";
+
+const supportedLangs = ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"] as const;
+
+// ─── Viewport ─────────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -17,33 +34,48 @@ export const viewport: Viewport = {
   themeColor: "#0a0a0a",
 };
 
+// ─── Static metadata (en fallback) ───────────────────────────────────────────
+// Per-language title/description are injected client-side via LocaleHandler;
+// here we provide sane English defaults for crawlers that hit the root URL.
 export const metadata: Metadata = {
-  title: "KusokMedi",
+  title: "KusokMedi — Developer & Programmer",
   description:
-    "Разработчик сайтов, ботов, автоматизации и цифровых решений. Специализация: Python, React, Node.js, Linux.",
+    "Developer of websites, bots, automation and digital solutions. Specialization: Python, React, Node.js, Linux.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
-      { url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>", type: "image/svg+xml" },
+      {
+        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>",
+        type: "image/svg+xml",
+      },
     ],
   },
   openGraph: {
-    title: "KusokMedi | Портфолио",
-    description:
-      "Разработчик сайтов, ботов, автоматизации и цифровых решений.",
+    title: "KusokMedi | Portfolio",
+    description: "Developer of websites, bots, automation and digital solutions.",
     type: "website",
-    locale: "ru_RU",
+    locale: "en_US",
     siteName: "KusokMedi Portfolio",
     url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: "KusokMedi | Портфолио",
-    description:
-      "Разработчик сайтов, ботов, автоматизации и цифровых решений.",
+    title: "KusokMedi | Portfolio",
+    description: "Developer of websites, bots, automation and digital solutions.",
+  },
+  // hreflang alternates for multilingual SEO
+  alternates: {
+    canonical: siteUrl,
+    languages: Object.fromEntries(
+      supportedLangs.map((lang) => [
+        lang,
+        lang === "en" ? siteUrl : `${siteUrl}/${lang}`,
+      ])
+    ),
   },
 };
 
+// ─── JSON-LD structured data ──────────────────────────────────────────────────
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -54,47 +86,40 @@ const jsonLd = {
       jobTitle: "Developer / Programmer",
       knowsAbout: ["Python", "React", "Node.js", "Linux", "TypeScript", "Docker"],
       sameAs: [
-        "https://github.com/kusokmedi",
-        "https://t.me/kusokmedi52",
-        "https://youtube.com/@kusokmedi",
+        process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/kusokmedi",
+        process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52",
+        process.env.NEXT_PUBLIC_YOUTUBE_MAIN_URL ?? "https://youtube.com/@kusokmedi",
       ],
     },
     {
       "@type": "WebSite",
       name: "KusokMedi Portfolio",
       url: siteUrl,
-      description: "Личный сайт-портфолио разработчика",
+      description: "Personal developer portfolio",
     },
   ],
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     // lang="en" is the safe SSR default; LocaleHandler updates it on the client
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="canonical" href={siteUrl} />
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon.svg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        {/* Preconnect first, then preload the stylesheet to reduce render-blocking */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        {/* #6: preload hint so the browser fetches the CSS before render */}
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* hreflang tags for multilingual SEO */}
+        {supportedLangs.map((lang) => (
+          <link
+            key={lang}
+            rel="alternate"
+            hrefLang={lang}
+            href={lang === "en" ? siteUrl : `${siteUrl}/${lang}`}
+          />
+        ))}
+        <link rel="alternate" hrefLang="x-default" href={siteUrl} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

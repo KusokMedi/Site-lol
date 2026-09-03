@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useRef, ReactNode } from "react";
 
 import en from "@/lib/locales/en.json";
 import ru from "@/lib/locales/ru.json";
@@ -32,6 +32,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>("en");
   const [contentOpacity, setContentOpacity] = useState(true);
+  const timeoutRefs = useRef<{ fade?: ReturnType<typeof setTimeout>; restore?: ReturnType<typeof setTimeout> }>({});
 
   useEffect(() => {
     // 1. Check URL query param first (set by middleware redirect from /lv etc.)
@@ -46,20 +47,33 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       return;
     }
     // 2. Fall back to localStorage
-    const saved = localStorage.getItem("lang") as Language | null;
+    const saved = localStorage.getItem("lang");
     if (saved && saved in translations) {
-      setLangState(saved);
+      setLangState(saved as Language);
     }
   }, []);
 
   const setLang = (newLang: Language) => {
+    // Cancel any pending timeouts to prevent race conditions
+    if (timeoutRefs.current.fade) clearTimeout(timeoutRefs.current.fade);
+    if (timeoutRefs.current.restore) clearTimeout(timeoutRefs.current.restore);
+
     setContentOpacity(false);
-    setTimeout(() => {
+    timeoutRefs.current.fade = setTimeout(() => {
       setLangState(newLang);
       localStorage.setItem("lang", newLang);
-      setTimeout(() => setContentOpacity(true), 100);
+      timeoutRefs.current.restore = setTimeout(() => setContentOpacity(true), 100);
     }, 500);
   };
+
+  useEffect(() => {
+    // Cleanup on unmount — capture current value to avoid stale ref warning
+    const refs = timeoutRefs.current;
+    return () => {
+      if (refs.fade) clearTimeout(refs.fade);
+      if (refs.restore) clearTimeout(refs.restore);
+    };
+  }, []);
 
   const t = (key: string): string => {
     const value = translations[lang]?.[key as keyof typeof en];

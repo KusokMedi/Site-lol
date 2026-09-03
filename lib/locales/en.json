@@ -109,6 +109,11 @@
   "github.title": "Code",
   "github.subtitle": "GitHub repos",
   "footer.rights": "All rights reserved.",
+  "aria.scrollToTop": "Scroll to top",
+  "aria.goHome": "Go to homepage",
+  "aria.scrollDown": "Scroll down",
+  "aria.openMenu": "Open menu",
+  "aria.closeMenu": "Close menu",
   "notFound.title": "Page not found",
   "notFound.text": "This page does not exist. It may have been moved or deleted.",
   "notFound.button": "Go home"

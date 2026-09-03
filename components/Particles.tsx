@@ -7,6 +7,10 @@ export default function Particles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Respect user's motion preference
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
     if (isTouchDevice()) return;
 
     const canvas = canvasRef.current;
@@ -76,10 +80,23 @@ export default function Particles() {
 
     render();
 
+    // Also listen for runtime changes (user changes OS setting while page is open)
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onMotionChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        cancelAnimationFrame(animId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } else {
+        render();
+      }
+    };
+    motionQuery.addEventListener("change", onMotionChange);
+
     return () => {
       cancelAnimationFrame(animId);
       clearTimeout(resizeTimer);
       ro.disconnect();
+      motionQuery.removeEventListener("change", onMotionChange);
     };
   }, []);
 
@@ -87,6 +104,7 @@ export default function Particles() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 pointer-events-none z-[1]"
+      aria-hidden="true"
     />
   );
 }

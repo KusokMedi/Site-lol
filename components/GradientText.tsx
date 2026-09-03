@@ -5,7 +5,7 @@ export function GradientText({ children }: { children: React.ReactNode }) {
 }
 
 export function parseGradientText(text: string): React.ReactNode[] {
-  if (!text) return [];
+  if (!text) return [null];
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {

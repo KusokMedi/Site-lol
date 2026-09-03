@@ -4,12 +4,6 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { isTouchDevice } from "@/lib/isTouchDevice";
 
-declare global {
-  interface Window {
-    __lenis?: Lenis;
-  }
-}
-
 export default function SmoothScroll() {
   const once = useRef(false);
 
