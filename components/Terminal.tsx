@@ -93,6 +93,7 @@ export default function Terminal({ className = "" }: { className?: string }) {
     t("terminal.line6"),
     t("terminal.line7"),
     t("terminal.line8"),
+    t("terminal.line9"),
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ], [lang]);
 
