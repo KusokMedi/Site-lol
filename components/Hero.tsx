@@ -39,17 +39,6 @@ export default function Hero() {
 
           {/* Left — text */}
           <div className="space-y-6 w-full">
-            {/* Status badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border-green-400/20 text-xs font-mono text-white/50"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              available for work
-            </motion.div>
-
             {/* Heading */}
             <div className="space-y-3">
               <motion.h1
