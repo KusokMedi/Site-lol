@@ -1,56 +1,86 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowRight, MessageCircle } from "lucide-react";
+import { Send, ArrowRight, MessageCircle, Clock, CheckCircle2 } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
 
+const perks = [
+  { icon: Clock,        key: "response" },
+  { icon: CheckCircle2, key: "quality" },
+];
+
 export default function Contact() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="contact" className="relative py-32">
-      <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
+    <AnimatedSection id="contact" className="relative py-28 sm:py-36">
+      {/* Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-500/5 rounded-full blur-[130px]" />
-        <div className="absolute top-1/4 -left-32 w-72 h-72 bg-accent-400/6 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 -right-32 w-72 h-72 bg-accent-600/6 rounded-full blur-[100px]" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/25 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/10 to-transparent" />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full"
+          style={{ background: "radial-gradient(ellipse, rgba(255,179,0,0.055) 0%, transparent 60%)", filter: "blur(80px)" }}
+        />
+        <div
+          className="absolute top-[20%] -left-24 w-64 h-64 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(255,215,0,0.06) 0%, transparent 65%)", filter: "blur(60px)" }}
+        />
+        <div
+          className="absolute bottom-[20%] -right-24 w-64 h-64 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(255,140,0,0.06) 0%, transparent 65%)", filter: "blur(60px)" }}
+        />
+        <div className="absolute inset-0 grid-pattern opacity-20" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          className="max-w-2xl mx-auto text-center space-y-8"
+        >
           <SectionBadge icon={MessageCircle} label={t("contact.title")} />
 
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]">
             {parseGradientText(t("contact.heading"))}
           </h2>
 
-          <p className="text-base sm:text-lg text-white/40 text-balance">
+          <p className="text-base sm:text-[17px] text-white/38 text-balance leading-relaxed">
             {t("contact.text")}
           </p>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="pt-2"
-          >
+          {/* CTA button */}
+          <div className="pt-2">
             <a
               href="https://t.me/kusokmedi52"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-accent text-dark-950 font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-accent text-dark-950 font-semibold text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] glow ripple"
             >
               <Send className="w-5 h-5" />
               {t("contact.button")}
-              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
-          </motion.div>
-        </div>
+          </div>
+
+          {/* Subtle social proof / perks */}
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <div className="flex items-center gap-2 text-sm text-white/30">
+              <Clock className="w-3.5 h-3.5 text-accent-400/50" />
+              <span>Отвечаю в течение дня</span>
+            </div>
+            <span className="w-px h-4 bg-white/[0.08]" />
+            <div className="flex items-center gap-2 text-sm text-white/30">
+              <CheckCircle2 className="w-3.5 h-3.5 text-accent-400/50" />
+              <span>Бесплатная консультация</span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </AnimatedSection>
   );

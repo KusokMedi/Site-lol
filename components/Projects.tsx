@@ -1,106 +1,136 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FolderKanban, Lock } from "lucide-react";
+import { FolderKanban, Lock, Clock } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
 
 const placeholders = [
-  { gradient: "from-accent-500/10 to-accent-700/10", blur: "bg-accent-500/10" },
-  { gradient: "from-violet-500/10 to-purple-700/10", blur: "bg-violet-500/10" },
-  { gradient: "from-sky-500/10 to-blue-700/10", blur: "bg-sky-500/10" },
+  {
+    gradientFrom: "rgba(255,179,0,0.08)",
+    gradientTo: "rgba(255,106,0,0.04)",
+    blur: "rgba(255,179,0,0.08)",
+  },
+  {
+    gradientFrom: "rgba(139,92,246,0.08)",
+    gradientTo: "rgba(109,40,217,0.04)",
+    blur: "rgba(139,92,246,0.08)",
+  },
+  {
+    gradientFrom: "rgba(14,165,233,0.08)",
+    gradientTo: "rgba(30,64,175,0.04)",
+    blur: "rgba(14,165,233,0.08)",
+  },
 ];
 
 export default function Projects() {
   const { t } = useLanguage();
 
   return (
-    <AnimatedSection id="projects" className="relative py-32">
+    <AnimatedSection id="projects" className="relative py-28 sm:py-36">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 -left-40 w-[500px] h-[500px] bg-accent-500/7 rounded-full blur-[110px]" />
-        <div className="absolute bottom-1/3 -right-40 w-[500px] h-[500px] bg-accent-700/5 rounded-full blur-[110px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[200px] bg-accent-600/3 rounded-full blur-[100px]" />
-        <div className="absolute inset-0 grid-pattern opacity-15" />
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-400/15 to-transparent" />
+        <div
+          className="absolute top-[25%] -left-32 w-[480px] h-[480px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(255,179,0,0.065) 0%, transparent 65%)", filter: "blur(80px)" }}
+        />
+        <div
+          className="absolute bottom-[25%] -right-32 w-[480px] h-[480px] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(255,106,0,0.05) 0%, transparent 65%)", filter: "blur(80px)" }}
+        />
+        <div className="absolute inset-0 grid-pattern opacity-10" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-14 sm:mb-16 space-y-4">
           <SectionBadge icon={FolderKanban} label={t("projects.title")} />
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
             {parseGradientText(t("projects.heading"))}
           </h2>
-          <p className="text-white/40 max-w-2xl mx-auto text-base sm:text-lg">
+          <p className="text-white/35 max-w-xl mx-auto text-base sm:text-[17px] text-balance">
             {t("projects.description")}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {placeholders.map((p, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-2xl glass gradient-border flex flex-col glow-card"
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ delay: i * 0.12, duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+              className="group relative overflow-hidden rounded-2xl glass gradient-border glow-card flex flex-col"
             >
               {/* Image area */}
-              <div className={`relative h-44 sm:h-48 bg-gradient-to-br ${p.gradient} overflow-hidden`}>
-                <div className={`absolute inset-6 rounded-full ${p.blur} blur-3xl`} />
+              <div
+                className="relative h-44 overflow-hidden"
+                style={{ background: `linear-gradient(135deg, ${p.gradientFrom} 0%, ${p.gradientTo} 100%)` }}
+              >
+                {/* Blur orb */}
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full"
+                  style={{ background: p.blur, filter: "blur(40px)" }}
+                />
+                {/* Lock icon placeholder */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-col items-center gap-3 select-none">
-                    <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
-                      <Lock className="w-6 h-6 text-white/20" />
+                  <div className="flex flex-col items-center gap-3 opacity-70">
+                    <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-white/20" />
                     </div>
-                    <div className="space-y-1.5 text-center px-6">
-                      <div className="h-2.5 w-28 rounded-full bg-white/[0.06] mx-auto" />
-                      <div className="h-2 w-20 rounded-full bg-white/[0.04] mx-auto" />
+                    <div className="space-y-1.5 text-center">
+                      <div className="h-2 w-24 rounded-full bg-white/[0.06] mx-auto" />
+                      <div className="h-2 w-16 rounded-full bg-white/[0.04] mx-auto" />
                     </div>
                   </div>
                 </div>
+
+                {/* Coming soon badge */}
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-dark-950/70 backdrop-blur-sm border border-white/[0.08]">
+                  <Clock className="w-2.5 h-2.5 text-white/30" />
+                  <span className="text-[10px] font-mono text-white/30 tracking-wider">soon</span>
+                </div>
               </div>
 
-              {/* Content area */}
-              <div className="p-5 sm:p-6 space-y-4 flex-1 flex flex-col">
-                {/* Title skeleton */}
+              {/* Content */}
+              <div className="p-5 space-y-4 flex-1 flex flex-col">
+                {/* Title + desc skeleton */}
                 <div className="space-y-2">
-                  <div className="h-4 w-32 rounded-full shimmer" />
-                  <div className="h-3 w-full rounded-full shimmer" style={{ animationDelay: "0.1s" }} />
-                  <div className="h-3 w-3/4 rounded-full shimmer" style={{ animationDelay: "0.2s" }} />
+                  <div className="h-4 w-1/2 rounded-full shimmer" />
+                  <div className="h-3 w-full rounded-full shimmer" style={{ animationDelay: "0.15s" }} />
+                  <div className="h-3 w-3/4 rounded-full shimmer" style={{ animationDelay: "0.25s" }} />
                 </div>
 
-                {/* Tech tags skeleton */}
-                <div className="flex gap-1.5">
-                  <div className="h-5 w-14 rounded-md shimmer border border-white/[0.06]" />
-                  <div className="h-5 w-16 rounded-md shimmer border border-white/[0.06]" style={{ animationDelay: "0.1s" }} />
-                  <div className="h-5 w-12 rounded-md shimmer border border-white/[0.06]" style={{ animationDelay: "0.2s" }} />
+                {/* Tech badges skeleton */}
+                <div className="flex flex-wrap gap-1.5">
+                  {[14, 16, 12].map((w, j) => (
+                    <div
+                      key={j}
+                      className="h-5 rounded-md shimmer border border-white/[0.05]"
+                      style={{ width: `${w * 4}px`, animationDelay: `${j * 0.1}s` }}
+                    />
+                  ))}
                 </div>
 
-                {/* Features skeleton */}
-                <ul className="space-y-2 pt-1">
+                {/* Feature list skeleton */}
+                <ul className="space-y-2 pt-0.5 flex-1">
                   {[70, 55, 65, 50].map((w, j) => (
                     <li key={j} className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent-400/20 shrink-0" />
+                      <span className="w-1 h-1 rounded-full bg-accent-400/18 shrink-0" />
                       <div
                         className="h-2.5 rounded-full shimmer"
-                        style={{ width: `${w}%`, animationDelay: `${j * 0.1}s` }}
+                        style={{ width: `${w}%`, animationDelay: `${j * 0.12}s` }}
                       />
                     </li>
                   ))}
                 </ul>
 
                 {/* CTA skeleton */}
-                <div className="mt-auto pt-4">
-                  <div className="h-9 w-28 rounded-xl shimmer border border-white/[0.06]" />
+                <div className="pt-3">
+                  <div className="h-8 w-28 rounded-xl shimmer border border-white/[0.05]" />
                 </div>
-              </div>
-
-              {/* Coming soon overlay badge */}
-              <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-dark-950/80 backdrop-blur-sm border border-white/[0.08] text-[11px] font-mono text-white/30">
-                soon
               </div>
             </motion.div>
           ))}

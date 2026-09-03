@@ -13,18 +13,27 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useLanguage();
   const barRef = useRef<HTMLDivElement>(null);
-  const barGlowRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef(false);
   const activeRef = useRef("home");
 
   const navLinks = [
-    { label: t("nav.home"), href: "#home" },
-    { label: t("nav.about"), href: "#about" },
+    { label: t("nav.home"),     href: "#home" },
+    { label: t("nav.about"),    href: "#about" },
     { label: t("nav.services"), href: "#services" },
     { label: t("nav.projects"), href: "#projects" },
     { label: t("nav.contacts"), href: "#contact" },
   ];
 
+  // Close drawer on resize to desktop
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setIsOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Scroll tracking
   useEffect(() => {
     let rafPending = false;
 
@@ -32,13 +41,10 @@ export default function Navigation() {
       const pct = Math.min(progress * 100, 100);
       if (barRef.current) {
         barRef.current.style.width = `${pct}%`;
-        barRef.current.style.opacity = pct > 0 ? "1" : "0";
-      }
-      if (barGlowRef.current) {
-        barGlowRef.current.style.opacity = pct > 0 ? "1" : "0";
+        barRef.current.style.opacity = pct > 0.5 ? "1" : "0";
       }
 
-      const newScrolled = scrollY > 50;
+      const newScrolled = scrollY > 40;
       if (newScrolled !== scrolledRef.current) {
         scrolledRef.current = newScrolled;
         if (!rafPending) {
@@ -55,10 +61,10 @@ export default function Navigation() {
     let fallback: (() => void) | null = null;
 
     if (lenis) {
-      const onLenisScroll = () => handleScroll(lenis.scroll, lenis.progress);
-      lenis.on("scroll", onLenisScroll);
-      onLenisScroll();
-      (lenis as unknown as Record<string, unknown>).__navUnsub = () => lenis.off("scroll", onLenisScroll);
+      const cb = () => handleScroll(lenis.scroll, lenis.progress);
+      lenis.on("scroll", cb);
+      cb();
+      (lenis as unknown as Record<string, unknown>).__navScrollSub = () => lenis.off("scroll", cb);
     } else {
       fallback = () => {
         const top = window.scrollY;
@@ -69,19 +75,17 @@ export default function Navigation() {
       fallback();
     }
 
+    // Active section detection
     const sectionIds = navLinks.map(({ href }) => href.slice(1));
 
-    const updateActiveSection = () => {
+    const updateActive = () => {
       const sections = sectionIds
         .map((id) => document.getElementById(id))
         .filter(Boolean) as HTMLElement[];
-
       const threshold = window.innerHeight * 0.4;
       let active = sections[0]?.id ?? "home";
-      for (const section of sections) {
-        if (section.getBoundingClientRect().top <= threshold) {
-          active = section.id;
-        }
+      for (const s of sections) {
+        if (s.getBoundingClientRect().top <= threshold) active = s.id;
       }
       if (active !== activeRef.current) {
         activeRef.current = active;
@@ -89,27 +93,24 @@ export default function Navigation() {
       }
     };
 
-    const lenisCb = window.__lenis;
-    if (lenisCb) {
-      lenisCb.on("scroll", updateActiveSection);
-      updateActiveSection();
-      (lenisCb as unknown as Record<string, unknown>).__navActiveSub = () => lenisCb.off("scroll", updateActiveSection);
+    if (lenis) {
+      lenis.on("scroll", updateActive);
+      updateActive();
+      (lenis as unknown as Record<string, unknown>).__navActiveSub = () => lenis.off("scroll", updateActive);
     } else {
-      window.addEventListener("scroll", updateActiveSection, { passive: true });
-      updateActiveSection();
+      window.addEventListener("scroll", updateActive, { passive: true });
+      updateActive();
     }
 
     return () => {
       if (lenis) {
-        const unsub = (lenis as unknown as Record<string, unknown>).__navUnsub;
-        if (typeof unsub === "function") unsub();
-        delete (lenis as unknown as Record<string, unknown>).__navUnsub;
-        const activeSub = (lenis as unknown as Record<string, unknown>).__navActiveSub;
-        if (typeof activeSub === "function") activeSub();
-        delete (lenis as unknown as Record<string, unknown>).__navActiveSub;
+        const s = (lenis as unknown as Record<string, unknown>).__navScrollSub;
+        if (typeof s === "function") s();
+        const a = (lenis as unknown as Record<string, unknown>).__navActiveSub;
+        if (typeof a === "function") a();
       } else {
         if (fallback) window.removeEventListener("scroll", fallback);
-        window.removeEventListener("scroll", updateActiveSection);
+        window.removeEventListener("scroll", updateActive);
       }
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,39 +130,30 @@ export default function Navigation() {
         transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-dark-950/75 backdrop-blur-2xl"
+            ? "bg-dark-950/80 backdrop-blur-2xl"
             : "bg-transparent"
         }`}
       >
-        {/* Bottom border line — only when scrolled */}
-        <div className={`absolute bottom-0 left-0 right-0 h-px transition-opacity duration-500 ${isScrolled ? "opacity-100" : "opacity-0"}`}
-          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent)" }}
+        {/* Bottom border — only when scrolled */}
+        <div
+          className={`absolute bottom-0 left-0 right-0 h-px transition-opacity duration-500 ${isScrolled ? "opacity-100" : "opacity-0"}`}
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.05) 75%, transparent)" }}
         />
 
         {/* Scroll progress bar */}
         <div
           ref={barRef}
-          className="absolute bottom-0 left-0 h-[2px] will-change-[width] transition-opacity duration-500"
+          className="absolute bottom-0 left-0 h-[2px] will-change-[width] transition-opacity duration-300 z-10"
           style={{
             width: "0%",
             opacity: 0,
             background: "linear-gradient(90deg, #ffd700, #ffb300, #ff8c00)",
-          }}
-        />
-        {/* Glow under progress bar */}
-        <div
-          ref={barGlowRef}
-          className="absolute bottom-0 left-0 h-[6px] pointer-events-none transition-opacity duration-500"
-          style={{
-            width: "inherit",
-            opacity: 0,
-            background: "linear-gradient(90deg, transparent, rgba(255,179,0,0.4), transparent)",
-            filter: "blur(4px)",
+            boxShadow: "0 0 8px rgba(255,179,0,0.4)",
           }}
         />
 
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-[72px]">
+          <div className="flex items-center justify-between h-16 sm:h-[68px]">
 
             {/* Logo */}
             <a
@@ -170,17 +162,17 @@ export default function Navigation() {
               className="flex items-center gap-2.5 group shrink-0"
               aria-label="На главную"
             >
-              <div className="w-8 h-8 rounded-lg bg-accent-500/10 border border-accent-400/20 flex items-center justify-center group-hover:bg-accent-500/20 group-hover:border-accent-400/40 transition-all duration-300">
+              <div className="w-8 h-8 rounded-lg bg-accent-500/8 border border-accent-400/18 flex items-center justify-center group-hover:bg-accent-500/18 group-hover:border-accent-400/35 transition-all duration-300">
                 <Terminal className="w-4 h-4 text-accent-400" />
               </div>
-              <span className="font-mono text-sm font-semibold tracking-tight">
+              <span className="font-mono text-sm font-semibold tracking-tight text-white/80 group-hover:text-white transition-colors duration-300">
                 KusokMedi<span className="text-accent-400 animate-pulse-glow">~</span>
               </span>
             </a>
 
-            {/* Desktop nav — pill style */}
+            {/* Desktop nav pill */}
             <div className="hidden md:flex items-center">
-              <div className="flex items-center gap-0.5 px-2 py-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm">
+              <div className="flex items-center gap-0.5 px-1.5 py-1.5 rounded-2xl bg-white/[0.025] border border-white/[0.05]">
                 {navLinks.map((link) => {
                   const isActive = activeSection === link.href.slice(1);
                   return (
@@ -189,17 +181,17 @@ export default function Navigation() {
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
                       aria-current={isActive ? "page" : undefined}
-                      className={`relative px-4 py-1.5 text-sm rounded-xl transition-all duration-300 ${
+                      className={`relative px-4 py-1.5 text-sm rounded-xl transition-all duration-250 ${
                         isActive
                           ? "text-accent-400"
-                          : "text-white/40 hover:text-white/80"
+                          : "text-white/38 hover:text-white/75"
                       }`}
                     >
                       {isActive && (
                         <motion.span
                           layoutId="nav-pill"
-                          className="absolute inset-0 rounded-xl bg-white/[0.07] border border-accent-400/20"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                          className="absolute inset-0 rounded-xl bg-white/[0.065] border border-accent-400/18"
+                          transition={{ type: "spring", stiffness: 400, damping: 32 }}
                         />
                       )}
                       <span className="relative z-10">{link.label}</span>
@@ -209,36 +201,25 @@ export default function Navigation() {
               </div>
             </div>
 
-            {/* Right side */}
+            {/* Right */}
             <div className="flex items-center gap-2 shrink-0">
               <LanguageSwitcher />
 
               {/* Mobile burger */}
               <motion.button
                 onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/60 hover:text-white hover:bg-white/[0.07] transition-all duration-200"
+                className="md:hidden relative w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.04] border border-white/[0.06] text-white/55 hover:text-white hover:bg-white/[0.07] transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent-400/50"
                 aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
-                whileTap={{ scale: 0.92 }}
+                aria-expanded={isOpen}
+                whileTap={{ scale: 0.9 }}
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {isOpen ? (
-                    <motion.span
-                      key="close"
-                      initial={{ rotate: -45, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 45, opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                    >
+                    <motion.span key="close" initial={{ rotate: -45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 45, opacity: 0 }} transition={{ duration: 0.15 }}>
                       <X className="w-4 h-4" />
                     </motion.span>
                   ) : (
-                    <motion.span
-                      key="open"
-                      initial={{ rotate: 45, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -45, opacity: 0 }}
-                      transition={{ duration: 0.15 }}
-                    >
+                    <motion.span key="open" initial={{ rotate: 45, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -45, opacity: 0 }} transition={{ duration: 0.15 }}>
                       <Menu className="w-4 h-4" />
                     </motion.span>
                   )}
@@ -249,7 +230,7 @@ export default function Navigation() {
         </nav>
       </motion.header>
 
-      {/* Mobile menu — full overlay, outside header so no height animation issues */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -259,30 +240,29 @@ export default function Navigation() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-40 bg-dark-950/60 backdrop-blur-sm md:hidden"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40 bg-dark-950/50 backdrop-blur-sm md:hidden"
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Drawer */}
+            {/* Drawer panel */}
             <motion.div
               key="drawer"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-              className="fixed top-[72px] left-3 right-3 z-50 md:hidden rounded-2xl overflow-hidden"
+              initial={{ opacity: 0, y: -6, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.25, 0.1, 0.25, 1] }}
+              className="fixed top-[72px] inset-x-3 z-50 md:hidden rounded-2xl overflow-hidden"
               style={{
-                background: "rgba(10,10,10,0.95)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,179,0,0.05)",
-                backdropFilter: "blur(32px)",
+                background: "rgba(8,8,8,0.97)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,179,0,0.04), inset 0 1px 0 rgba(255,255,255,0.04)",
               }}
             >
               {/* Top accent line */}
-              <div className="h-px bg-gradient-to-r from-transparent via-accent-400/30 to-transparent" />
+              <div className="h-px bg-gradient-to-r from-transparent via-accent-400/25 to-transparent" />
 
-              <div className="p-3 space-y-1">
+              <div className="p-2.5 space-y-0.5">
                 {navLinks.map((link, i) => {
                   const isActive = activeSection === link.href.slice(1);
                   return (
@@ -290,26 +270,26 @@ export default function Navigation() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
-                      initial={{ opacity: 0, x: -12 }}
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.04, duration: 0.2 }}
+                      transition={{ delay: i * 0.04, duration: 0.18 }}
                       aria-current={isActive ? "page" : undefined}
                       className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
-                          ? "text-accent-400 bg-accent-400/[0.08] border border-accent-400/[0.15]"
-                          : "text-white/50 hover:text-white hover:bg-white/[0.05]"
+                          ? "text-accent-400 bg-accent-400/[0.07] border border-accent-400/[0.14]"
+                          : "text-white/45 hover:text-white/80 hover:bg-white/[0.04]"
                       }`}
                     >
                       <span>{link.label}</span>
                       {isActive && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent-400" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent-400 shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
                       )}
                     </motion.a>
                   );
                 })}
               </div>
 
-              {/* Bottom accent line */}
+              {/* Bottom line */}
               <div className="h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
             </motion.div>
           </>

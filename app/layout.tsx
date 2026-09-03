@@ -5,7 +5,6 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
-import CustomCursor from "@/components/CustomCursor";
 
 const siteUrl = "https://kusok-medi.ru";
 
@@ -101,16 +100,56 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="noise-overlay relative min-h-screen antialiased">
-        {/* Global ambient glow — single continuous layer behind all sections */}
-        <div className="fixed inset-0 pointer-events-none z-0" aria-hidden>
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-accent-500/4 rounded-full blur-[160px]" />
-          <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-accent-700/3 rounded-full blur-[160px]" />
-          <div className="absolute top-2/3 -left-32 w-[500px] h-[500px] bg-accent-600/3 rounded-full blur-[160px]" />
-          <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-accent-500/4 rounded-full blur-[160px]" />
+      <body className="noise-overlay relative min-h-screen antialiased overflow-x-hidden">
+        {/*
+          Global ambient glow — fixed layer behind all content.
+          Uses multiple orbs at different depths for a layered, premium look.
+          Opacity is intentionally very low to stay subtle and not overpower the content.
+        */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden>
+          {/* Primary warm orb — top left */}
+          <div
+            className="absolute -top-32 left-[15%] w-[700px] h-[700px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255,179,0,0.055) 0%, rgba(255,140,0,0.02) 50%, transparent 70%)",
+              filter: "blur(80px)",
+              willChange: "transform",
+            }}
+          />
+          {/* Secondary cool orb — right edge mid */}
+          <div
+            className="absolute top-[30%] -right-24 w-[500px] h-[500px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255,106,0,0.04) 0%, transparent 65%)",
+              filter: "blur(100px)",
+            }}
+          />
+          {/* Tertiary orb — lower left */}
+          <div
+            className="absolute top-[65%] -left-24 w-[500px] h-[500px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255,140,0,0.035) 0%, transparent 65%)",
+              filter: "blur(100px)",
+            }}
+          />
+          {/* Bottom right warm orb */}
+          <div
+            className="absolute -bottom-24 right-[15%] w-[600px] h-[600px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(255,179,0,0.045) 0%, rgba(255,140,0,0.015) 50%, transparent 70%)",
+              filter: "blur(90px)",
+            }}
+          />
+          {/* Dead center subtle glow */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[400px] rounded-full"
+            style={{
+              background: "radial-gradient(ellipse, rgba(255,179,0,0.02) 0%, transparent 60%)",
+              filter: "blur(60px)",
+            }}
+          />
         </div>
         <LanguageProvider>
-          <CustomCursor />
           <LocaleHandler />
           {children}
           <Particles />
