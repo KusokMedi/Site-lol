@@ -32,7 +32,7 @@ export default function Footer() {
 
           {/* Copyright — right side on desktop */}
           <p className="text-[11px] text-white/20 font-mono tracking-wide text-center sm:text-right order-last sm:order-none">
-            © {year} KusokMedi. {t("footer.rights")}
+            © {year} KusokMedi. All rights reserved.
           </p>
         </div>
       </div>

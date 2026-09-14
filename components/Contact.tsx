@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowRight, MessageCircle } from "lucide-react";
+import { Send, ArrowRight, MessageCircle, Mail } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -35,8 +35,8 @@ export default function Contact() {
             {t("contact.text")}
           </p>
 
-          {/* CTA button */}
-          <div className="pt-2">
+          {/* CTA buttons */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
               href={process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52"}
               target="_blank"
@@ -46,6 +46,13 @@ export default function Contact() {
               <Send className="w-5 h-5" />
               {t("contact.button")}
               <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </a>
+            <a
+              href={`mailto:${process.env.NEXT_PUBLIC_EMAIL ?? "kusokmedi@proton.me"}`}
+              className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white/8 text-white/70 font-semibold text-base border border-white/10 transition-all duration-300 hover:bg-white/12 hover:text-white hover:scale-[1.03] active:scale-[0.97]"
+            >
+              <Mail className="w-5 h-5" />
+              {t("contact.email_button")}
             </a>
           </div>
         </motion.div>
