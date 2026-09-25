@@ -103,12 +103,6 @@ export default function Projects() {
                       <Icon className="w-7 h-7 text-white/40 group-hover:text-accent-400 transition-colors duration-300" />
                     </div>
                   </div>
-
-                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-dark-950/70 backdrop-blur-sm border border-white/[0.08]">
-                    <span className="text-[10px] font-mono text-white/40 tracking-wider">
-                      {t(`project.${p.key}.tag`)}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Content */}
