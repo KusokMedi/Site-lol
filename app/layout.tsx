@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import LocaleHandler from "@/components/LocaleHandler";
+import { env, siteUrl, toUrl } from "@/lib/env";
 
 // ─── Local fonts via next/font (no CDN, no render-blocking) ───────────────────
 const inter = Inter({
@@ -21,8 +22,6 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   display: "swap",
 });
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kusokmedi.lat";
 
 const supportedLangs = ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"] as const;
 
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
   title: "KusokMedi — Developer & Programmer",
   description:
     "Developer of websites, bots, automation and digital solutions. Specialization: Python, React, Node.js, Linux.",
-  metadataBase: new URL(siteUrl),
+  metadataBase: toUrl(siteUrl),
   icons: {
     icon: [
       {
@@ -86,9 +85,9 @@ const jsonLd = {
       jobTitle: "Developer / Programmer",
       knowsAbout: ["Python", "React", "Node.js", "Linux", "TypeScript", "Docker"],
       sameAs: [
-        process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/kusokmedi",
-        process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52",
-        process.env.NEXT_PUBLIC_YOUTUBE_MAIN_URL ?? "https://youtube.com/@kusokmedi",
+        env("NEXT_PUBLIC_GITHUB_URL"),
+        env("NEXT_PUBLIC_TELEGRAM_URL"),
+        env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
       ],
     },
     {

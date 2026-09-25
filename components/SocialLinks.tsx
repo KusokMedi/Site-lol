@@ -3,23 +3,24 @@
 import { motion } from "framer-motion";
 import { Github, Send, Globe } from "lucide-react";
 import YouTubeSelector from "./YouTubeSelector";
+import { env } from "@/lib/env";
 
 const socials = [
   {
     name: "GitHub",
-    url: process.env.NEXT_PUBLIC_GITHUB_URL ?? "https://github.com/kusokmedi",
+    url: env("NEXT_PUBLIC_GITHUB_URL"),
     icon: Github,
     color: "hover:text-white",
   },
   {
     name: "GitHub Organization",
-    url: process.env.NEXT_PUBLIC_GITHUB_ORG_URL ?? "https://github.com/kusokmedillc",
+    url: env("NEXT_PUBLIC_GITHUB_ORG_URL"),
     icon: Globe,
     color: "hover:text-white",
   },
   {
     name: "Telegram",
-    url: process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52",
+    url: env("NEXT_PUBLIC_TELEGRAM_URL"),
     icon: Send,
     color: "hover:text-[#0088cc]",
   },

@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/env";
 
 export const dynamic = "force-static";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kusokmedi.lat";
 
 const supportedLangs = ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"] as const;
 

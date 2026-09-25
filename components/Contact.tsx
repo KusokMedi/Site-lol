@@ -6,6 +6,7 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
+import { env } from "@/lib/env";
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -38,7 +39,7 @@ export default function Contact() {
           {/* CTA buttons */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <a
-              href={process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/kusokmedi52"}
+              href={env("NEXT_PUBLIC_TELEGRAM_URL")}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl gradient-accent text-dark-950 font-semibold text-base transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] glow ripple"
@@ -48,7 +49,7 @@ export default function Contact() {
               <ArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
             <a
-              href={`mailto:${process.env.NEXT_PUBLIC_EMAIL ?? "kusokmedi@proton.me"}`}
+              href={`mailto:${env("NEXT_PUBLIC_EMAIL")}`}
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white/8 text-white/70 font-semibold text-base border border-white/10 transition-all duration-300 hover:bg-white/12 hover:text-white hover:scale-[1.03] active:scale-[0.97]"
             >
               <Mail className="w-5 h-5" />

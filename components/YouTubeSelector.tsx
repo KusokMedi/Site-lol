@@ -4,16 +4,17 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Youtube } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
+import { env } from "@/lib/env";
 
 const youtubeChannels = [
   {
     name: "@kusokmedi",
-    url: process.env.NEXT_PUBLIC_YOUTUBE_MAIN_URL ?? "https://youtube.com/@kusokmedi",
+    url: env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
     lang: "ru",
   },
   {
     name: "@kexbytes",
-    url: process.env.NEXT_PUBLIC_YOUTUBE_EN_URL ?? "https://youtube.com/@kexbytes",
+    url: env("NEXT_PUBLIC_YOUTUBE_EN_URL"),
     lang: "en",
   },
 ];
