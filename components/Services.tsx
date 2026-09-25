@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Zap, Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wrench, Plug } from "lucide-react";
+import { Zap, Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wrench, Plug } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
@@ -60,11 +60,10 @@ export default function Services() {
                   style={{ background: "radial-gradient(circle at 30% 0%, rgba(255,179,0,0.05) 0%, transparent 60%)" }}
                 />
 
-                <div className="flex items-start justify-between mb-5">
+                <div className="mb-5">
                   <div className="w-9 h-9 rounded-xl bg-accent-400/8 border border-accent-400/15 flex items-center justify-center group-hover:bg-accent-400/12 group-hover:border-accent-400/25 transition-all duration-300">
                     <Icon className="w-4.5 h-4.5 text-accent-400" />
                   </div>
-                  <ArrowRight className="w-4 h-4 text-white/15 group-hover:text-accent-400/50 transition-all duration-300 translate-x-0 group-hover:translate-x-0.5 mt-0.5" />
                 </div>
 
                 <h3 className="text-[15px] font-semibold text-white/90 mb-1.5 leading-snug">
