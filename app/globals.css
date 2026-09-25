@@ -26,7 +26,8 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* No global smooth scroll: it fights with Lenis on desktop.
+       JS handles scrolling (Lenis, or window.scrollTo fallback). */
     overflow-x: hidden;
     width: 100%;
   }

@@ -1,28 +1,35 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Terminal } from "lucide-react";
-import { scrollToTarget } from "@/lib/utils";
+import { useLenis, useScrollTo } from "@/components/SmoothScroll";
 import { useLanguage } from "@/components/LanguageProvider";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+
+const SECTION_IDS = ["home", "about", "services", "projects", "contact"];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useLanguage();
+  const lenis = useLenis();
+  const scrollTo = useScrollTo();
   const barRef = useRef<HTMLDivElement>(null);
   const scrolledRef = useRef(false);
   const activeRef = useRef("home");
 
-  const navLinks = [
-    { label: t("nav.home"),     href: "#home" },
-    { label: t("nav.about"),    href: "#about" },
-    { label: t("nav.services"), href: "#services" },
-    { label: t("nav.projects"), href: "#projects" },
-    { label: t("nav.contacts"), href: "#contact" },
-  ];
+  const navLinks = useMemo(
+    () => [
+      { label: t("nav.home"),     href: "#home" },
+      { label: t("nav.about"),    href: "#about" },
+      { label: t("nav.services"), href: "#services" },
+      { label: t("nav.projects"), href: "#projects" },
+      { label: t("nav.contacts"), href: "#contact" },
+    ],
+    [t]
+  );
 
   // Close drawer on resize to desktop
   useEffect(() => {
@@ -57,35 +64,38 @@ export default function Navigation() {
       }
     };
 
-    const lenis = window.__lenis;
-    let fallback: (() => void) | null = null;
-
     if (lenis) {
-      const cb = () => handleScroll(lenis.scroll, lenis.progress);
-      lenis.on("scroll", cb);
-      cb();
-      (lenis as unknown as Record<string, unknown>).__navScrollSub = () => lenis.off("scroll", cb);
-    } else {
-      fallback = () => {
-        const top = window.scrollY;
-        const docH = document.documentElement.scrollHeight - window.innerHeight;
-        handleScroll(top, docH > 0 ? top / docH : 0);
-      };
-      window.addEventListener("scroll", fallback, { passive: true });
-      fallback();
+      const onScroll = () => handleScroll(lenis.scroll, lenis.progress);
+      lenis.on("scroll", onScroll);
+      onScroll();
+      return () => lenis.off("scroll", onScroll);
     }
 
-    // Active section detection
-    const sectionIds = navLinks.map(({ href }) => href.slice(1));
+    // No Lenis (touch / reduced motion) — native scroll listener
+    const docHeight = () => document.documentElement.scrollHeight - window.innerHeight;
+    const onScroll = () => {
+      const top = window.scrollY;
+      const max = docHeight();
+      handleScroll(top, max > 0 ? top / max : 0);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    onScroll();
 
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [lenis]);
+
+  // Active section detection
+  useEffect(() => {
     const updateActive = () => {
-      const sections = sectionIds
-        .map((id) => document.getElementById(id))
-        .filter(Boolean) as HTMLElement[];
       const threshold = window.innerHeight * 0.4;
-      let active = sections[0]?.id ?? "home";
-      for (const s of sections) {
-        if (s.getBoundingClientRect().top <= threshold) active = s.id;
+      let active = SECTION_IDS[0];
+      for (const id of SECTION_IDS) {
+        const section = document.getElementById(id);
+        if (section && section.getBoundingClientRect().top <= threshold) active = id;
       }
       if (active !== activeRef.current) {
         activeRef.current = active;
@@ -96,31 +106,27 @@ export default function Navigation() {
     if (lenis) {
       lenis.on("scroll", updateActive);
       updateActive();
-      (lenis as unknown as Record<string, unknown>).__navActiveSub = () => lenis.off("scroll", updateActive);
-    } else {
-      window.addEventListener("scroll", updateActive, { passive: true });
-      updateActive();
+      return () => lenis.off("scroll", updateActive);
     }
 
-    return () => {
-      if (lenis) {
-        const s = (lenis as unknown as Record<string, unknown>).__navScrollSub;
-        if (typeof s === "function") s();
-        const a = (lenis as unknown as Record<string, unknown>).__navActiveSub;
-        if (typeof a === "function") a();
-      } else {
-        if (fallback) window.removeEventListener("scroll", fallback);
-        window.removeEventListener("scroll", updateActive);
-      }
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t]);
+    window.addEventListener("scroll", updateActive, { passive: true });
+    window.addEventListener("resize", updateActive, { passive: true });
+    updateActive();
 
-  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setIsOpen(false);
-    scrollToTarget(href);
-  }, []);
+    return () => {
+      window.removeEventListener("scroll", updateActive);
+      window.removeEventListener("resize", updateActive);
+    };
+  }, [lenis]);
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      e.preventDefault();
+      setIsOpen(false);
+      scrollTo(href);
+    },
+    [scrollTo]
+  );
 
   return (
     <>
@@ -180,7 +186,7 @@ export default function Navigation() {
                       key={link.href}
                       href={link.href}
                       onClick={(e) => handleNavClick(e, link.href)}
-                      aria-current={isActive ? "page" : undefined}
+                      aria-current={isActive ? "true" : undefined}
                       className={`relative px-4 py-1.5 text-sm rounded-xl transition-all duration-250 ${
                         isActive
                           ? "text-accent-400"
@@ -273,7 +279,7 @@ export default function Navigation() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.18 }}
-                      aria-current={isActive ? "page" : undefined}
+                      aria-current={isActive ? "true" : undefined}
                       className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
                           ? "text-accent-400 bg-accent-400/[0.07] border border-accent-400/[0.14]"

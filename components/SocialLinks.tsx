@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Send, Globe } from "lucide-react";
+import { Github, Send, Globe, MessagesSquare } from "lucide-react";
 import YouTubeSelector from "./YouTubeSelector";
 import { env } from "@/lib/env";
 
@@ -17,6 +17,12 @@ const socials = [
     url: env("NEXT_PUBLIC_GITHUB_ORG_URL"),
     icon: Globe,
     color: "hover:text-white",
+  },
+  {
+    name: "Discord",
+    url: env("NEXT_PUBLIC_DISCORD_URL"),
+    icon: MessagesSquare,
+    color: "hover:text-[#5865F2]",
   },
   {
     name: "Telegram",

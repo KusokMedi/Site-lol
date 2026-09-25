@@ -6,9 +6,6 @@ import { Terminal } from "lucide-react";
 export default function Loading() {
   return (
     <motion.main
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
       className="min-h-dvh flex items-center justify-center bg-dark-950"
     >
       <div className="flex flex-col items-center gap-6">

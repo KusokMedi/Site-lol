@@ -61,7 +61,7 @@ export default function YouTubeSelector({ className = "" }: { className?: string
             >
               <div className="p-2">
                 <p className="px-3 py-2 text-xs text-white/40 font-medium">
-                  {t("nav.code")}
+                  {t("youtube.title")}
                 </p>
                 {youtubeChannels.map((channel) => (
                   <a

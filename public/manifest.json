@@ -1,16 +1,41 @@
 {
+  "id": "/",
   "name": "KusokMedi Portfolio",
   "short_name": "KusokMedi",
-  "description": "Разработчик сайтов, ботов, автоматизации и цифровых решений",
+  "description": "Developer of websites, bots, automation and digital solutions",
+  "lang": "en",
+  "dir": "ltr",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#050505",
-  "theme_color": "#ffd700",
+  "theme_color": "#050505",
+  "categories": ["portfolio", "developer", "productivity"],
   "icons": [
     {
       "src": "/icon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

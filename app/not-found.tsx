@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { useLanguage } from "@/components/LanguageProvider";
+import { LanguageProvider, useLanguage } from "@/components/LanguageProvider";
 
-export default function NotFound() {
+function NotFoundContent() {
   const { t } = useLanguage();
 
   return (
@@ -51,5 +51,14 @@ export default function NotFound() {
         </motion.div>
       </div>
     </main>
+  );
+}
+
+// Rendered outside the page tree, so it needs its own provider
+export default function NotFound() {
+  return (
+    <LanguageProvider>
+      <NotFoundContent />
+    </LanguageProvider>
   );
 }

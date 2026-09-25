@@ -1,12 +1,13 @@
 "use client";
 
 import { Terminal } from "lucide-react";
-import { scrollToTarget } from "@/lib/utils";
+import { useScrollTo } from "@/components/SmoothScroll";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   const { t } = useLanguage();
+  const scrollTo = useScrollTo();
 
   return (
     <footer className="relative py-8 sm:py-10">
@@ -18,7 +19,7 @@ export default function Footer() {
 
           {/* Logo */}
           <button
-            onClick={() => scrollToTarget("#home")}
+            onClick={() => scrollTo("#home")}
             className="flex items-center gap-2 group"
             aria-label={t("aria.goHome")}
           >
@@ -26,13 +27,13 @@ export default function Footer() {
               <Terminal className="w-3.5 h-3.5 text-accent-400" />
             </div>
             <span className="font-mono text-sm font-semibold text-white/55 group-hover:text-white/80 transition-colors duration-300">
-              KusokMedi<span className="text-accent-400">~</span>
+              {t("hero.name")}<span className="text-accent-400">~</span>
             </span>
           </button>
 
           {/* Copyright — right side on desktop */}
           <p className="text-[11px] text-white/20 font-mono tracking-wide text-center sm:text-right order-last sm:order-none">
-            © {year} KusokMedi. All rights reserved.
+            © {year} {t("hero.name")}. {t("footer.rights")}
           </p>
         </div>
       </div>

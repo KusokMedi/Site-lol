@@ -1,28 +1,14 @@
-import dynamic from "next/dynamic";
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import Footer from "@/components/Footer";
+import type { Metadata } from "next";
+import { LanguageProvider } from "@/components/LanguageProvider";
+import Home from "@/components/Home";
+import { rootMetadata } from "@/lib/seo";
 
-// These components each contain their own AnimatedSection internally.
-const About = dynamic(() => import("@/components/About"));
-const Services = dynamic(() => import("@/components/Services"));
-const Projects = dynamic(() => import("@/components/Projects"));
-const Contact = dynamic(() => import("@/components/Contact"));
-const ScrollToTop = dynamic(() => import("@/components/ScrollToTop"));
+export const metadata: Metadata = rootMetadata();
 
-export default function Home() {
+export default function Page() {
   return (
-    <>
-      <Navigation />
-      <main role="main">
-        <Hero />
-        <About />
-        <Services />
-        <Projects />
-        <Contact />
-        <Footer />
-      </main>
-      <ScrollToTop />
-    </>
+    <LanguageProvider>
+      <Home />
+    </LanguageProvider>
   );
 }

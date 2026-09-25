@@ -2,13 +2,7 @@
 
 // global-error.tsx catches errors in the root layout itself.
 // It must include its own <html> and <body> tags.
-export default function GlobalError({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function GlobalError({ reset }: { error: Error; reset: () => void }) {
   return (
     <html lang="en">
       <body
@@ -60,7 +54,7 @@ export default function GlobalError({
               marginBottom: "1.5rem",
             }}
           >
-            {error.message || "An unexpected error occurred. Please try again."}
+            An unexpected error occurred. Please try again.
           </p>
 
           <button

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { MotionConfig } from "framer-motion";
 import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Analytics } from "@vercel/analytics/next";
-import { LanguageProvider } from "@/components/LanguageProvider";
-import LocaleHandler from "@/components/LocaleHandler";
-import { env, siteUrl, toUrl } from "@/lib/env";
+import { env, siteUrl } from "@/lib/env";
+import { rootMetadata } from "@/lib/seo";
 
 // ─── Local fonts via next/font (no CDN, no render-blocking) ───────────────────
 const inter = Inter({
@@ -23,54 +24,27 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const supportedLangs = ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"] as const;
-
 // ─── Viewport ─────────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#0a0a0a",
+  themeColor: "#050505",
 };
 
-// ─── Static metadata (en fallback) ───────────────────────────────────────────
-// Per-language title/description are injected client-side via LocaleHandler;
-// here we provide sane English defaults for crawlers that hit the root URL.
+// ─── Metadata ─────────────────────────────────────────────────────────────────
+// Defaults only — every route overrides them with its own language via
+// lib/seo.ts, so title/description/hreflang are correct in the static HTML.
 export const metadata: Metadata = {
-  title: "KusokMedi — Developer & Programmer",
-  description:
-    "Developer of websites, bots, automation and digital solutions. Specialization: Python, React, Node.js, Linux.",
-  metadataBase: toUrl(siteUrl),
+  ...rootMetadata(),
+  applicationName: "KusokMedi Portfolio",
+  manifest: "/manifest.json",
   icons: {
     icon: [
-      {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>",
-        type: "image/svg+xml",
-      },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
     ],
-  },
-  openGraph: {
-    title: "KusokMedi | Portfolio",
-    description: "Developer of websites, bots, automation and digital solutions.",
-    type: "website",
-    locale: "en_US",
-    siteName: "KusokMedi Portfolio",
-    url: siteUrl,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "KusokMedi | Portfolio",
-    description: "Developer of websites, bots, automation and digital solutions.",
-  },
-  // hreflang alternates for multilingual SEO
-  alternates: {
-    canonical: siteUrl,
-    languages: Object.fromEntries(
-      supportedLangs.map((lang) => [
-        lang,
-        lang === "en" ? siteUrl : `${siteUrl}/${lang}`,
-      ])
-    ),
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 
@@ -83,11 +57,16 @@ const jsonLd = {
       name: "KusokMedi",
       url: siteUrl,
       jobTitle: "Developer / Programmer",
+      image: `${siteUrl}/icon.svg`,
       knowsAbout: ["Python", "React", "Node.js", "Linux", "TypeScript", "Docker"],
+      knowsLanguage: ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"],
       sameAs: [
         env("NEXT_PUBLIC_GITHUB_URL"),
+        env("NEXT_PUBLIC_GITHUB_ORG_URL"),
+        env("NEXT_PUBLIC_DISCORD_URL"),
         env("NEXT_PUBLIC_TELEGRAM_URL"),
         env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
+        env("NEXT_PUBLIC_YOUTUBE_EN_URL"),
       ],
     },
     {
@@ -95,36 +74,28 @@ const jsonLd = {
       name: "KusokMedi Portfolio",
       url: siteUrl,
       description: "Personal developer portfolio",
+      inLanguage: "en",
     },
   ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    // lang="en" is the safe SSR default; LocaleHandler updates it on the client
+    // lang="en" is the SSR default for "/" — LocaleHandler syncs it per language
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        <link rel="canonical" href={siteUrl} />
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/icon.svg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        {/* hreflang tags for multilingual SEO */}
-        {supportedLangs.map((lang) => (
-          <link
-            key={lang}
-            rel="alternate"
-            hrefLang={lang}
-            href={lang === "en" ? siteUrl : `${siteUrl}/${lang}`}
-          />
-        ))}
-        <link rel="alternate" hrefLang="x-default" href={siteUrl} />
+        <meta name="apple-mobile-web-app-title" content="KusokMedi" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="noise-overlay relative min-h-screen antialiased overflow-x-hidden">
+        {/* Respects prefers-reduced-motion for every Framer Motion animation */}
+        <MotionConfig reducedMotion="user">
         {/*
           Global ambient glow — fixed layer, covers entire page.
           Strong left/right edge orbs visible in every section.
@@ -187,13 +158,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
         </div>
-        <LanguageProvider>
-          <LocaleHandler />
+        <SmoothScroll>
           {children}
           <Particles />
-          <SmoothScroll />
-          <Analytics />
-        </LanguageProvider>
+        </SmoothScroll>
+        </MotionConfig>
+        <ServiceWorkerRegistration />
+        <Analytics />
       </body>
     </html>
   );

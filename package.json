@@ -8,8 +8,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
+    "start": "npx --yes serve out",
+    "preview": "npx --yes serve out",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run typecheck"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",

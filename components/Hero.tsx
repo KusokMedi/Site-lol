@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Terminal from "./Terminal";
 import SocialLinks from "./SocialLinks";
-import { scrollToTarget } from "@/lib/utils";
+import { useScrollTo } from "@/components/SmoothScroll";
 import { useLanguage } from "@/components/LanguageProvider";
 
 export default function Hero() {
   const { t } = useLanguage();
+  const scrollTo = useScrollTo();
 
   return (
     <section
@@ -31,7 +32,10 @@ export default function Hero() {
                 transition={{ duration: 0.65, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
                 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold tracking-tight leading-[1.05]"
               >
-                <span className="gradient-accent-text">KusokMedi</span>
+                <span className="block text-base sm:text-lg font-medium text-white/35 mb-1.5">
+                  {t("hero.greeting")}
+                </span>
+                <span className="gradient-accent-text">{t("hero.name")}</span>
               </motion.h1>
 
               <motion.p
@@ -52,7 +56,7 @@ export default function Hero() {
               className="flex flex-wrap gap-3"
             >
               <button
-                onClick={() => scrollToTarget("#services")}
+                onClick={() => scrollTo("#services")}
                 className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.97] glow ripple"
                 aria-label={t("hero.cta")}
               >
@@ -61,7 +65,7 @@ export default function Hero() {
               </button>
 
               <button
-                onClick={() => scrollToTarget("#contact")}
+                onClick={() => scrollTo("#contact")}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-glass text-sm font-medium text-white/60 hover:text-white"
                 aria-label={t("contact.title")}
               >
@@ -99,7 +103,7 @@ export default function Hero() {
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
       >
         <button
-          onClick={() => scrollToTarget("#about")}
+          onClick={() => scrollTo("#about")}
           className="flex items-center justify-center text-white/20 hover:text-white/50 transition-colors duration-300"
           aria-label={t("aria.scrollDown")}
         >
