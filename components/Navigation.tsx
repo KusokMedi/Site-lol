@@ -47,7 +47,7 @@ export default function Navigation() {
     const handleScroll = (scrollY: number, progress: number) => {
       const pct = Math.min(progress * 100, 100);
       if (barRef.current) {
-        barRef.current.style.width = `${pct}%`;
+        barRef.current.style.transform = `scaleX(${pct / 100})`;
         barRef.current.style.opacity = pct > 0.5 ? "1" : "0";
       }
 
@@ -135,9 +135,7 @@ export default function Navigation() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? "bg-dark-950/80 backdrop-blur-2xl"
-            : "bg-transparent"
+          isScrolled ? "bg-dark-950/80 backdrop-blur-2xl" : "bg-transparent"
         }`}
       >
         {/* Bottom border — only when scrolled */}
@@ -146,12 +144,11 @@ export default function Navigation() {
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.05) 75%, transparent)" }}
         />
 
-        {/* Scroll progress bar */}
+        {/* Scroll progress bar — scaleX, not width: width would relayout every frame */}
         <div
           ref={barRef}
-          className="absolute bottom-0 left-0 h-[2px] will-change-[width] transition-opacity duration-300 z-10"
+          className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 will-change-transform transition-opacity duration-300 z-10"
           style={{
-            width: "0%",
             opacity: 0,
             background: "linear-gradient(90deg, #ffd700, #ffb300, #ff8c00)",
             boxShadow: "0 0 8px rgba(255,179,0,0.4)",

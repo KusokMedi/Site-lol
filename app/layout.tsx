@@ -24,6 +24,82 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+// ─── Ambient background orbs ───────────────────────────────────────────────────
+// Soft radial-gradients instead of `filter: blur()`: the gradient falloff
+// already reads as soft, while a blurred surface that large is a repaint-heavy
+// layer in Firefox (re-filtered on every scroll frame).
+// Sizes/offsets reproduce the previous blurred version's visible falloff.
+const AMBIENT_ORBS = [
+  {
+    key: "left-top",
+    left: "-370px",
+    top: "5%",
+    width: 940,
+    height: 940,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,179,0,0.10) 0%, rgba(255,140,0,0.045) 40%, rgba(255,140,0,0.012) 68%, transparent 100%)",
+  },
+  {
+    key: "left-mid",
+    left: "-368px",
+    top: "38%",
+    width: 960,
+    height: 960,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,140,0,0.08) 0%, rgba(255,140,0,0.03) 42%, rgba(255,140,0,0.008) 70%, transparent 100%)",
+  },
+  {
+    key: "left-bottom",
+    left: "-384px",
+    top: "70%",
+    width: 940,
+    height: 940,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,179,0,0.07) 0%, rgba(255,140,0,0.026) 42%, rgba(255,140,0,0.007) 70%, transparent 100%)",
+  },
+  {
+    key: "right-top",
+    left: "calc(100% + 370px)",
+    top: "10%",
+    width: 940,
+    height: 940,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,106,0,0.09) 0%, rgba(255,179,0,0.035) 40%, rgba(255,140,0,0.01) 68%, transparent 100%)",
+  },
+  {
+    key: "right-mid",
+    left: "calc(100% + 368px)",
+    top: "45%",
+    width: 960,
+    height: 960,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,140,0,0.08) 0%, rgba(255,140,0,0.03) 42%, rgba(255,140,0,0.008) 70%, transparent 100%)",
+  },
+  {
+    key: "right-bottom",
+    left: "calc(100% + 384px)",
+    top: "75%",
+    width: 940,
+    height: 940,
+    background:
+      "radial-gradient(circle closest-side, rgba(255,179,0,0.07) 0%, rgba(255,140,0,0.026) 42%, rgba(255,140,0,0.007) 70%, transparent 100%)",
+  },
+  {
+    key: "center",
+    left: "calc(50% - 680px)",
+    top: "calc(50% - 430px)",
+    width: 1360,
+    height: 860,
+    background:
+      "radial-gradient(ellipse closest-side, rgba(255,179,0,0.018) 0%, rgba(255,179,0,0.008) 45%, transparent 100%)",
+  },
+] as const;
+
+// ─── Browser detection ─────────────────────────────────────────────────────────
+// Runs before first paint so the Firefox-only CSS overrides in globals.css
+// apply without a flash of glass/backdrop-filter being rendered first.
+const BROWSER_SCRIPT = `document.documentElement.dataset.browser=/Firefox/i.test(navigator.userAgent)?"firefox":"other";`;
+
 // ─── Viewport ─────────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
   width: "device-width",
@@ -84,6 +160,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // lang="en" is the SSR default for "/" — LocaleHandler syncs it per language
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: BROWSER_SCRIPT }} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="KusokMedi" />
@@ -101,62 +178,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Strong left/right edge orbs visible in every section.
         */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden>
-          {/* LEFT EDGE — top */}
-          <div
-            className="absolute top-[5%] -left-40 w-[520px] h-[520px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,179,0,0.1) 0%, rgba(255,140,0,0.04) 45%, transparent 70%)",
-              filter: "blur(70px)",
-            }}
-          />
-          {/* LEFT EDGE — mid */}
-          <div
-            className="absolute top-[38%] -left-32 w-[480px] h-[480px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%)",
-              filter: "blur(80px)",
-            }}
-          />
-          {/* LEFT EDGE — bottom */}
-          <div
-            className="absolute top-[70%] -left-36 w-[460px] h-[460px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,179,0,0.07) 0%, transparent 65%)",
-              filter: "blur(80px)",
-            }}
-          />
-          {/* RIGHT EDGE — top */}
-          <div
-            className="absolute top-[10%] -right-40 w-[520px] h-[520px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,106,0,0.09) 0%, rgba(255,179,0,0.03) 45%, transparent 70%)",
-              filter: "blur(70px)",
-            }}
-          />
-          {/* RIGHT EDGE — mid */}
-          <div
-            className="absolute top-[45%] -right-32 w-[480px] h-[480px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,140,0,0.08) 0%, transparent 65%)",
-              filter: "blur(80px)",
-            }}
-          />
-          {/* RIGHT EDGE — bottom */}
-          <div
-            className="absolute top-[75%] -right-36 w-[460px] h-[460px] rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(255,179,0,0.07) 0%, transparent 65%)",
-              filter: "blur(80px)",
-            }}
-          />
-          {/* Center ambient — very subtle */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] rounded-full"
-            style={{
-              background: "radial-gradient(ellipse, rgba(255,179,0,0.018) 0%, transparent 60%)",
-              filter: "blur(60px)",
-            }}
-          />
+          {AMBIENT_ORBS.map((orb) => (
+            <div
+              key={orb.key}
+              className="absolute"
+              style={{
+                left: orb.left,
+                top: orb.top,
+                width: orb.width,
+                height: orb.height,
+                background: orb.background,
+              }}
+            />
+          ))}
         </div>
         <SmoothScroll>
           {children}

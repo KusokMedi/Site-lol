@@ -37,7 +37,7 @@ export default function ScrollToTop() {
           whileHover={{ scale: 1.08, y: -2 }}
           whileTap={{ scale: 0.92 }}
           onClick={() => scrollTo("#home", 0)}
-          className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-2xl flex items-center justify-center cursor-pointer btn-glass text-accent-400/70 hover:text-accent-400"
+          className="no-fx-blur fixed bottom-6 right-6 z-50 w-11 h-11 rounded-2xl flex items-center justify-center cursor-pointer btn-glass text-accent-400/70 hover:text-accent-400"
           style={{
             background: "rgba(8, 8, 10, 0.72)",
             backdropFilter: "blur(16px) saturate(140%)",

@@ -20,6 +20,7 @@ export default function Particles() {
     if (!ctx) return;
 
     let animId: number;
+    let running = false;
     let resizeTimer: ReturnType<typeof setTimeout>;
     const particles: {
       x: number; y: number; vx: number; vy: number;
@@ -27,10 +28,8 @@ export default function Particles() {
     }[] = [];
 
     const resize = () => {
-      const parent = canvas.parentElement;
-      if (!parent) return;
-      canvas.width = parent.offsetWidth;
-      canvas.height = parent.offsetHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
     const debouncedResize = () => {
@@ -38,8 +37,7 @@ export default function Particles() {
       resizeTimer = setTimeout(resize, 80);
     };
 
-    const ro = new ResizeObserver(debouncedResize);
-    if (canvas.parentElement) ro.observe(canvas.parentElement);
+    window.addEventListener("resize", debouncedResize, { passive: true });
     resize();
 
     for (let i = 0; i < 35; i++) {
@@ -78,32 +76,55 @@ export default function Particles() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
+    const start = () => {
+      if (running) return;
+      running = true;
+      animId = requestAnimationFrame(render);
+    };
+
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(animId);
+    };
+
+    start();
 
     // Also listen for runtime changes (user changes OS setting while page is open)
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onMotionChange = (e: MediaQueryListEvent) => {
       if (e.matches) {
-        cancelAnimationFrame(animId);
+        stop();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       } else {
-        render();
+        start();
       }
     };
     motionQuery.addEventListener("change", onMotionChange);
 
+    // Don't burn frames (and battery) while the tab is in the background
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        stop();
+      } else if (!motionQuery.matches) {
+        start();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
     return () => {
-      cancelAnimationFrame(animId);
+      stop();
       clearTimeout(resizeTimer);
-      ro.disconnect();
+      window.removeEventListener("resize", debouncedResize);
       motionQuery.removeEventListener("change", onMotionChange);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none z-[1]"
+      className="fixed inset-0 pointer-events-none z-[1]"
       aria-hidden="true"
     />
   );
