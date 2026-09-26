@@ -6,6 +6,7 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
+import { env } from "@/lib/env";
 
 type ProjectEntry = {
   key: string;
@@ -25,7 +26,7 @@ const projectEntries: ProjectEntry[] = [
     icon: Gamepad2,
     linkIcon: Github,
     tech: ["C++", "SDL2", "CMake", "nlohmann/json"],
-    href: "https://github.com/KusokMedi/KSnake",
+    href: env("NEXT_PUBLIC_K_SNAKE_URL"),
     linkKey: "project.link.github",
     gradientFrom: "rgba(255,179,0,0.08)",
     gradientTo: "rgba(255,106,0,0.04)",
@@ -36,7 +37,7 @@ const projectEntries: ProjectEntry[] = [
     icon: Download,
     linkIcon: Send,
     tech: ["Python", "aiogram", "yt-dlp", "FFmpeg"],
-    href: "https://t.me/KusokMediSaveBot",
+    href: env("NEXT_PUBLIC_SAVE_BOT_URL"),
     linkKey: "project.link.telegram",
     gradientFrom: "rgba(14,165,233,0.08)",
     gradientTo: "rgba(30,64,175,0.04)",
@@ -47,7 +48,7 @@ const projectEntries: ProjectEntry[] = [
     icon: MessageCircle,
     linkIcon: Send,
     tech: ["Python", "aiogram", "SQLite"],
-    href: "https://t.me/AnonSpeakKM_bot",
+    href: env("NEXT_PUBLIC_ANON_SPEAK_URL"),
     linkKey: "project.link.telegram",
     gradientFrom: "rgba(139,92,246,0.08)",
     gradientTo: "rgba(109,40,217,0.04)",

@@ -1,5 +1,12 @@
 "use client";
 
+import en from "@/lib/locales/en.json";
+
+// global-error.tsx replaces the root layout, so it cannot use LanguageProvider
+// and has to inline its own copy of the strings. English is the right fallback:
+// if the root layout itself crashed, the visitor's language is unknown.
+const t = (key: string) => (en as Record<string, string>)[key] ?? key;
+
 // global-error.tsx catches errors in the root layout itself.
 // It must include its own <html> and <body> tags.
 export default function GlobalError({ reset }: { error: Error; reset: () => void }) {
@@ -43,7 +50,7 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
               marginBottom: "0.75rem",
             }}
           >
-            Something went wrong
+            {t("error.title")}
           </h1>
 
           <p
@@ -54,7 +61,7 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
               marginBottom: "1.5rem",
             }}
           >
-            An unexpected error occurred. Please try again.
+            {t("error.text")}
           </p>
 
           <button
@@ -76,7 +83,7 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
-            Try again
+            {t("error.retry")}
           </button>
         </div>
       </body>

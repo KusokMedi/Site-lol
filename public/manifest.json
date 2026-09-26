@@ -3,8 +3,6 @@
   "name": "KusokMedi Portfolio",
   "short_name": "KusokMedi",
   "description": "Developer of websites, bots, automation and digital solutions",
-  "lang": "en",
-  "dir": "ltr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

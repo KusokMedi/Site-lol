@@ -1,13 +1,18 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { MotionConfig } from "framer-motion";
-import "./globals.css";
 import Particles from "@/components/Particles";
 import SmoothScroll from "@/components/SmoothScroll";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { Analytics } from "@vercel/analytics/next";
 import { env, siteUrl } from "@/lib/env";
 import { rootMetadata } from "@/lib/seo";
+import { languages, type Language } from "@/lib/languages";
+
+// Both root layouts render this shell, so the global stylesheet is pulled in
+// here. Without this Next emits only the next/font @font-face rules and the
+// whole site ships unstyled.
+import "@/app/globals.css";
 
 // ─── Local fonts via next/font (no CDN, no render-blocking) ───────────────────
 const inter = Inter({
@@ -100,8 +105,18 @@ const AMBIENT_ORBS = [
 // apply without a flash of glass/backdrop-filter being rendered first.
 const BROWSER_SCRIPT = `document.documentElement.dataset.browser=/Firefox/i.test(navigator.userAgent)?"firefox":"other";`;
 
+// Framer Motion serialises the *start* state of every reveal animation
+// (opacity:0 plus a translate) into the static HTML. With scripting enabled
+// that is correct — the animation runs on hydration. With scripting off nothing
+// ever animates it back in, so the whole page below the hero would stay
+// invisible. Cancelling the start state is safe to scope to <noscript>, where it
+// cannot affect the scripted path.
+const NO_SCRIPT_STYLE = `[style*="opacity:0"]{opacity:1!important}`;
+
 // ─── Viewport ─────────────────────────────────────────────────────────────────
-export const viewport: Viewport = {
+// Re-exported as `viewport` from each root layout, because Next.js only reads
+// route segment config from layout/page files, not from shared components.
+export const shellViewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -111,7 +126,7 @@ export const viewport: Viewport = {
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 // Defaults only — every route overrides them with its own language via
 // lib/seo.ts, so title/description/hreflang are correct in the static HTML.
-export const metadata: Metadata = {
+export const shellMetadata: Metadata = {
   ...rootMetadata(),
   applicationName: "KusokMedi Portfolio",
   manifest: "/manifest.json",
@@ -124,50 +139,69 @@ export const metadata: Metadata = {
   },
 };
 
-// ─── JSON-LD structured data ──────────────────────────────────────────────────
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Person",
-      name: "KusokMedi",
-      url: siteUrl,
-      jobTitle: "Developer / Programmer",
-      image: `${siteUrl}/icon.svg`,
-      knowsAbout: ["Python", "React", "Node.js", "Linux", "TypeScript", "Docker"],
-      knowsLanguage: ["en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko"],
-      sameAs: [
-        env("NEXT_PUBLIC_GITHUB_URL"),
-        env("NEXT_PUBLIC_GITHUB_ORG_URL"),
-        env("NEXT_PUBLIC_DISCORD_URL"),
-        env("NEXT_PUBLIC_TELEGRAM_URL"),
-        env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
-        env("NEXT_PUBLIC_YOUTUBE_EN_URL"),
-      ],
-    },
-    {
-      "@type": "WebSite",
-      name: "KusokMedi Portfolio",
-      url: siteUrl,
-      description: "Personal developer portfolio",
-      inLanguage: "en",
-    },
-  ],
-};
+/** JSON-LD structured data. `inLanguage` follows the active route language. */
+function buildJsonLd(lang: Language) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        name: "KusokMedi",
+        url: siteUrl,
+        jobTitle: "Developer / Programmer",
+        image: `${siteUrl}/icon.svg`,
+        knowsAbout: ["Python", "React", "Node.js", "Linux", "TypeScript", "Docker"],
+        knowsLanguage: [...languages],
+        sameAs: [
+          env("NEXT_PUBLIC_GITHUB_URL"),
+          env("NEXT_PUBLIC_GITHUB_ORG_URL"),
+          env("NEXT_PUBLIC_DISCORD_URL"),
+          env("NEXT_PUBLIC_TELEGRAM_URL"),
+          env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
+          env("NEXT_PUBLIC_YOUTUBE_EN_URL"),
+        ],
+      },
+      {
+        "@type": "WebSite",
+        name: "KusokMedi Portfolio",
+        url: siteUrl,
+        description: "Personal developer portfolio",
+        inLanguage: lang,
+      },
+    ],
+  };
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/**
+ * The <html>/<body> shell shared by every route.
+ *
+ * There is no top-level app/layout.tsx: Next.js allows multiple root layouts
+ * when they live in route groups, and that is the only way to emit a correct
+ * `lang` attribute into the *static* HTML — a single root layout is rendered
+ * before the route is known and would have to hardcode `lang="en"` for all 12
+ * languages. LocaleHandler still syncs it on the client for language switches
+ * that happen without a page load.
+ */
+export default function RootShell({
+  lang,
+  children,
+}: {
+  lang: Language;
+  children: React.ReactNode;
+}) {
   return (
-    // lang="en" is the SSR default for "/" — LocaleHandler syncs it per language
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang={lang} className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: BROWSER_SCRIPT }} />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: NO_SCRIPT_STYLE }} />
+        </noscript>
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="KusokMedi" />
         <meta name="mobile-web-app-capable" content="yes" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJsonLd(lang)) }}
         />
       </head>
       <body className="noise-overlay relative min-h-screen antialiased overflow-x-hidden">
@@ -198,7 +232,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </SmoothScroll>
         </MotionConfig>
         <ServiceWorkerRegistration />
-        <Analytics />
+        {/* The insights script is only served by Vercel's edge network. On any
+            other host (and in local builds) it 404s on every page load, so it is
+            opt-in via NEXT_PUBLIC_VERCEL_ANALYTICS instead of unconditional. */}
+        {process.env.NEXT_PUBLIC_VERCEL_ANALYTICS === "1" ? <Analytics /> : null}
       </body>
     </html>
   );

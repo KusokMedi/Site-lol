@@ -1,3 +1,5 @@
+import { siteUrl } from "./env";
+
 export const languages = [
   "en", "ru", "lv", "uk", "zh", "es", "hi", "pt", "fr", "de", "ja", "ko",
 ] as const;
@@ -46,8 +48,36 @@ export function langPath(lang: Language): string {
   return lang === defaultLanguage ? "/" : `/${lang}/`;
 }
 
+/**
+ * hreflang map for every supported language plus x-default.
+ * The root URL is the English one, every other language has its own path.
+ * Lives here (not in lib/seo.ts) so client components can update the <link>
+ * tags on a language switch without pulling in the server-side dictionaries.
+ */
+export function alternates(): Record<string, string> {
+  return Object.fromEntries([
+    ...languages.map((lang) => [lang, `${siteUrl}${langPath(lang)}`]),
+    ["x-default", siteUrl],
+  ]);
+}
+
+/** Absolute URL of a language page. */
+export function langUrl(lang: Language): string {
+  return `${siteUrl}${langPath(lang)}`;
+}
+
 /** Language encoded in a pathname, or null for unknown/absent segments. */
 export function pathToLang(pathname: string): Language | null {
   const segment = pathname.split("/").filter(Boolean)[0];
   return isLanguage(segment) ? segment : null;
+}
+
+/**
+ * Language a pathname represents, falling back to English.
+ * The root path has no language segment, so it means English — needed by the
+ * back/forward handler, which must be able to switch *back* to English.
+ */
+export function pathToLangOrDefault(pathname: string): Language {
+  const lang = pathToLang(pathname);
+  return lang ?? defaultLanguage;
 }

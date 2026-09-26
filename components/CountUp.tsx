@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
 interface CountUpProps {
@@ -11,15 +11,17 @@ interface CountUpProps {
 export default function CountUp({ value, suffix = "" }: CountUpProps) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const [count, setCount] = useState(0);
+
+  // null = "not animating yet", so the prerendered HTML (and any render before
+  // the section scrolls in) shows the real figure instead of a placeholder 0.
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || count !== null) return;
 
     const duration = 1500;
     const start = performance.now();
-    let rafId: number;
-    // Guard against calling setState on an unmounted component
+    let rafId = 0;
     let cancelled = false;
 
     const tick = (now: number) => {
@@ -39,11 +41,11 @@ export default function CountUp({ value, suffix = "" }: CountUpProps) {
       cancelled = true;
       cancelAnimationFrame(rafId);
     };
-  }, [isInView, value]);
+  }, [isInView, value, count]);
 
   return (
     <span ref={ref}>
-      {count}{suffix}
+      {count ?? value}{suffix}
     </span>
   );
 }

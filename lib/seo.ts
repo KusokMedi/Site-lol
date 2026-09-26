@@ -1,25 +1,22 @@
 import type { Metadata } from "next";
 import { siteUrl, toUrl } from "./env";
-import { defaultLanguage, langPath, languages, ogLocales, type Language } from "./languages";
+import {
+  alternates,
+  defaultLanguage,
+  langPath,
+  langUrl,
+  languages,
+  ogLocales,
+  type Language,
+} from "./languages";
 import { getMeta, type Dict } from "./dictionaries";
-
-/**
- * hreflang map for every supported language plus x-default.
- * The root URL is the English one, every other language has its own path.
- */
-function alternates() {
-  return Object.fromEntries([
-    ...languages.map((lang) => [lang, `${siteUrl}${langPath(lang)}`]),
-    ["x-default", siteUrl],
-  ]);
-}
 
 /** Metadata for a single language page — title/description come from the locale file. */
 export function languageMetadata(lang: Language): Metadata {
   const dict = getMeta(lang);
   const title = `${dict["hero.name"]} — ${dict["hero.title"]}`;
   const description = dict["hero.description"];
-  const url = `${siteUrl}${langPath(lang)}`;
+  const url = langUrl(lang);
   const languagesMap = alternates();
 
   return {

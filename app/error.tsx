@@ -1,6 +1,10 @@
 "use client";
 
-export default function Error({ reset }: { error: Error; reset: () => void }) {
+import { LanguageProvider, useLanguage } from "@/components/LanguageProvider";
+
+function ErrorContent({ reset }: { reset: () => void }) {
+  const { t } = useLanguage();
+
   return (
     <main className="min-h-dvh flex items-center justify-center bg-dark-950 px-4" role="main">
       <div className="text-center space-y-6">
@@ -8,18 +12,29 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
           500
         </div>
         <h1 className="text-xl sm:text-2xl font-semibold text-white/80">
-          Something went wrong
+          {t("error.title")}
         </h1>
         <p className="text-white/40 text-sm sm:text-base max-w-md">
-          An unexpected error occurred. Please try again.
+          {t("error.text")}
         </p>
         <button
           onClick={reset}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-accent text-dark-950 font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] glow"
         >
-          Try again
+          {t("error.retry")}
         </button>
       </div>
     </main>
+  );
+}
+
+// error.tsx replaces the page, so the LanguageProvider mounted by the page is
+// gone — and with it the route's language. Its own provider restores the stored
+// or browser language, the same way the 404 page does.
+export default function Error({ reset }: { error: Error; reset: () => void }) {
+  return (
+    <LanguageProvider>
+      <ErrorContent reset={reset} />
+    </LanguageProvider>
   );
 }

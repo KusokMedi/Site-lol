@@ -64,6 +64,7 @@ export default [
         HTMLCanvasElement: "readonly",
         HTMLAnchorElement: "readonly",
         HTMLMetaElement: "readonly",
+        HTMLLinkElement: "readonly",
         HTMLButtonElement: "readonly",
         Element: "readonly",
         Node: "readonly",

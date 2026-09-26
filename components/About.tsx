@@ -49,12 +49,10 @@ export default function About() {
           {/* Right — stats grid */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {highlights.map((item, i) => {
-              const value = t(`highlight.${item.key}.value`);
-              const digitMatch = value.match(/(\d+)/);
-              const num = digitMatch ? parseInt(digitMatch[1], 10) : 0;
-              const suffix = digitMatch
-                ? value.slice(digitMatch.index! + digitMatch[1].length)
-                : "";
+              // The number and its suffix are separate dictionary keys, so a
+              // translation can reword the unit without breaking the counter.
+              const raw = t(`highlight.${item.key}.num`);
+              const num = Number.parseInt(raw, 10);
 
               return (
                 <motion.div
@@ -75,7 +73,7 @@ export default function About() {
 
                   <div className="space-y-0.5">
                     <div className="text-[1.6rem] sm:text-[1.75rem] font-bold leading-none tracking-tight gradient-accent-text">
-                      <CountUp value={num} suffix={suffix} />
+                      <CountUp value={Number.isNaN(num) ? 0 : num} suffix={t(`highlight.${item.key}.suffix`)} />
                     </div>
                     <div className="text-sm font-medium text-white/70 mt-1">
                       {t(`highlight.${item.key}`)}

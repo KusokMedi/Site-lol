@@ -27,9 +27,33 @@ export default function Particles() {
       size: number; alpha: number; alphaDir: number;
     }[] = [];
 
+    // Backing store in device pixels, CSS box stays viewport-sized. Without the
+    // ratio the canvas is upscaled by the browser and the dots look blurry.
+    const dpr = () => Math.min(window.devicePixelRatio || 1, 2);
+
     const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const prevWidth = canvas.width / dpr();
+      const prevHeight = canvas.height / dpr();
+      const ratio = dpr();
+
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+
+      // Keep the particles inside the new viewport instead of leaving a band
+      // of empty space (or a cluster) after a window resize.
+      if (prevWidth > 0 && prevHeight > 0) {
+        const scaleX = width / prevWidth;
+        const scaleY = height / prevHeight;
+        for (const p of particles) {
+          p.x *= scaleX;
+          p.y *= scaleY;
+        }
+      }
     };
 
     const debouncedResize = () => {
@@ -42,8 +66,8 @@ export default function Particles() {
 
     for (let i = 0; i < 35; i++) {
       particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * canvas.width / dpr(),
+        y: Math.random() * canvas.height / dpr(),
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         size: Math.random() * 1.5 + 0.5,
@@ -53,7 +77,9 @@ export default function Particles() {
     }
 
     const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const width = canvas.width / dpr();
+      const height = canvas.height / dpr();
+      ctx.clearRect(0, 0, width, height);
 
       for (const p of particles) {
         p.alpha += p.alphaDir * 0.002;
@@ -62,10 +88,10 @@ export default function Particles() {
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -124,7 +150,9 @@ export default function Particles() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-[1]"
+      // width/height are set in px by the resize handler (device-pixel aware),
+      // so the element must not be stretched by inset-0.
+      className="fixed top-0 left-0 pointer-events-none z-[1]"
       aria-hidden="true"
     />
   );

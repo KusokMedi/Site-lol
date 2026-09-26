@@ -12,7 +12,7 @@ import {
 } from "react";
 
 import en from "@/lib/locales/en.json";
-import type { Language } from "@/lib/languages";
+import { langPath, type Language } from "@/lib/languages";
 
 export type { Language };
 
@@ -44,18 +44,8 @@ const loaders: Record<Language, () => Promise<{ default: Dict }>> = {
 
 const cache = new Map<Language, Dict>([["en", english]]);
 
-function getDict(lang: Language): Dict | undefined {
-  return cache.get(lang);
-}
-
-async function loadDict(lang: Language): Promise<Dict> {
-  const cached = cache.get(lang);
-  if (cached) return cached;
-  const mod = await loaders[lang]();
-  const dict = mod.default as Dict;
-  cache.set(lang, dict);
-  return dict;
-}
+/** How long the content stays hidden while the dictionary is swapped. */
+const FADE_MS = 400;
 
 function readStoredLang(): Language | null {
   try {
@@ -89,10 +79,21 @@ function detectBrowserLang(): Language | null {
   return null;
 }
 
+export interface SwitchOptions {
+  /** Skip the fade-out (used by popstate and the first automatic restore). */
+  immediate?: boolean;
+  /**
+   * Rewrite the address bar to the new language. Off when the browser already
+   * navigated (popstate) and for the automatic restore on "/", so a visitor is
+   * never silently moved to a different URL than the one they opened.
+   */
+  syncUrl?: boolean;
+}
+
 interface LanguageContextType {
   lang: Language;
-  /** Switch language. `immediate` skips the fade-out (used by popstate). */
-  setLang: (lang: Language, immediate?: boolean) => void;
+  /** Switch language. See SwitchOptions for the available strategies. */
+  setLang: (lang: Language, options?: SwitchOptions) => void;
   t: (key: string) => string;
 }
 
@@ -115,33 +116,42 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({ children, initialLang, dict: initialDict }: LanguageProviderProps) {
   const [lang, setLangState] = useState<Language>(initialLang ?? "en");
-  const [dict, setDict] = useState<Dict>(() => {
-    if (initialLang && initialDict) cache.set(initialLang, initialDict);
-    return initialDict ?? english;
-  });
+  const [dict, setDict] = useState<Dict>(() => initialDict ?? english);
   const [contentOpacity, setContentOpacity] = useState(true);
   const timers = useRef<{ fade?: ReturnType<typeof setTimeout>; restore?: ReturnType<typeof setTimeout> }>({});
   const switchId = useRef(0);
 
-  const apply = useCallback(async (next: Language) => {
+  // Side-effect free: the server-provided dictionary goes into the cache from
+  // an effect rather than from the useState initialiser, which must stay pure.
+  useEffect(() => {
+    if (initialLang && initialDict) cache.set(initialLang, initialDict);
+  }, [initialLang, initialDict]);
+
+  /**
+   * Loads a dictionary and makes it the active one.
+   * Resolves to false when the chunk could not be fetched or a newer switch
+   * superseded this one — callers must be able to recover from that, an
+   * unhandled rejection here would leave the UI stuck mid-fade.
+   */
+  const apply = useCallback(async (next: Language, syncUrl: boolean): Promise<boolean> => {
     const id = ++switchId.current;
-    const nextDict = await loadDict(next);
-    if (id !== switchId.current) return; // a newer switch won
+    let nextDict: Dict;
+    try {
+      nextDict = (await loaders[next]()).default as Dict;
+    } catch {
+      return false; // chunk failed to load — keep the language we already have
+    }
+    cache.set(next, nextDict);
+    if (id !== switchId.current) return false; // a newer switch won
+
     setDict(nextDict);
     setLangState(next);
-    writeStoredLang(next);
-  }, []);
-
-  // Remember the language that came from the URL, otherwise restore the
-  // visitor's own preference.
-  useEffect(() => {
-    if (initialLang) {
-      writeStoredLang(initialLang);
-      return;
+    if (syncUrl && typeof window !== "undefined") {
+      // Shareable URLs without polluting the back-button history
+      window.history.replaceState(null, "", langPath(next) + window.location.search);
     }
-    const preferred = readStoredLang() ?? detectBrowserLang();
-    if (preferred && preferred !== "en") void apply(preferred);
-  }, [initialLang, apply]);
+    return true;
+  }, []);
 
   const clearTimers = useCallback(() => {
     if (timers.current.fade) clearTimeout(timers.current.fade);
@@ -149,25 +159,51 @@ export function LanguageProvider({ children, initialLang, dict: initialDict }: L
   }, []);
 
   const setLang = useCallback(
-    (next: Language, immediate = false) => {
-      if (next === lang && getDict(next)) return;
+    (next: Language, options: SwitchOptions = {}) => {
+      const { immediate = false, syncUrl = true } = options;
+      if (next === lang && cache.has(next)) return;
       clearTimers();
 
-      // Immediate switch — used by the browser back/forward buttons
+      // Immediate switch — used by popstate and the automatic restore on "/"
       if (immediate) {
-        void apply(next);
+        void apply(next, syncUrl);
         return;
       }
 
       // Fade out, swap the dictionary, fade back in
       setContentOpacity(false);
       timers.current.fade = setTimeout(() => {
-        void apply(next);
-        timers.current.restore = setTimeout(() => setContentOpacity(true), 120);
-      }, 400);
+        void apply(next, syncUrl).then((ok) => {
+          // Only an explicit, successful choice becomes the stored preference:
+          // merely opening /ru/ must not overwrite what the visitor picked before.
+          if (ok && syncUrl) writeStoredLang(next);
+          timers.current.restore = setTimeout(() => setContentOpacity(true), 120);
+        });
+      }, FADE_MS);
     },
     [apply, clearTimers, lang]
   );
+
+  // On a language URL the route already decided the language — leave the
+  // stored preference alone. On "/" restore whatever the visitor chose before,
+  // or their browser language, without touching the address bar.
+  useEffect(() => {
+    if (initialLang) return;
+    const preferred = readStoredLang() ?? detectBrowserLang();
+    if (preferred && preferred !== lang) {
+      setLang(preferred, { immediate: true, syncUrl: false });
+    }
+  }, [initialLang, setLang, lang]);
+
+  // Guard against a language change while the tab is hidden: the fade timers
+  // would otherwise be throttled and leave the content stuck at opacity 0.
+  useEffect(() => {
+    const onVisibility = () => {
+      if (!document.hidden) setContentOpacity(true);
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   useEffect(() => clearTimers, [clearTimers]);
 

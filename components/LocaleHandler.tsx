@@ -2,22 +2,42 @@
 
 import { useCallback, useEffect } from "react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { langPath, ogLocales, pathToLang } from "@/lib/languages";
+import { alternates, langUrl, ogLocales, pathToLangOrDefault } from "@/lib/languages";
 
-function setMeta(selector: string, attr: "name" | "property", key: string, content: string) {
-  const el = document.head.querySelector<HTMLMetaElement>(selector);
-  if (el) el.setAttribute("content", content);
-  else {
-    const meta = document.createElement("meta");
-    meta.setAttribute(attr, key);
-    meta.setAttribute("content", content);
-    document.head.appendChild(meta);
+function setMeta(attr: "name" | "property", key: string, content: string) {
+  const selector = `meta[${attr}="${key}"]`;
+  const existing = document.head.querySelector<HTMLMetaElement>(selector);
+  if (existing) {
+    if (existing.content !== content) existing.content = content;
+    return;
   }
+  const meta = document.createElement("meta");
+  meta.setAttribute(attr, key);
+  meta.setAttribute("content", content);
+  document.head.appendChild(meta);
+}
+
+function ensureLink(rel: string): HTMLLinkElement {
+  const existing = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+  if (existing) return existing;
+  const link = document.createElement("link");
+  link.rel = rel;
+  document.head.appendChild(link);
+  return link;
+}
+
+function createAlternate(): HTMLLinkElement {
+  const link = document.createElement("link");
+  link.rel = "alternate";
+  document.head.appendChild(link);
+  return link;
 }
 
 /**
- * Keeps the document in sync with the active language:
- * <html lang>, title, meta description, Open Graph tags and the address bar.
+ * Keeps the document in sync with the active language after a switch that
+ * happened without a page load: <html lang>, title, meta description, canonical,
+ * Open Graph and Twitter cards. The address bar is handled by LanguageProvider,
+ * which knows whether the change came from the visitor or from the browser.
  */
 export default function LocaleHandler() {
   const { lang, setLang, t } = useLanguage();
@@ -27,25 +47,41 @@ export default function LocaleHandler() {
 
     const title = `${t("hero.name")} — ${t("hero.title")}`;
     const description = t("hero.description");
+    const url = langUrl(lang);
 
-    document.title = title;
-    setMeta('meta[name="description"]', "name", "description", description);
-    setMeta('meta[property="og:title"]', "property", "og:title", title);
-    setMeta('meta[property="og:description"]', "property", "og:description", description);
-    setMeta('meta[property="og:locale"]', "property", "og:locale", ogLocales[lang]);
-    setMeta('meta[property="og:url"]', "property", "og:url", window.location.href);
+    if (document.title !== title) document.title = title;
 
-    // Shareable URLs without polluting the back-button history
-    const path = langPath(lang);
-    if (window.location.pathname !== path) {
-      window.history.replaceState(null, "", path + window.location.search);
+    setMeta("name", "description", description);
+    setMeta("name", "twitter:title", title);
+    setMeta("name", "twitter:description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", url);
+    setMeta("property", "og:locale", ogLocales[lang]);
+    setMeta("property", "og:site_name", `${t("hero.name")} Portfolio`);
+    setMeta("property", "og:image:alt", title);
+
+    // Without this the document would keep advertising the language it was
+    // server-rendered in, contradicting the og:* tags above.
+    const canonical = ensureLink("canonical");
+    if (canonical.getAttribute("href") !== url) canonical.setAttribute("href", url);
+
+    // Next.js emits one <link rel="alternate"> per hreflang, all with the same
+    // rel — look them up by hreflang so each language gets its own element.
+    for (const [hrefLang, href] of Object.entries(alternates())) {
+      const link =
+        document.head.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${hrefLang}"]`) ??
+        createAlternate();
+      link.setAttribute("hreflang", hrefLang);
+      if (link.getAttribute("href") !== href) link.setAttribute("href", href);
     }
   }, [lang, t]);
 
-  // Browser back/forward across language URLs
+  // Browser back/forward across language URLs. The root path has no language
+  // segment, so it maps to English — otherwise going back to "/" would leave the
+  // previous language on screen.
   const onPopState = useCallback(() => {
-    const fromUrl = pathToLang(window.location.pathname);
-    if (fromUrl) setLang(fromUrl, true);
+    setLang(pathToLangOrDefault(window.location.pathname), { immediate: true, syncUrl: false });
   }, [setLang]);
 
   useEffect(() => {

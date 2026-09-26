@@ -43,12 +43,20 @@ export default function Navigation() {
   // Scroll tracking
   useEffect(() => {
     let rafPending = false;
+    // The bar's opacity is transitioned by CSS, so it may only be written when
+    // the value actually changes — writing it every frame restarts the
+    // transition and the bar visibly lags behind the scroll.
+    let barVisible = false;
 
     const handleScroll = (scrollY: number, progress: number) => {
-      const pct = Math.min(progress * 100, 100);
+      const pct = Math.min(Math.max(progress, 0), 1);
       if (barRef.current) {
-        barRef.current.style.transform = `scaleX(${pct / 100})`;
-        barRef.current.style.opacity = pct > 0.5 ? "1" : "0";
+        barRef.current.style.transform = `scaleX(${pct})`;
+        const visible = pct > 0.005;
+        if (visible !== barVisible) {
+          barVisible = visible;
+          barRef.current.style.opacity = visible ? "1" : "0";
+        }
       }
 
       const newScrolled = scrollY > 40;
@@ -277,16 +285,13 @@ export default function Navigation() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.18 }}
                       aria-current={isActive ? "true" : undefined}
-                      className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center px-4 py-3.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
                           ? "text-accent-400 bg-accent-400/[0.07] border border-accent-400/[0.14]"
                           : "text-white/45 hover:text-white/80 hover:bg-white/[0.04]"
                       }`}
                     >
                       <span>{link.label}</span>
-                      {isActive && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent-400 shadow-[0_0_8px_rgba(255,215,0,0.6)]" />
-                      )}
                     </motion.a>
                   );
                 })}

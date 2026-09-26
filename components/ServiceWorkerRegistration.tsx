@@ -20,20 +20,18 @@ export default function ServiceWorkerRegistration() {
       });
     };
 
-    // Pick up where the user left off once the connection is back
-    const onOnline = () => window.location.reload();
-    window.addEventListener("online", onOnline);
+    // No reload on the `online` event: the precache is revision-stamped, so the
+    // new service worker already serves the fresh assets once it activates, and
+    // reloading would throw away the scroll position every time the connection
+    // flaps (which is routine on mobile).
 
     if (document.readyState === "complete") {
       register();
-      return () => window.removeEventListener("online", onOnline);
+      return;
     }
 
     window.addEventListener("load", register, { once: true });
-    return () => {
-      window.removeEventListener("load", register);
-      window.removeEventListener("online", onOnline);
-    };
+    return () => window.removeEventListener("load", register);
   }, []);
 
   return null;
