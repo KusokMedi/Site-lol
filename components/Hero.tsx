@@ -32,9 +32,6 @@ export default function Hero() {
                 transition={{ duration: 0.65, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
                 className="text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-[4rem] font-bold tracking-tight leading-[1.05]"
               >
-                <span className="block text-base sm:text-lg font-medium text-white/35 mb-1.5">
-                  {t("hero.greeting")}
-                </span>
                 <span className="gradient-accent-text">{t("hero.name")}</span>
               </motion.h1>
 
