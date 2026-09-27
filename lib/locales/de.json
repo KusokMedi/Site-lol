@@ -111,7 +111,7 @@
   "youtube.title": "YouTube-Kanäle",
   "project.link.telegram": "In Telegram öffnen",
   "project.ksnake.title": "KSnake",
-  "project.ksnake.desc": "Desktop-Snake-Spiel in C++ mit SDL2. Builds für Windows und Linux — AppImage und .exe.",
+  "project.ksnake.desc": "Desktop-Snake-Spiel in C++ mit SDL2. Builds für Windows und Linux - AppImage und .exe.",
   "project.ksnake.detail1": "Skalierbares 20×15-Spielfeld, Steuerung per Tastatur und Maus",
   "project.ksnake.detail2": "Pause bei Fokusverlust, Statistik und Bestwert als JSON",
   "project.ksnake.detail3": "Plattformübergreifend: AppImage für Linux, .exe für Windows",

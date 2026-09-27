@@ -107,7 +107,7 @@ const BROWSER_SCRIPT = `document.documentElement.dataset.browser=/Firefox/i.test
 
 // Framer Motion serialises the *start* state of every reveal animation
 // (opacity:0 plus a translate) into the static HTML. With scripting enabled
-// that is correct — the animation runs on hydration. With scripting off nothing
+// that is correct - the animation runs on hydration. With scripting off nothing
 // ever animates it back in, so the whole page below the hero would stay
 // invisible. Cancelling the start state is safe to scope to <noscript>, where it
 // cannot affect the scripted path.
@@ -124,7 +124,7 @@ export const shellViewport: Viewport = {
 };
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
-// Defaults only — every route overrides them with its own language via
+// Defaults only - every route overrides them with its own language via
 // lib/seo.ts, so title/description/hreflang are correct in the static HTML.
 export const shellMetadata: Metadata = {
   ...rootMetadata(),
@@ -177,7 +177,7 @@ function buildJsonLd(lang: Language) {
  *
  * There is no top-level app/layout.tsx: Next.js allows multiple root layouts
  * when they live in route groups, and that is the only way to emit a correct
- * `lang` attribute into the *static* HTML — a single root layout is rendered
+ * `lang` attribute into the *static* HTML - a single root layout is rendered
  * before the route is known and would have to hardcode `lang="en"` for all 12
  * languages. LocaleHandler still syncs it on the client for language switches
  * that happen without a page load.
@@ -208,7 +208,7 @@ export default function RootShell({
         {/* Respects prefers-reduced-motion for every Framer Motion animation */}
         <MotionConfig reducedMotion="user">
         {/*
-          Global ambient glow — fixed layer, covers entire page.
+          Global ambient glow - fixed layer, covers entire page.
           Strong left/right edge orbs visible in every section.
         */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden>

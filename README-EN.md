@@ -18,10 +18,10 @@ Personal developer portfolio website.
 ```
 ├── app/                    # Next.js App Router
 │   ├── layout.tsx          # Root layout (fonts, ambient background, PWA meta)
-│   ├── page.tsx            # "/" — English version
-│   ├── [lang]/page.tsx     # "/ru/", "/lv/" … — 12 languages, statically generated
-│   ├── simple/             # "/simple/" — document copy, English
-│   ├── (lang-simple)/      # "/ru/simple/", "/lv/simple/" … — the same in 11 languages
+│   ├── page.tsx            # "/" - English version
+│   ├── [lang]/page.tsx     # "/ru/", "/lv/" … - 12 languages, statically generated
+│   ├── simple/             # "/simple/" - document copy, English
+│   ├── (lang-simple)/      # "/ru/simple/", "/lv/simple/" … - the same in 11 languages
 │   ├── not-found.tsx       # 404 (pulls the design in itself, no root layout wraps it)
 │   └── sitemap.ts, robots.ts
 ├── components/             # React components
@@ -87,12 +87,12 @@ block that makes the page print and "save as PDF" the way it looks on screen.
 Texts and lists come from the same dictionaries and `lib/content.ts` as the main
 site, interactivity is replaced by native HTML (anchor links, `<details>`,
 radio buttons), and the language switcher is a list of links under the title with
-the current language in bold. The name and the role sit on one line — "KusokMedi |
+the current language in bold. The name and the role sit on one line - "KusokMedi |
 Developer / Programmer": `hero.name` and `hero.title` inside a single `<h1>` with a dimmed
 separator, spaces around it in the markup so the text copies and reads out correctly; below
 480px the role wraps under the name instead of stretching the page. A pressed link never changes colour: the system
 press highlight (`-webkit-tap-highlight-color`) is off, `:active` only adds the
-underline, and there is no separate `:visited` colour at all — in the dark palette
+underline, and there is no separate `:visited` colour at all - in the dark palette
 it read as pink, so the language switcher changed shade once you had visited a page.
 
 **Layout.** The sheet spans the whole window while article and sidebar are centred
@@ -108,7 +108,7 @@ under its label. Sections no longer carry a small label above the heading either
 row, so each section now has a single heading and its name lives in the contents
 panel. Anchor
 scrolling is smooth (`html { scroll-behavior: smooth }`, switched off under
-`prefers-reduced-motion`), and the floating "↑" button points at `#top` — the very
+`prefers-reduced-motion`), and the floating "↑" button points at `#top` - the very
 top of the page, not the first section. Its fade-in is tied to the scroll position
 (`animation-timeline: scroll(root block)`), and in a browser without support it is
 simply always visible.
@@ -116,7 +116,7 @@ simply always visible.
 **Appearance.** The sidebar panel is Wikipedia's: Color (Automatic/Light/Dark) and
 Text (Small/Standard/Large), as `cdx-radio` style radio buttons. The switching is
 CSS: `html:has(#theme-dark:checked)` plus `data-theme`/`data-size` on `<html>` set
-the palette and the root font size (14/16/18px — the whole layout is in `rem`, so
+the palette and the root font size (14/16/18px - the whole layout is in `rem`, so
 the text measure scales with it). A ~1 kB inline script in `SimpleShell` only
 remembers the choice in `localStorage` and sets those attributes before the first
 paint; without it the switches still work for the current page. The dark palette is
@@ -125,7 +125,7 @@ paint; without it the switches still work for the current page. The dark palette
 **Print.** `@media print` always prints the light theme (whatever is on screen),
 hides the Appearance panel and the "↑" button, prints link addresses and avoids
 breaking sections and the numbers table across pages. The footer is down to two
-lines — "KusokMedi~" and the copyright; the plain "Наверх" text link
+lines - "KusokMedi~" and the copyright; the plain "Наверх" text link
 (`aria.scrollToTop`) is gone, and only the floating button scrolls up, keeping that
 key as its `aria-label` and `title`.
 
@@ -135,18 +135,18 @@ shrinks and moves in from the safe area. The panels no longer sit below the arti
 a burger button to the right of the title (the h1 keeps a 4rem right padding for it,
 three lines drawn in CSS) opens them into a fullscreen menu with the
 contents, the Appearance panel and a close button, and the page underneath does not
-scroll (`html:has(#menu:target) { overflow: hidden }`). The state is pure CSS — the
+scroll (`html:has(#menu:target) { overflow: hidden }`). The state is pure CSS - the
 burger is a link to `#menu`, so `:target` both opens the menu and closes it again on
 any link inside it (a jump to a section) or on the close button (`href="#top"`); no
 script is involved. Opening is animated: the panel slides down (`menu-in`, 0.18s) and
 the contents and Appearance blocks follow one after another with a 0.06s stagger
 (`menu-box-in`). Both animations sit on `html:has(#menu:target)`, so they start on
 their own, and `prefers-reduced-motion: reduce` switches them off (the selector is
-repeated there — `:has(#menu:target)` carries an id, so a plain `.sidebar` would not
+repeated there - `:has(#menu:target)` carries an id, so a plain `.sidebar` would not
 win). The buttons themselves are 2.75rem (44px, the smallest comfortable tap target)
 with a pointer cursor, a hover state, press feedback (`scale(0.94)`) and a visible
 keyboard focus ring. Where the menu is taller than the screen it scrolls inside itself.
-There is no separate mobile version — the same page adapts, and in print
+There is no separate mobile version - the same page adapts, and in print
 (`@media print`) neither the panels nor the burger are printed. The panel headings and the Appearance labels come from `toc.title`
 and the `appearance.*` keys added to all 12 dictionaries. The last line of
 `about.txt` (`terminal.line9`) is not printed: on the main site it is a typed
@@ -156,7 +156,7 @@ Routes: `/simple/` (English) plus `/ru/simple/`, `/lv/simple/`, `/uk/simple/`,
 `/zh/simple/`, `/es/simple/`, `/hi/simple/`, `/pt/simple/`, `/fr/simple/`,
 `/de/simple/`, `/ja/simple/`, `/ko/simple/`. Those live in a separate route tree
 (`app/(lang-simple)/`) so they can sit under `/{lang}/simple/` and still render
-through `SimpleShell` instead of `RootShell` — which means that tree and
+through `SimpleShell` instead of `RootShell` - which means that tree and
 `app/simple/` each have their own root layout. The pages are `noindex` with a
 canonical to the designed URL and are not listed in the sitemap.
 
@@ -169,7 +169,7 @@ Without that, `404.html` was exported with no stylesheet at all.
 ## Deploy
 
 `.github/workflows/deploy.yml` builds `out/` and publishes it to GitHub Pages
-(custom domain via `public/CNAME`). On Vercel just connect the repository — the
+(custom domain via `public/CNAME`). On Vercel just connect the repository - the
 static export is deployed as-is.
 
 [Vercel Analytics](https://vercel.com/analytics) is enabled for traffic tracking.

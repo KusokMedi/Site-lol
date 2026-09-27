@@ -8,7 +8,7 @@ import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
 import { projectEntries } from "@/lib/content";
 
-// Design-only half of the project list (icons, header gradients) — the data
+// Design-only half of the project list (icons, header gradients) - the data
 // itself lives in lib/content.ts, shared with the simple /simple/ copy.
 const iconsByKey: Record<string, React.ElementType> = {
   ksnake: Gamepad2,

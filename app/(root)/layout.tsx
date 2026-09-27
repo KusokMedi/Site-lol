@@ -6,7 +6,7 @@ export const viewport: Viewport = shellViewport;
 
 export const metadata: Metadata = shellMetadata;
 
-/** Root layout of "/" — the English page. */
+/** Root layout of "/" - the English page. */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return <RootShell lang={defaultLanguage}>{children}</RootShell>;
 }

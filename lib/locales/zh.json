@@ -111,7 +111,7 @@
   "youtube.title": "YouTube 频道",
   "project.link.telegram": "在 Telegram 中打开",
   "project.ksnake.title": "KSnake",
-  "project.ksnake.desc": "使用 C++ 和 SDL2 编写的桌面贪吃蛇游戏。提供 Windows 和 Linux 构建版本 — AppImage 与 .exe。",
+  "project.ksnake.desc": "使用 C++ 和 SDL2 编写的桌面贪吃蛇游戏。提供 Windows 和 Linux 构建版本 - AppImage 与 .exe。",
   "project.ksnake.detail1": "可缩放的 20×15 网格，键盘与鼠标操作",
   "project.ksnake.detail2": "失去焦点自动暂停，成绩统计与 JSON 最高分记录",
   "project.ksnake.detail3": "跨平台：Linux 用 AppImage，Windows 用 .exe",

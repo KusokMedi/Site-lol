@@ -14,7 +14,7 @@ export async function generateMetadata({
   return simpleMetadata(lang);
 }
 
-/** "/ru/simple/", "/lv/simple/" … — the document copy in every other language. */
+/** "/ru/simple/", "/lv/simple/" … - the document copy in every other language. */
 export default async function LanguageSimplePage({
   params,
 }: {

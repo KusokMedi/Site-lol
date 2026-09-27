@@ -22,7 +22,7 @@ export const dictionaries: Record<Language, Dict> = {
   en, ru, lv, uk, zh, es, hi, pt, fr, de, ja, ko,
 };
 
-/** English dictionary — the fallback for every missing key in any language. */
+/** English dictionary - the fallback for every missing key in any language. */
 export const fallbackDict: Dict = en;
 
 export function getDict(lang: Language): Dict {

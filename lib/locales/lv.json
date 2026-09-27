@@ -111,7 +111,7 @@
   "youtube.title": "YouTube kanāli",
   "project.link.telegram": "Atvērt Telegram",
   "project.ksnake.title": "KSnake",
-  "project.ksnake.desc": "Datorspēle “Ķīļa”, uzrakstīta C++ ar SDL2. Būvējumi Windows un Linux — AppImage un .exe.",
+  "project.ksnake.desc": "Datorspēle “Ķīļa”, uzrakstīta C++ ar SDL2. Būvējumi Windows un Linux - AppImage un .exe.",
   "project.ksnake.detail1": "Maināms 20×15 laukums, vadība ar tastatūru un peli",
   "project.ksnake.detail2": "Automātiska pauze, kad tiek zaudēta uzmanība, statistika un rekords JSON formātā",
   "project.ksnake.detail3": "Sietoskāpnes: AppImage Linux, .exe Windows",

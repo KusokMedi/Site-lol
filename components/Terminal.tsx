@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
-// Inner component — re-mounts completely when `key` changes (lang switch)
+// Inner component - re-mounts completely when `key` changes (lang switch)
 function TypingContent({ fileContent }: { fileContent: string[] }) {
   const allChars = useMemo(() => {
     const chars: { char: string; lineIdx: number }[] = [];
@@ -126,7 +126,7 @@ export default function Terminal({ className = "" }: { className?: string }) {
         </div>
       </div>
 
-      {/* key=lang forces full remount on language change — guaranteed clean reset */}
+      {/* key=lang forces full remount on language change - guaranteed clean reset */}
       <div style={{ minHeight: "260px" }}>
         <TypingContent key={lang} fileContent={fileContent} />
       </div>

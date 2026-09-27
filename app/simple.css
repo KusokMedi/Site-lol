@@ -6,7 +6,7 @@
  * an Appearance panel (Color/Text) in the sidebar, an infobox top right of the
  * article, and the "edit"-less section headings with a hairline rule.
  *
- * Plain CSS only — no Tailwind, no web fonts, no animation, no bundler. The
+ * Plain CSS only - no Tailwind, no web fonts, no animation, no bundler. The
  * theme and the text size come from the Appearance panel: the radios drive the
  * page through `:has()`, and a small inline script in SimpleShell mirrors them
  * into `data-` attributes so the choice survives a reload (and another language).
@@ -17,7 +17,7 @@
 :root {
   color-scheme: light dark;
 
-  /* Light palette — the colours of the Vector skin */
+  /* Light palette - the colours of the Vector skin */
   --page: #f8f9fa;
   --paper: #ffffff;
   --ink: #202122;
@@ -32,7 +32,7 @@
   --serif: "Linux Libertine", Georgia, "Times New Roman", Times, serif;
   --mono: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
   --gutter: 4rem;
-  /* Sidebar 13rem + gutter + text 40.5rem — the measure of the article */
+  /* Sidebar 13rem + gutter + text 40.5rem - the measure of the article */
   --measure: 57.5rem;
   --radius: 2px;
 }
@@ -71,8 +71,8 @@ html:has(#theme-dark:checked) {
   }
 }
 
-/* Text size of the Appearance panel. Everything is in rem, so the whole page —
-   including the measure of the article — scales with it. */
+/* Text size of the Appearance panel. Everything is in rem, so the whole page -
+   including the measure of the article - scales with it. */
 html[data-size="small"],
 html:has(#size-small:checked) {
   font-size: 87.5%;
@@ -112,7 +112,7 @@ a {
   color: var(--link);
   text-decoration: none;
   /* Пока ссылка нажата, браузер и система рисуют свою подсветку (на телефоне
-     это «tap highlight», на Linux — цвет акцента GTK, часто розовый). Она не
+     это «tap highlight», на Linux - цвет акцента GTK, часто розовый). Она не
      отключается через `color`, поэтому гасим её здесь. */
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -121,7 +121,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Нажатая ссылка не меняет цвет — только подчёркивание, как в Википедии.
+/* Нажатая ссылка не меняет цвет - только подчёркивание, как в Википедии.
    Отдельного цвета для :visited тоже нет: в тёмной палитре он читался как
    розовый, и переключатель языка после посещения страницы менял оттенок. */
 a:active {
@@ -168,7 +168,7 @@ strong {
 }
 
 /* Роль в одну строку с именем: «KusokMedi | Developer / Programmer».
-   Пробелы вокруг разделителя — в разметке, а не в CSS, поэтому текст
+   Пробелы вокруг разделителя - в разметке, а не в CSS, поэтому текст
    копируется и читается вслух правильно. */
 .masthead h1 .role {
   color: var(--ink-soft);
@@ -201,7 +201,7 @@ strong {
 
 /* Both icons are drawn with two extra lines, so they follow the theme and
    need no icon font or SVG. Hidden on the desktop, where the panels are
-   already in the sidebar. 2.75rem — минимальная область нажатия, до неё
+   already in the sidebar. 2.75rem - минимальная область нажатия, до неё
    не добирается палец, а не курсор. */
 .nav-burger,
 .nav-close {
@@ -224,7 +224,7 @@ strong {
   text-decoration: none;
 }
 
-/* Отклик на нажатие и видимый фокус с клавиатуры — как у обычной кнопки */
+/* Отклик на нажатие и видимый фокус с клавиатуры - как у обычной кнопки */
 .nav-burger:active,
 .nav-close:active {
   transform: scale(0.94);
@@ -279,7 +279,7 @@ strong {
 
 /* ─── Layout: sidebar + article ───────────────────────────────────────────── */
 
-/* Статья слева, сайдбар справа — как панели Википедии, только зеркально */
+/* Статья слева, сайдбар справа - как панели Википедии, только зеркально */
 .columns {
   display: grid;
   gap: var(--gutter);
@@ -497,7 +497,7 @@ section {
 
 /* Полноширинная сводная таблица, какwikitable в Википедии. Раньше инфобокс
    висел `float: right` у лида и отбирал у текста ~300px, из-за чего строка
-   со ссылками упиралась в него, — теперь он не плавает и ничего не
+   со ссылками упиралась в него, - теперь он не плавает и ничего не
    перекрывает. */
 .infobox {
   background: var(--page);
@@ -533,7 +533,7 @@ section {
   vertical-align: top;
 }
 
-/* Значение — цифра с подписью, не ломается о новую строку */
+/* Значение - цифра с подписью, не ломается о новую строку */
 .infobox .value {
   font-weight: 700;
   white-space: nowrap;
@@ -576,7 +576,7 @@ section {
 
 /* Появляется после прокрутки: анимация привязана к позиции скролла
    (animation-timeline, поддерживается в Chromium). В браузере без поддержки
-   кнопка просто видна всегда — и работает как обычная ссылка на #top. */
+   кнопка просто видна всегда - и работает как обычная ссылка на #top. */
 .to-top {
   align-items: center;
   animation: to-top-in 0.15s linear both;
@@ -605,7 +605,7 @@ section {
   text-decoration: none;
 }
 
-/* Открытие меню: панель выезжает сверху, её блоки — с задержкой друг за
+/* Открытие меню: панель выезжает сверху, её блоки - с задержкой друг за
    другом. Анимация висит на `html:has(#menu:target)`, поэтому запускается сама
    при появлении якоря и не требует скрипта. */
 @keyframes menu-in {
@@ -639,13 +639,13 @@ section {
   }
 
   /* На телефоне панели не висят под статьёй, а открываются меню-бургером.
-     Состояние — якорь `#menu`: бургер ставит его, любая ссылка из меню и
+     Состояние - якорь `#menu`: бургер ставит его, любая ссылка из меню и
      крестик убирают, поэтому меню закрывается само и без скрипта. */
   .nav-burger {
     display: flex;
     position: absolute;
     right: 1rem;
-    /* Центр кнопки — по середине первой строки заголовка */
+    /* Центр кнопки - по середине первой строки заголовка */
     top: 0.8rem;
   }
 
@@ -728,7 +728,7 @@ section {
   }
 
   /* Узкий экран: подпись «Опыт / 3+ года» остаётся в одной строке, а
-     описание переносится под ней — три колонки в 320px не помещаются. */
+     описание переносится под ней - три колонки в 320px не помещаются. */
   .infobox tr {
     display: grid;
     gap: 0 0.5rem;

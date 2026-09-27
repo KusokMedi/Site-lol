@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-16 items-center min-h-[calc(100dvh-64px)] lg:min-h-0 justify-center pt-20 lg:pt-0">
 
-          {/* Left — text */}
+          {/* Left - text */}
           <div className="space-y-6 w-full">
             {/* Heading */}
             <div className="space-y-3">
@@ -80,7 +80,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right — terminal */}
+          {/* Right - terminal */}
           <motion.div
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
@@ -92,7 +92,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator — mouse icon */}
+      {/* Scroll indicator - mouse icon */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

@@ -15,7 +15,7 @@ export function generateStaticParams() {
   return languages.filter((lang) => lang !== "en").map((lang) => ({ lang }));
 }
 
-/** Root layout of "/{lang}/" — renders the real `lang` into the static HTML. */
+/** Root layout of "/{lang}/" - renders the real `lang` into the static HTML. */
 export default async function LangLayout({
   children,
   params,

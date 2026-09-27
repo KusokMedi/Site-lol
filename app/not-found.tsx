@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 // Framer Motion writes the *start* state of every animation (opacity:0) into the
 // static HTML. Without scripting nothing animates it back, so the 404 would
-// render as a blank dark page — same guard as RootShell.
+// render as a blank dark page - same guard as RootShell.
 const NO_SCRIPT_STYLE = `[style*="opacity:0"]{opacity:1!important}`;
 
 function NotFoundContent() {

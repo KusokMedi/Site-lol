@@ -22,7 +22,7 @@ export function generateStaticParams() {
 }
 
 /**
- * Root layout of "/{lang}/simple/" — the document copy in every other language.
+ * Root layout of "/{lang}/simple/" - the document copy in every other language.
  *
  * A route group ("(lang-simple)" adds nothing to the URL) keeps this tree apart
  * from the designed "app/[lang]/", so the language versions of the document can

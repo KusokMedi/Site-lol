@@ -5,7 +5,7 @@ import { Github, Send, Globe, MessagesSquare } from "lucide-react";
 import YouTubeSelector from "./YouTubeSelector";
 import { socialEntries } from "@/lib/content";
 
-// Icon and hover colour per social — design only, the links come from
+// Icon and hover colour per social - design only, the links come from
 // lib/content.ts so /simple/ can render the same list without either.
 const iconsByName: Record<string, React.ElementType> = {
   GitHub: Github,

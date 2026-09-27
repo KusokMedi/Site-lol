@@ -52,7 +52,7 @@ function readStoredLang(): Language | null {
     const saved = localStorage.getItem(STORAGE_KEY);
     return isStoredLang(saved) ? saved : null;
   } catch {
-    // Private mode / storage disabled — fall through to browser detection
+    // Private mode / storage disabled - fall through to browser detection
     return null;
   }
 }
@@ -61,7 +61,7 @@ function writeStoredLang(lang: Language) {
   try {
     localStorage.setItem(STORAGE_KEY, lang);
   } catch {
-    // ignore — the language still applies for the current visit
+    // ignore - the language still applies for the current visit
   }
 }
 
@@ -109,7 +109,7 @@ interface LanguageProviderProps {
   initialLang?: Language;
   /**
    * Dictionary of `initialLang`, inlined by the server so the static HTML of
-   * /ru/ is already in Russian — no flash, no extra request.
+   * /ru/ is already in Russian - no flash, no extra request.
    */
   dict?: Dict;
 }
@@ -130,7 +130,7 @@ export function LanguageProvider({ children, initialLang, dict: initialDict }: L
   /**
    * Loads a dictionary and makes it the active one.
    * Resolves to false when the chunk could not be fetched or a newer switch
-   * superseded this one — callers must be able to recover from that, an
+   * superseded this one - callers must be able to recover from that, an
    * unhandled rejection here would leave the UI stuck mid-fade.
    */
   const apply = useCallback(async (next: Language, syncUrl: boolean): Promise<boolean> => {
@@ -139,7 +139,7 @@ export function LanguageProvider({ children, initialLang, dict: initialDict }: L
     try {
       nextDict = (await loaders[next]()).default as Dict;
     } catch {
-      return false; // chunk failed to load — keep the language we already have
+      return false; // chunk failed to load - keep the language we already have
     }
     cache.set(next, nextDict);
     if (id !== switchId.current) return false; // a newer switch won
@@ -164,7 +164,7 @@ export function LanguageProvider({ children, initialLang, dict: initialDict }: L
       if (next === lang && cache.has(next)) return;
       clearTimers();
 
-      // Immediate switch — used by popstate and the automatic restore on "/"
+      // Immediate switch - used by popstate and the automatic restore on "/"
       if (immediate) {
         void apply(next, syncUrl);
         return;
@@ -184,7 +184,7 @@ export function LanguageProvider({ children, initialLang, dict: initialDict }: L
     [apply, clearTimers, lang]
   );
 
-  // On a language URL the route already decided the language — leave the
+  // On a language URL the route already decided the language - leave the
   // stored preference alone. On "/" restore whatever the visitor chose before,
   // or their browser language, without touching the address bar.
   useEffect(() => {

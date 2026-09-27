@@ -29,7 +29,7 @@ function ErrorContent({ reset }: { reset: () => void }) {
 }
 
 // error.tsx replaces the page, so the LanguageProvider mounted by the page is
-// gone — and with it the route's language. Its own provider restores the stored
+// gone - and with it the route's language. Its own provider restores the stored
 // or browser language, the same way the 404 page does.
 export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (

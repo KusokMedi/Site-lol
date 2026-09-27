@@ -18,7 +18,7 @@ export default function LanguageSwitcher() {
     if (focusTrigger) buttonRef.current?.focus();
   };
 
-  /** Moves focus between the options — the menu pattern keeps focus inside. */
+  /** Moves focus between the options - the menu pattern keeps focus inside. */
   const moveFocus = (from: number, delta: number) => {
     const items = listRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitemradio"]');
     if (!items?.length) return;

@@ -15,7 +15,7 @@ export default function AnimatedSection({ children, id, className = "", delay = 
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   // Framer Motion serialises its *animate* target into the static HTML, so the
-  // animate value itself has to be visible on the server — `initial={false}`
+  // animate value itself has to be visible on the server - `initial={false}`
   // alone is not enough, it only skips the enter transition. `hydrated` is false
   // during SSR and on the first client render, so the prerendered markup is
   // fully readable for crawlers and no-JS visitors, and a failed or slow bundle

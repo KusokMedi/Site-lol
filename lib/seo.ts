@@ -11,10 +11,10 @@ import {
 } from "./languages";
 import { getMeta, type Dict } from "./dictionaries";
 
-/** Metadata for a single language page — title/description come from the locale file. */
+/** Metadata for a single language page - title/description come from the locale file. */
 export function languageMetadata(lang: Language): Metadata {
   const dict = getMeta(lang);
-  const title = `${dict["hero.name"]} — ${dict["hero.title"]}`;
+  const title = `${dict["hero.name"]} - ${dict["hero.title"]}`;
   const description = dict["hero.description"];
   const url = langUrl(lang);
   const languagesMap = alternates();
@@ -48,7 +48,7 @@ export function languageMetadata(lang: Language): Metadata {
   };
 }
 
-/** Root page metadata — identical to English, but canonicalises to the site root. */
+/** Root page metadata - identical to English, but canonicalises to the site root. */
 export function rootMetadata(): Metadata {
   return { ...languageMetadata(defaultLanguage), alternates: { canonical: "/", languages: alternates() } };
 }

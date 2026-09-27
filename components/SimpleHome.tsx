@@ -10,7 +10,7 @@ import {
 } from "@/lib/content";
 
 /**
- * The site as a Wikipedia-style article — the exact same content as the
+ * The site as a Wikipedia-style article - the exact same content as the
  * designed page, laid out like a document: title, language bar, table of
  * contents in the sidebar, sections with the numbers in an infobox. No
  * Tailwind, no icons, no animation, no client JS; the responsive rules turn the
@@ -26,7 +26,7 @@ export default function SimpleHome({ lang }: { lang: Language }) {
   const t = (key: string) => dict[key] ?? key;
   const year = new Date().getFullYear();
 
-  // Table of contents in the sidebar — the same five anchors as the navigation
+  // Table of contents in the sidebar - the same five anchors as the navigation
   // of the designed site.
   const sections = [
     { label: t("nav.home"), href: "#home" },

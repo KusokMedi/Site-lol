@@ -373,7 +373,7 @@ a, button, [role="button"] {
 /* ─── Firefox: skip repaint-heavy effects ────────────────────
    Only two elements actually blur in Firefox: Terminal and ScrollToTop set
    `backdrop-filter` inline (unprefixed), and Firefox re-runs it on every
-   repaint — i.e. on every character of the terminal's typing animation, and
+   repaint - i.e. on every character of the terminal's typing animation, and
    on every scroll frame for the floating button. The class-based glass
    utilities ship as `-webkit-backdrop-filter`, which Firefox ignores, so they
    are listed here only as a safety net in case the minifier ever emits the

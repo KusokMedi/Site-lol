@@ -44,7 +44,7 @@ export default function Navigation() {
   useEffect(() => {
     let rafPending = false;
     // The bar's opacity is transitioned by CSS, so it may only be written when
-    // the value actually changes — writing it every frame restarts the
+    // the value actually changes - writing it every frame restarts the
     // transition and the bar visibly lags behind the scroll.
     let barVisible = false;
 
@@ -79,7 +79,7 @@ export default function Navigation() {
       return () => lenis.off("scroll", onScroll);
     }
 
-    // No Lenis (touch / reduced motion) — native scroll listener
+    // No Lenis (touch / reduced motion) - native scroll listener
     const docHeight = () => document.documentElement.scrollHeight - window.innerHeight;
     const onScroll = () => {
       const top = window.scrollY;
@@ -146,13 +146,13 @@ export default function Navigation() {
           isScrolled ? "bg-dark-950/80 backdrop-blur-2xl" : "bg-transparent"
         }`}
       >
-        {/* Bottom border — only when scrolled */}
+        {/* Bottom border - only when scrolled */}
         <div
           className={`absolute bottom-0 left-0 right-0 h-px transition-opacity duration-500 ${isScrolled ? "opacity-100" : "opacity-0"}`}
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.05) 75%, transparent)" }}
         />
 
-        {/* Scroll progress bar — scaleX, not width: width would relayout every frame */}
+        {/* Scroll progress bar - scaleX, not width: width would relayout every frame */}
         <div
           ref={barRef}
           className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 will-change-transform transition-opacity duration-300 z-10"

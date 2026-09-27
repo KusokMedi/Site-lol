@@ -31,7 +31,7 @@ export default function Footer() {
             </span>
           </button>
 
-          {/* Copyright — right side on desktop */}
+          {/* Copyright - right side on desktop */}
           <p className="text-[11px] text-white/20 font-mono tracking-wide text-center sm:text-right order-last sm:order-none">
             © {year} {t("hero.name")}. {t("footer.rights")}
           </p>

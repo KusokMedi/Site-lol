@@ -45,7 +45,7 @@ export default function LocaleHandler() {
   useEffect(() => {
     document.documentElement.lang = lang;
 
-    const title = `${t("hero.name")} — ${t("hero.title")}`;
+    const title = `${t("hero.name")} - ${t("hero.title")}`;
     const description = t("hero.description");
     const url = langUrl(lang);
 
@@ -67,7 +67,7 @@ export default function LocaleHandler() {
     if (canonical.getAttribute("href") !== url) canonical.setAttribute("href", url);
 
     // Next.js emits one <link rel="alternate"> per hreflang, all with the same
-    // rel — look them up by hreflang so each language gets its own element.
+    // rel - look them up by hreflang so each language gets its own element.
     for (const [hrefLang, href] of Object.entries(alternates())) {
       const link =
         document.head.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${hrefLang}"]`) ??
@@ -78,7 +78,7 @@ export default function LocaleHandler() {
   }, [lang, t]);
 
   // Browser back/forward across language URLs. The root path has no language
-  // segment, so it maps to English — otherwise going back to "/" would leave the
+  // segment, so it maps to English - otherwise going back to "/" would leave the
   // previous language on screen.
   const onPopState = useCallback(() => {
     setLang(pathToLangOrDefault(window.location.pathname), { immediate: true, syncUrl: false });

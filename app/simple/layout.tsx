@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout of "/simple/" — the document copy, English only.
+ * Root layout of "/simple/" - the document copy, English only.
  *
  * There is no app/layout.tsx: every route tree brings its own root layout, which
  * is what lets this one skip RootShell and ship a bare document. The other

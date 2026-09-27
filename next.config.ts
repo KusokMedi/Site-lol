@@ -3,7 +3,7 @@ import withPWAInit from "@ducanh2912/next-pwa";
 import { defaultLanguage, languages } from "./lib/languages";
 
 // The service worker is compiled from webpack assets, which do not include the
-// HTML written by the export step — so the pages are added to the precache
+// HTML written by the export step - so the pages are added to the precache
 // manifest explicitly, otherwise offline navigation would fail.
 //
 // The revision has to change whenever *any* precached byte changes, otherwise
@@ -40,7 +40,7 @@ const withPWA = withPWAInit({
     additionalManifestEntries: staticEntries,
     directoryIndex: "/index.html",
     // The default "index.html" navigation fallback would answer every language
-    // URL with the English page — navigations are cached per URL instead.
+    // URL with the English page - navigations are cached per URL instead.
     navigateFallback: null,
     runtimeCaching: [
       {
@@ -56,7 +56,7 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
-  // Pure static export — deployable to GitHub Pages and any CDN.
+  // Pure static export - deployable to GitHub Pages and any CDN.
   // Language routes are real pages (app/[lang]), so no middleware is needed.
   output: "export",
   trailingSlash: true,

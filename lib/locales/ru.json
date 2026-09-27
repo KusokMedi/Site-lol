@@ -111,7 +111,7 @@
   "youtube.title": "YouTube-каналы",
   "project.link.telegram": "Открыть в Telegram",
   "project.ksnake.title": "KSnake",
-  "project.ksnake.desc": "Настольная игра «Змейка» на C++ с SDL2. Сборки под Windows и Linux — AppImage и .exe.",
+  "project.ksnake.desc": "Настольная игра «Змейка» на C++ с SDL2. Сборки под Windows и Linux - AppImage и .exe.",
   "project.ksnake.detail1": "Изменяемое поле 20×15, управление с клавиатуры и мыши",
   "project.ksnake.detail2": "Пауза при потере фокуса, статистика и рекорд в JSON",
   "project.ksnake.detail3": "Кроссплатформенность: AppImage для Linux, .exe для Windows",

@@ -23,7 +23,7 @@ export const languageNames: Record<Language, string> = {
   ko: "한국어",
 };
 
-/** Open Graph locale codes — used for og:locale and og:locale:alternate. */
+/** Open Graph locale codes - used for og:locale and og:locale:alternate. */
 export const ogLocales: Record<Language, string> = {
   en: "en_US",
   ru: "ru_RU",
@@ -79,7 +79,7 @@ export function pathToLang(pathname: string): Language | null {
 
 /**
  * Language a pathname represents, falling back to English.
- * The root path has no language segment, so it means English — needed by the
+ * The root path has no language segment, so it means English - needed by the
  * back/forward handler, which must be able to switch *back* to English.
  */
 export function pathToLangOrDefault(pathname: string): Language {

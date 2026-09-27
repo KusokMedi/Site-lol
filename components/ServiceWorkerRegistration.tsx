@@ -16,7 +16,7 @@ export default function ServiceWorkerRegistration() {
 
     const register = () => {
       navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
-        // Offline support is optional — ignore registration failures
+        // Offline support is optional - ignore registration failures
       });
     };
 

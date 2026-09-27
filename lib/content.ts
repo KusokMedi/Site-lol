@@ -20,7 +20,7 @@ export const highlightKeys = ["experience", "projects", "tech", "commits"] as co
 export type HighlightKey = (typeof highlightKeys)[number];
 
 export type ProjectEntry = {
-  /** Dictionary prefix — "project.{key}.title", ".desc", ".detail1..3". */
+  /** Dictionary prefix - "project.{key}.title", ".desc", ".detail1..3". */
   key: string;
   tech: string[];
   href: string;
