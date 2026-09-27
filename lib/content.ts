@@ -2,7 +2,7 @@ import { env } from "./env";
 
 /**
  * Content lists shared by the designed site and the design-free copy at
- * "/nodesign/".
+ * "/simple/".
  *
  * Only data lives here: icons, layout and animation stay in the components, so
  * the plain copy reuses the exact same content without pulling in any design.

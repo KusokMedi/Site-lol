@@ -20,12 +20,12 @@ Personal developer portfolio website.
 │   ├── layout.tsx          # Root layout (fonts, ambient background, PWA meta)
 │   ├── page.tsx            # "/" — English version
 │   ├── [lang]/page.tsx     # "/ru/", "/lv/" … — 12 languages, statically generated
-│   ├── nodesign/           # "/nodesign/" — same content, no design, English only
+│   ├── simple/             # "/simple/" — same content, plain formatting, English only
 │   ├── not-found.tsx       # 404
 │   └── sitemap.ts, robots.ts
 ├── components/             # React components
 │   ├── Home.tsx            # Shared page markup for every language
-│   ├── NoDesignHome.tsx    # The same page without design (for /nodesign/)
+│   ├── SimpleHome.tsx      # The same page in plain formatting (for /simple/)
 │   ├── LanguageProvider.tsx# i18n context + language switching
 │   ├── LocaleHandler.tsx   # <html lang>, title, meta, URL, popstate
 │   └── SmoothScroll.tsx    # Lenis provider + useLenis()/useScrollTo()
@@ -74,15 +74,15 @@ No server components or middleware are involved.
 - The choice is stored in `localStorage`; on `/` the browser language is used.
 - Title, description, `og:locale` and `hreflang` are rendered at build time, so the static HTML is already in the right language.
 
-## No-design copy
+## Simple version
 
-`/nodesign/` is an exact copy of the homepage with the design stripped: the same
-content from `en.json`, but no Tailwind, fonts, animations, icons or client JS.
-Its own root layout (`app/nodesign/layout.tsx`) loads only a tiny
-`nodesign.css`, and the texts and lists come from the same dictionaries and
-`lib/content.ts` as the main site. Interactivity is replaced by native HTML
-(anchor links, `<details>`); the page is `noindex` with a canonical to `/` and is
-not listed in the sitemap.
+`/simple/` is the same site with the design reduced to the bare minimum: the
+colours and type habits of the main site (dark background, gold accent), but
+plain CSS — no Tailwind, web fonts, glass, animations or client JS. Its own root
+layout (`app/simple/layout.tsx`) loads a single small `simple.css`, and the
+texts and lists come from the same dictionaries and `lib/content.ts` as the main
+site. Interactivity is replaced by native HTML (anchor links, `<details>`); the
+page is `noindex` with a canonical to `/` and is not listed in the sitemap.
 
 ## Deploy
 

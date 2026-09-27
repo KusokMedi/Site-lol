@@ -18,7 +18,7 @@ const buildRevision =
 const staticEntries = [
   "/index.html",
   "/404.html",
-  "/nodesign/index.html",
+  "/simple/index.html",
   "/manifest.json",
   "/icon.svg",
   "/icon-192.png",

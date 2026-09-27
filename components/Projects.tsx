@@ -9,7 +9,7 @@ import { parseGradientText } from "./GradientText";
 import { projectEntries } from "@/lib/content";
 
 // Design-only half of the project list (icons, header gradients) — the data
-// itself lives in lib/content.ts, shared with the design-free /nodesign/ copy.
+// itself lives in lib/content.ts, shared with the simple /simple/ copy.
 const iconsByKey: Record<string, React.ElementType> = {
   ksnake: Gamepad2,
   savebot: Download,

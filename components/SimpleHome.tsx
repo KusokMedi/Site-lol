@@ -10,9 +10,10 @@ import {
 } from "@/lib/content";
 
 /**
- * The site as plain text — the exact same content as the designed page, with
- * no design at all: no Tailwind, no icons, no animation, no client JS. Lives
- * at /nodesign/ for reading, translating and checking the copy.
+ * The site in its simplest form — the exact same content as the designed page,
+ * with only plain formatting: the site's dark background and gold accent, but
+ * no Tailwind, no icons, no animation, no client JS. Lives at /simple/ for
+ * reading, translating and checking the copy.
  *
  * Everything here is a server component on purpose: the static HTML is the
  * whole page, so it renders with scripting disabled and without hydration.
@@ -23,8 +24,8 @@ const t = (key: string) => dict[key] ?? key;
 
 /**
  * Renders the `**highlighted**` markers of the locale files. The designed page
- * turns them into gradient spans, here they stay plain bold text — same words,
- * no styling. split() with a capture group keeps unmatched asterisks intact.
+ * turns them into gradient spans, the simple copy colours them — same words.
+ * split() with a capture group keeps unmatched asterisks intact.
  */
 function withEmphasis(text: string): React.ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -34,7 +35,7 @@ function withEmphasis(text: string): React.ReactNode[] {
   );
 }
 
-export default function NoDesignHome() {
+export default function SimpleHome() {
   const year = new Date().getFullYear();
 
   const navLinks = [
@@ -47,12 +48,14 @@ export default function NoDesignHome() {
 
   return (
     <>
-      <header>
+      <header className="nav">
         <nav>
           <ul>
             {/* Logo of the designed header, same destination */}
             <li>
-              <a href="#home">{t("hero.name")}~</a>
+              <a className="logo" href="#home">
+                {t("hero.name")}~
+              </a>
             </li>
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -101,24 +104,27 @@ export default function NoDesignHome() {
           </ul>
 
           {/* Typing animation replaced by the finished text of the same lines */}
-          <pre>
-            {[
-              t("terminal.line1"),
-              t("terminal.line2"),
-              t("terminal.line3"),
-              t("terminal.line4"),
-              t("terminal.line5"),
-              t("terminal.line6"),
-              t("terminal.line7"),
-              t("terminal.line8"),
-              t("terminal.line9"),
-            ].join("\n")}
-          </pre>
+          <div className="term">
+            <div className="term-title">about.txt</div>
+            <pre>
+              {[
+                t("terminal.line1"),
+                t("terminal.line2"),
+                t("terminal.line3"),
+                t("terminal.line4"),
+                t("terminal.line5"),
+                t("terminal.line6"),
+                t("terminal.line7"),
+                t("terminal.line8"),
+                t("terminal.line9"),
+              ].join("\n")}
+            </pre>
+          </div>
         </section>
 
         {/* ─── About ────────────────────────────────────────────────────── */}
         <section id="about">
-          <p>{t("about.title")}</p>
+          <p className="label">{t("about.title")}</p>
           <h2>{withEmphasis(t("about.heading"))}</h2>
           <p>{t("about.text1")}</p>
           <p>{t("about.text2")}</p>
@@ -128,7 +134,7 @@ export default function NoDesignHome() {
               <li key={key}>
                 {/* The count-up animation of the designed page is a static
                     number here — the number and its suffix are the same keys. */}
-                <div>
+                <div className="stat-num">
                   {t(`highlight.${key}.num`)}
                   {t(`highlight.${key}.suffix`)}
                 </div>
@@ -141,7 +147,7 @@ export default function NoDesignHome() {
 
         {/* ─── Services ─────────────────────────────────────────────────── */}
         <section id="services">
-          <p>{t("services.title")}</p>
+          <p className="label">{t("services.title")}</p>
           <h2>{withEmphasis(t("services.heading"))}</h2>
           <p>{t("services.description")}</p>
 
@@ -162,7 +168,7 @@ export default function NoDesignHome() {
 
         {/* ─── Projects ─────────────────────────────────────────────────── */}
         <section id="projects">
-          <p>{t("projects.title")}</p>
+          <p className="label">{t("projects.title")}</p>
           <h2>{withEmphasis(t("projects.heading"))}</h2>
           <p>{t("projects.description")}</p>
 
@@ -190,7 +196,7 @@ export default function NoDesignHome() {
 
         {/* ─── Contact ──────────────────────────────────────────────────── */}
         <section id="contact">
-          <p>{t("contact.title")}</p>
+          <p className="label">{t("contact.title")}</p>
           <h2>{withEmphasis(t("contact.heading"))}</h2>
           <p>{t("contact.text")}</p>
           <p>

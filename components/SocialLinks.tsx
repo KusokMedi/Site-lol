@@ -6,7 +6,7 @@ import YouTubeSelector from "./YouTubeSelector";
 import { socialEntries } from "@/lib/content";
 
 // Icon and hover colour per social — design only, the links come from
-// lib/content.ts so /nodesign/ can render the same list without either.
+// lib/content.ts so /simple/ can render the same list without either.
 const iconsByName: Record<string, React.ElementType> = {
   GitHub: Github,
   "GitHub Organization": Globe,

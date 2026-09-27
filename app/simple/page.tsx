@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import NoDesignHome from "@/components/NoDesignHome";
+import SimpleHome from "@/components/SimpleHome";
 import { getDict } from "@/lib/dictionaries";
 import { defaultLanguage } from "@/lib/languages";
 
@@ -13,6 +13,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function NoDesignPage() {
-  return <NoDesignHome />;
+export default function SimplePage() {
+  return <SimpleHome />;
 }
