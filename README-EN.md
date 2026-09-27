@@ -79,21 +79,32 @@ No server components or middleware are involved.
 ## Document version
 
 `/simple/` and `/{lang}/simple/` are the same content formatted as a Wikipedia
-article: light grey page background, a white column with a hairline border,
-sans-serif headings over serif body text, blue links, a sidebar with the table of
-contents, and the numbers of the About section in an infobox on the right. Plain
-CSS (`app/simple.css`, ~9 kB) with no Tailwind, web fonts, glass, animations or
-client JS, and a `@media print` block that makes the page print and "save as
-PDF" the way it looks on screen. Texts and lists come from the same dictionaries
-and `lib/content.ts` as the main site, interactivity is replaced by native HTML
-(anchor links, `<details>`), and the language switcher is a list of links under
-the title with the current language in bold.
+article: a full-width white sheet, sans-serif headings over serif body text, blue
+links, a sidebar with the table of contents, and the numbers of the About section
+in an infobox on the right. Plain CSS (`app/simple.css`, ~11 kB) with no Tailwind,
+web fonts, glass, animations or client JS, and a `@media print` block that makes
+the page print and "save as PDF" the way it looks on screen. Texts and lists come
+from the same dictionaries and `lib/content.ts` as the main site, interactivity is
+replaced by native HTML (anchor links, `<details>`), and the language switcher is
+a list of links under the title with the current language in bold.
 
-On a phone (`@media (max-width: 60rem)`) the two columns collapse into one: the
-table of contents and the infobox become normal blocks, the infobox stops
-floating, the type is larger (16px) and long tech lists and URLs wrap. There is
-no separate mobile version — the same page adapts. The sidebar heading comes from
-the `toc.title` key added to all 12 dictionaries.
+The sheet spans the whole window while the text column keeps a measure of
+`--measure` (60.5rem = 13rem contents + 3.5rem gutter + 44rem text) and stays
+centred, so a wide monitor keeps the margins of a Wikipedia article. Anchor
+scrolling is smooth (`html { scroll-behavior: smooth }`, switched off under
+`prefers-reduced-motion`), and the floating "↑" button in the bottom right corner
+points at `#top` — the very top of the page, not the first section. It fades in
+with the scroll position (`animation-timeline: scroll(root block)`), and in a
+browser without support it is simply always visible.
+
+On a phone (`@media (max-width: 60rem)`) the sheet stays full width and the two
+columns collapse into one: the table of contents and the infobox become normal
+blocks, the infobox stops floating, the type is larger (16px) and long tech lists
+and URLs wrap, while the "↑" button shrinks and moves in from the safe area. There
+is no separate mobile version — the same page adapts. The sidebar heading comes
+from the `toc.title` key added to all 12 dictionaries. The last line of `about.txt`
+(`terminal.line9`) is not printed: on the main site it is a typed greeting line,
+and the About heading follows this block anyway.
 
 Routes: `/simple/` (English) plus `/ru/simple/`, `/lv/simple/`, `/uk/simple/`,
 `/zh/simple/`, `/es/simple/`, `/hi/simple/`, `/pt/simple/`, `/fr/simple/`,

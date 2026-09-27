@@ -26,7 +26,21 @@
   --serif: "Linux Libertine", Georgia, "Times New Roman", Times, serif;
   --mono: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
   --gutter: 3.5rem;
+  /* Ширина текстовой колонки: оглавление 13rem + отступ 3.5rem + текст 44rem.
+     Страница идёт на всю ширину окна, а эта мера держит колонки по центру. */
+  --measure: 60.5rem;
   --radius: 2px;
+}
+
+/* Плавная прокрутка к якорям (оглавление, «наверх») — на чистом CSS */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 * {
@@ -66,22 +80,22 @@ strong {
 
 /* ─── Page frame ──────────────────────────────────────────────────────────── */
 
+/* Во всю ширину окна, как лист статьи; колонки внутри центрируются по --measure */
 .page {
-  margin: 0 auto;
-  max-width: 62rem;
-  padding: 1.5rem 1rem 3rem;
+  margin: 0;
+  padding: 0 0 1.5rem;
 }
 
 .sheet {
   background: var(--paper);
-  border: 1px solid var(--rule);
+  border: 0;
 }
 
 /* ─── Masthead: article title + language bar ──────────────────────────────── */
 
 .masthead {
   border-bottom: 1px solid var(--rule);
-  padding: 1.25rem 1.5rem 0.9rem;
+  padding: 1.25rem max(1.5rem, calc(50% - var(--measure) / 2)) 0.9rem;
 }
 
 .masthead h1 {
@@ -123,8 +137,13 @@ strong {
 .columns {
   display: grid;
   gap: var(--gutter);
-  grid-template-columns: 13rem minmax(0, 1fr);
-  padding: 1.25rem 1.5rem 2rem;
+  grid-template-columns: 13rem minmax(0, 44rem);
+  justify-content: center;
+  padding: 1.25rem 0 2rem;
+}
+
+section {
+  scroll-margin-top: 0.5rem;
 }
 
 /* ─── Sidebar boxes ───────────────────────────────────────────────────────── */
@@ -329,7 +348,7 @@ strong {
   color: var(--muted);
   font-family: var(--sans);
   font-size: 0.78rem;
-  padding: 0.9rem 1.5rem 1.1rem;
+  padding: 0.9rem max(1.5rem, calc(50% - var(--measure) / 2)) 1.1rem;
 }
 
 .footer p {
@@ -342,12 +361,57 @@ strong {
   font-weight: 700;
 }
 
+/* ─── Back to top ─────────────────────────────────────────────────────────── */
+
+/* Появляется после прокрутки: анимация привязана к позиции скролла
+   (animation-timeline, поддерживается в Chromium). В браузере без поддержки
+   кнопка просто видна всегда — и работает как обычная ссылка на #top. */
+.to-top {
+  align-items: center;
+  animation: to-top-in 0.15s linear both;
+  animation-range: 60vh 100vh;
+  animation-timeline: scroll(root block);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  color: var(--link);
+  display: flex;
+  font-family: var(--sans);
+  font-size: 1rem;
+  height: 2.25rem;
+  justify-content: center;
+  opacity: 0;
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  transform: translateY(0.4rem);
+  width: 2.25rem;
+  z-index: 10;
+}
+
+.to-top:visited {
+  color: var(--link);
+}
+
+.to-top:hover {
+  background: var(--box-head);
+  text-decoration: none;
+}
+
+@keyframes to-top-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ─── Phone: one column, roomier type ─────────────────────────────────────── */
 
 @media (max-width: 60rem) {
   .columns {
     gap: 1.2rem;
     grid-template-columns: minmax(0, 1fr);
+    padding: 1rem 1rem 1.5rem;
   }
 
   /* The infobox stops floating and becomes a normal block above the text */
@@ -358,14 +422,18 @@ strong {
   }
 
   .page {
-    padding: 0.75rem 0.5rem 2rem;
+    padding: 0 0 1rem;
   }
 
   .masthead,
-  .columns,
   .footer {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .to-top {
+    height: 2rem;
+    width: 2rem;
   }
 }
 
@@ -403,8 +471,11 @@ strong {
   }
 
   .page {
-    max-width: none;
     padding: 0;
+  }
+
+  .to-top {
+    display: none;
   }
 
   .sheet,

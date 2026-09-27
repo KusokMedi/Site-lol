@@ -47,7 +47,7 @@ export default function SimpleHome({ lang }: { lang: Language }) {
     );
 
   return (
-    <div className="page">
+    <div className="page" id="top">
       <div className="sheet">
         {/* ─── Title + language bar ─────────────────────────────────────── */}
         <header className="masthead">
@@ -119,7 +119,9 @@ export default function SimpleHome({ lang }: { lang: Language }) {
                 </li>
               </ul>
 
-              {/* Typing animation replaced by the finished text of the same lines */}
+              {/* Typing animation replaced by the finished text of the same lines.
+                  The last line the main site types is the About heading, which
+                  follows right after this block, so it is left out here. */}
               <div className="term">
                 <div className="term-title">about.txt</div>
                 <pre>
@@ -132,7 +134,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
                     t("terminal.line6"),
                     t("terminal.line7"),
                     t("terminal.line8"),
-                    t("terminal.line9"),
                   ].join("\n")}
                 </pre>
               </div>
@@ -233,19 +234,25 @@ export default function SimpleHome({ lang }: { lang: Language }) {
         {/* ─── Footer ──────────────────────────────────────────────────── */}
         <footer className="footer">
           <p>
-            <a className="logo" href="#home">
+            <a className="logo" href="#top">
               {t("hero.name")}~
             </a>
           </p>
           <p>
             © {year} {t("hero.name")}. {t("footer.rights")}
           </p>
-          {/* Stands in for the floating scroll-to-top button, which needs JS */}
           <p>
-            <a href="#home">{t("aria.scrollToTop")}</a>
+            <a href="#top">{t("aria.scrollToTop")}</a>
           </p>
         </footer>
       </div>
+
+      {/* Stands in for the floating scroll-to-top button of the main site.
+          Plain anchor to the very top of the page, so it works without JS; the
+          fade-in is tied to the scroll position in CSS. */}
+      <a className="to-top" href="#top" aria-label={t("aria.scrollToTop")} title={t("aria.scrollToTop")}>
+        ↑
+      </a>
     </div>
   );
 }
