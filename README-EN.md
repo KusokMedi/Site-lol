@@ -80,8 +80,8 @@ No server components or middleware are involved.
 
 `/simple/` and `/{lang}/simple/` are the same content formatted as a Wikipedia
 article: a full-width white sheet, sans-serif headings over serif body text, blue
-links, the panels on the right (table of contents + Appearance) and an infobox with
-the numbers in the top right corner of the article. Plain CSS (`app/simple.css`,
+links, the panels on the right (table of contents + Appearance) and a summary table
+with the counters in the About section. Plain CSS (`app/simple.css`,
 ~14 kB) with no Tailwind, web fonts, glass or animations, and a `@media print`
 block that makes the page print and "save as PDF" the way it looks on screen.
 Texts and lists come from the same dictionaries and `lib/content.ts` as the main
@@ -95,9 +95,15 @@ it read as pink, so the language switcher changed shade once you had visited a p
 **Layout.** The sheet spans the whole window while article and sidebar are centred
 on the measure `--measure` (13rem panels + 4rem gutter + 40.5rem text). The panels
 are `position: sticky`, so they follow the text instead of leaving a dead column.
-The infobox is a real table with a `<caption>`, the way Wikipedia builds it: it
-floats to the right at the top of the article, and `section { display: flow-root }`
-keeps it inside its own section (it used to overlap the Services heading). Anchor
+The numbers table is a real `<table>` with a `<caption>` and three columns (label,
+value, description), the way Wikipedia builds a wikitable; it spans the whole column
+at the top of the About section and overlaps nothing. It used to float right next to
+the lead text, where it stole ~300px of the column and the socials row ran into it, so
+it does not float any more, and on a narrow screen the description of a row moves
+under its label. Sections no longer carry a small label above the heading either:
+"Contact" followed by "Let's create something together" read as two headings in a
+row, so each section now has a single heading and its name lives in the contents
+panel. Anchor
 scrolling is smooth (`html { scroll-behavior: smooth }`, switched off under
 `prefers-reduced-motion`), and the floating "↑" button points at `#top` — the very
 top of the page, not the first section. Its fade-in is tied to the scroll position
@@ -115,11 +121,11 @@ paint; without it the switches still work for the current page. The dark palette
 
 **Print.** `@media print` always prints the light theme (whatever is on screen),
 hides the Appearance panel and the "↑" button, prints link addresses and avoids
-breaking sections and the infobox across pages.
+breaking sections and the numbers table across pages.
 
 On a phone (`@media (max-width: 60rem)`) the sheet stays full width and the two
 columns collapse into one: the panels move below the article and stop being sticky,
-the infobox stops floating, long tech lists and URLs wrap, and the "↑" button
+long tech lists and URLs wrap, and the "↑" button
 shrinks and moves in from the safe area. There is no separate mobile version — the
 same page adapts. The panel headings and the Appearance labels come from `toc.title`
 and the `appearance.*` keys added to all 12 dictionaries. The last line of

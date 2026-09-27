@@ -202,10 +202,8 @@ strong {
 }
 
 section {
-  scroll-margin-top: 0.5rem;
-  /* Каждый раздел держит свои плавающие элементы, иначе инфобокс из «Home»
-     наезжал бы на заголовок следующего раздела. */
   display: flow-root;
+  scroll-margin-top: 0.5rem;
 }
 
 /* ─── Sidebar boxes ───────────────────────────────────────────────────────── */
@@ -339,17 +337,6 @@ section {
   margin: 0 0 0.8rem;
 }
 
-.label {
-  color: var(--muted);
-  display: block;
-  font-family: var(--sans);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  margin: 0 0 0.3rem;
-  text-transform: uppercase;
-}
-
 .article ul {
   margin: 0 0 0.9rem;
   padding-left: 1.4rem;
@@ -421,18 +408,18 @@ section {
 
 /* ─── Infobox: the numbers of the About section ───────────────────────────── */
 
-/* A real table, the way Wikipedia builds it: caption on top, label on the left,
-   value with a sub-note on the right, floated at the top of the article. */
+/* Полноширинная сводная таблица, какwikitable в Википедии. Раньше инфобокс
+   висел `float: right` у лида и отбирал у текста ~300px, из-за чего строка
+   со ссылками упиралась в него, — теперь он не плавает и ничего не
+   перекрывает. */
 .infobox {
   background: var(--page);
   border: 1px solid var(--rule);
   border-collapse: collapse;
-  float: right;
   font-family: var(--sans);
   font-size: 0.8rem;
-  margin: 0 0 0.8rem 1.2rem;
-  padding: 0.3rem;
-  width: 17rem;
+  margin: 1rem 0 0;
+  width: 100%;
 }
 
 .infobox caption {
@@ -446,27 +433,29 @@ section {
 .infobox th {
   color: var(--ink-soft);
   font-weight: 400;
-  padding: 0.4rem 0.5rem 0.4rem 0.4rem;
+  padding: 0.45rem 0.6rem 0.45rem 0.5rem;
   text-align: left;
   vertical-align: top;
-  width: 6.5rem;
+  white-space: nowrap;
+  width: 1%;
 }
 
 .infobox td {
   border-left: 1px solid var(--rule-soft);
-  padding: 0.4rem 0.5rem;
+  padding: 0.45rem 0.6rem;
   vertical-align: top;
+}
+
+/* Значение — цифра с подписью, не ломается о новую строку */
+.infobox .value {
+  font-weight: 700;
+  white-space: nowrap;
+  width: 1%;
 }
 
 .infobox tr + tr th,
 .infobox tr + tr td {
   border-top: 1px solid var(--rule-soft);
-}
-
-.infobox .num {
-  display: block;
-  font-size: 1.05rem;
-  font-weight: 700;
 }
 
 .infobox .note {
@@ -545,16 +534,10 @@ section {
     padding: 1rem 1rem 1.5rem;
   }
 
-  /* The sidebar is not pinned on a phone, the infobox is not floated */
+  /* The sidebar is not pinned on a phone */
   .sidebar {
     margin-top: 0.5rem;
     position: static;
-  }
-
-  .infobox {
-    float: none;
-    margin: 0 0 1rem;
-    width: auto;
   }
 
   .page {
@@ -587,6 +570,31 @@ section {
   .tech,
   .langbar {
     overflow-wrap: anywhere;
+  }
+
+  /* Узкий экран: подпись «Опыт / 3+ года» остаётся в одной строке, а
+     описание переносится под ней — три колонки в 320px не помещаются. */
+  .infobox tr {
+    display: grid;
+    gap: 0 0.5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .infobox th {
+    grid-column: 1;
+    width: auto;
+    white-space: normal;
+  }
+
+  .infobox .value {
+    grid-column: 2;
+    text-align: right;
+    width: auto;
+  }
+
+  .infobox .note {
+    grid-column: 1 / -1;
+    padding-top: 0;
   }
 }
 

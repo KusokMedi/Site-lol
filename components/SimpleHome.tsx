@@ -72,27 +72,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
           <main className="article">
             {/* Hero */}
             <section id="home">
-              {/* Infobox with the counters of the designed page — the same
-                  place Wikipedia puts it: top right of the article, the lead
-                  text flows around it. */}
-              <table className="infobox">
-                <caption>{t("hero.name")}</caption>
-                <tbody>
-                  {highlightKeys.map((key) => (
-                    <tr key={key}>
-                      <th scope="row">{t(`highlight.${key}`)}</th>
-                      <td>
-                        <b className="num">
-                          {t(`highlight.${key}.num`)}
-                          {t(`highlight.${key}.suffix`)}
-                        </b>
-                        <span className="note">{t(`highlight.${key}.desc`)}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
               <p className="lead">{t("hero.description")}</p>
 
               <p>
@@ -148,15 +127,33 @@ export default function SimpleHome({ lang }: { lang: Language }) {
 
             {/* About */}
             <section id="about">
-              <p className="label">{t("about.title")}</p>
               <h2>{withEmphasis(t("about.heading"))}</h2>
               <p>{t("about.text1")}</p>
               <p>{t("about.text2")}</p>
+
+              {/* Counters of the designed page as a summary table. It used to
+                  float next to the lead text like a Wikipedia infobox, but it
+                  stole ~300px of the column and the socials row ran into it,
+                  so it now sits full width in the section it describes. */}
+              <table className="infobox">
+                <caption>{t("hero.name")}</caption>
+                <tbody>
+                  {highlightKeys.map((key) => (
+                    <tr key={key}>
+                      <th scope="row">{t(`highlight.${key}`)}</th>
+                      <td className="value">
+                        {t(`highlight.${key}.num`)}
+                        {t(`highlight.${key}.suffix`)}
+                      </td>
+                      <td className="note">{t(`highlight.${key}.desc`)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </section>
 
             {/* Services */}
             <section id="services">
-              <p className="label">{t("services.title")}</p>
               <h2>{withEmphasis(t("services.heading"))}</h2>
               <p>{t("services.description")}</p>
 
@@ -177,7 +174,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
 
             {/* Projects */}
             <section id="projects">
-              <p className="label">{t("projects.title")}</p>
               <h2>{withEmphasis(t("projects.heading"))}</h2>
               <p>{t("projects.description")}</p>
 
@@ -205,7 +201,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
 
             {/* Contact */}
             <section id="contact">
-              <p className="label">{t("contact.title")}</p>
               <h2>{withEmphasis(t("contact.heading"))}</h2>
               <p>{t("contact.text")}</p>
               <p>
