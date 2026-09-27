@@ -27,7 +27,6 @@
   --rule-soft: #c8ccd1;
   --box-head: #eaecf0;
   --link: #3366cc;
-  --link-visited: #6b4ba1;
   --on-link: #ffffff;
   --sans: "Linux Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --serif: "Linux Libertine", Georgia, "Times New Roman", Times, serif;
@@ -52,7 +51,6 @@ html:has(#theme-dark:checked) {
   --rule-soft: #43464b;
   --box-head: #27292d;
   --link: #88a3e8;
-  --link-visited: #b97bed;
   --on-link: #101418;
 }
 
@@ -69,7 +67,6 @@ html:has(#theme-dark:checked) {
     --rule-soft: #43464b;
     --box-head: #27292d;
     --link: #88a3e8;
-    --link-visited: #b97bed;
     --on-link: #101418;
   }
 }
@@ -120,22 +117,15 @@ a {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-a:visited {
-  color: var(--link-visited);
-}
-
 a:hover {
   text-decoration: underline;
 }
 
-/* Нажатая ссылка не меняет цвет — только подчёркивание, как в Википедии */
+/* Нажатая ссылка не меняет цвет — только подчёркивание, как в Википедии.
+   Отдельного цвета для :visited тоже нет: в тёмной палитре он читался как
+   розовый, и переключатель языка после посещения страницы менял оттенок. */
 a:active {
-  color: var(--link);
   text-decoration: underline;
-}
-
-a:visited:active {
-  color: var(--link-visited);
 }
 
 a.external {
@@ -420,11 +410,7 @@ section {
 .cta-primary {
   background: var(--link);
   border: 1px solid var(--link);
-  color: #fff;
-}
-
-.cta-primary:visited {
-  color: #fff;
+  color: var(--on-link);
 }
 
 .cta-secondary {
@@ -538,10 +524,6 @@ section {
   z-index: 10;
 }
 
-.to-top:visited {
-  color: var(--link);
-}
-
 .to-top:hover {
   background: var(--box-head);
   text-decoration: none;
@@ -633,7 +615,6 @@ section {
     --rule-soft: #bbb;
     --box-head: #eee;
     --link: #0000ee;
-    --link-visited: #551a8b;
   }
 
   body {

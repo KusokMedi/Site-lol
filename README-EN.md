@@ -87,9 +87,10 @@ block that makes the page print and "save as PDF" the way it looks on screen.
 Texts and lists come from the same dictionaries and `lib/content.ts` as the main
 site, interactivity is replaced by native HTML (anchor links, `<details>`,
 radio buttons), and the language switcher is a list of links under the title with
-the current language in bold. Links have the system press highlight disabled
-(`-webkit-tap-highlight-color`), otherwise a held link flashes pink on phones
-and on Linux; on `:active` only the underline appears, the colour stays the same.
+the current language in bold. A pressed link never changes colour: the system
+press highlight (`-webkit-tap-highlight-color`) is off, `:active` only adds the
+underline, and there is no separate `:visited` colour at all — in the dark palette
+it read as pink, so the language switcher changed shade once you had visited a page.
 
 **Layout.** The sheet spans the whole window while article and sidebar are centred
 on the measure `--measure` (13rem panels + 4rem gutter + 40.5rem text). The panels
