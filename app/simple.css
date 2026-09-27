@@ -1,17 +1,23 @@
 /**
  * Stylesheet of the document copy at /simple/ and /{lang}/simple/.
  *
- * The look of a Wikipedia article (Vector skin): light grey page, white content
- * area with a hairline border, sans-serif headings over serif body text, blue
- * links, boxed sidebar with the table of contents, and the infobox on the right
- * with the numbers from the About section.
+ * The look of a Wikipedia article (Vector skin): a full-width white sheet,
+ * sans-serif headings over serif body text, blue links, a table of contents and
+ * an Appearance panel (Color/Text) in the sidebar, an infobox top right of the
+ * article, and the "edit"-less section headings with a hairline rule.
  *
- * Plain CSS only — no Tailwind, no web fonts, no animation, no JavaScript. The
- * two-column layout collapses to one column on a phone, and the print block at
- * the bottom makes the page print (or save as PDF) the way it looks on screen.
+ * Plain CSS only — no Tailwind, no web fonts, no animation, no bundler. The
+ * theme and the text size come from the Appearance panel: the radios drive the
+ * page through `:has()`, and a small inline script in SimpleShell mirrors them
+ * into `data-` attributes so the choice survives a reload (and another language).
+ * The two-column layout collapses to one column on a phone, and the print block
+ * at the bottom always prints the light theme and hides the panels.
  */
 
 :root {
+  color-scheme: light dark;
+
+  /* Light palette — the colours of the Vector skin */
   --page: #f8f9fa;
   --paper: #ffffff;
   --ink: #202122;
@@ -22,17 +28,65 @@
   --box-head: #eaecf0;
   --link: #3366cc;
   --link-visited: #6b4ba1;
+  --on-link: #ffffff;
   --sans: "Linux Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --serif: "Linux Libertine", Georgia, "Times New Roman", Times, serif;
   --mono: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
-  --gutter: 3.5rem;
-  /* Ширина текстовой колонки: оглавление 13rem + отступ 3.5rem + текст 44rem.
-     Страница идёт на всю ширину окна, а эта мера держит колонки по центру. */
-  --measure: 60.5rem;
+  --gutter: 4rem;
+  /* Sidebar 13rem + gutter + text 40.5rem — the measure of the article */
+  --measure: 57.5rem;
   --radius: 2px;
 }
 
-/* Плавная прокрутка к якорям (оглавление, «наверх») — на чистом CSS */
+/* Dark palette. The `[data-]` attribute is written by the preferences script,
+   the `:has()` selector covers the page without JavaScript. */
+html[data-theme="dark"],
+html:has(#theme-dark:checked) {
+  color-scheme: dark;
+  --page: #101418;
+  --paper: #1b1f23;
+  --ink: #f8f9fa;
+  --ink-soft: #eaecf0;
+  --muted: #a2a9b1;
+  --rule: #54595d;
+  --rule-soft: #43464b;
+  --box-head: #27292d;
+  --link: #88a3e8;
+  --link-visited: #b97bed;
+  --on-link: #101418;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"],
+  html:has(#theme-auto:checked) {
+    color-scheme: dark;
+    --page: #101418;
+    --paper: #1b1f23;
+    --ink: #f8f9fa;
+    --ink-soft: #eaecf0;
+    --muted: #a2a9b1;
+    --rule: #54595d;
+    --rule-soft: #43464b;
+    --box-head: #27292d;
+    --link: #88a3e8;
+    --link-visited: #b97bed;
+    --on-link: #101418;
+  }
+}
+
+/* Text size of the Appearance panel. Everything is in rem, so the whole page —
+   including the measure of the article — scales with it. */
+html[data-size="small"],
+html:has(#size-small:checked) {
+  font-size: 87.5%;
+}
+
+html[data-size="large"],
+html:has(#size-large:checked) {
+  font-size: 112.5%;
+}
+
+/* Smooth scrolling to the anchors (contents, back to top), pure CSS */
 html {
   scroll-behavior: smooth;
 }
@@ -51,7 +105,7 @@ body {
   background: var(--page);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.6;
   margin: 0;
   -webkit-text-size-adjust: 100%;
@@ -60,6 +114,10 @@ body {
 a {
   color: var(--link);
   text-decoration: none;
+  /* Пока ссылка нажата, браузер и система рисуют свою подсветку (на телефоне
+     это «tap highlight», на Linux — цвет акцента GTK, часто розовый). Она не
+     отключается через `color`, поэтому гасим её здесь. */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 a:visited {
@@ -68,6 +126,16 @@ a:visited {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* Нажатая ссылка не меняет цвет — только подчёркивание, как в Википедии */
+a:active {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+a:visited:active {
+  color: var(--link-visited);
 }
 
 a.external {
@@ -134,19 +202,30 @@ strong {
 
 /* ─── Layout: sidebar + article ───────────────────────────────────────────── */
 
+/* Статья слева, сайдбар справа — как панели Википедии, только зеркально */
 .columns {
   display: grid;
   gap: var(--gutter);
-  grid-template-columns: 13rem minmax(0, 44rem);
+  grid-template-columns: minmax(0, 40.5rem) 13rem;
   justify-content: center;
   padding: 1.25rem 0 2rem;
 }
 
 section {
   scroll-margin-top: 0.5rem;
+  /* Каждый раздел держит свои плавающие элементы, иначе инфобокс из «Home»
+     наезжал бы на заголовок следующего раздела. */
+  display: flow-root;
 }
 
 /* ─── Sidebar boxes ───────────────────────────────────────────────────────── */
+
+/* Sticky, so the panels follow the article instead of leaving a dead column */
+.sidebar {
+  align-self: start;
+  position: sticky;
+  top: 1rem;
+}
 
 .box {
   background: var(--paper);
@@ -175,6 +254,71 @@ section {
 .box li {
   margin: 0;
   padding: 0.15rem 0.7rem;
+}
+
+/* ─── Appearance panel: Color + Text, like cdx-radio of Vector ────────────── */
+
+.appearance-group {
+  padding: 0.6rem 0.7rem;
+}
+
+.appearance-group + .appearance-group {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.appearance-label {
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.radio {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  min-height: 1.25rem;
+  position: relative;
+}
+
+.radio input {
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+.radio-icon {
+  background: var(--paper);
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+  flex: none;
+  height: 0.8rem;
+  margin-right: 0.5rem;
+  width: 0.8rem;
+}
+
+.radio input:enabled:hover + .radio-icon {
+  background: var(--box-head);
+  border-color: var(--ink-soft);
+}
+
+.radio input:enabled:focus-visible + .radio-icon {
+  border-color: var(--link);
+  box-shadow: inset 0 0 0 1px var(--link);
+}
+
+/* Checked: a thick ring instead of a dot, the way MediaWiki draws radios */
+.radio input:enabled:checked + .radio-icon {
+  background: var(--paper);
+  border: 4px solid var(--link);
+}
+
+.radio-text {
+  color: var(--ink-soft);
 }
 
 /* ─── Article ─────────────────────────────────────────────────────────────── */
@@ -291,54 +435,59 @@ section {
 
 /* ─── Infobox: the numbers of the About section ───────────────────────────── */
 
+/* A real table, the way Wikipedia builds it: caption on top, label on the left,
+   value with a sub-note on the right, floated at the top of the article. */
 .infobox {
   background: var(--page);
   border: 1px solid var(--rule);
+  border-collapse: collapse;
   float: right;
   font-family: var(--sans);
   font-size: 0.8rem;
   margin: 0 0 0.8rem 1.2rem;
-  padding: 0;
+  padding: 0.3rem;
   width: 17rem;
 }
 
-.infobox-title {
+.infobox caption {
   background: var(--box-head);
   border-bottom: 1px solid var(--rule);
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  padding: 0.45rem 0.7rem;
-  text-align: center;
+  padding: 0.4rem 0.5rem;
 }
 
-.infobox-row {
-  border-bottom: 1px solid var(--rule-soft);
-  display: flex;
-  gap: 0.6rem;
-  justify-content: space-between;
-  padding: 0.4rem 0.7rem;
-}
-
-.infobox-row:last-child {
-  border-bottom: 0;
-}
-
-.infobox-key {
+.infobox th {
   color: var(--ink-soft);
+  font-weight: 400;
+  padding: 0.4rem 0.5rem 0.4rem 0.4rem;
+  text-align: left;
+  vertical-align: top;
+  width: 6.5rem;
 }
 
-.infobox-value {
+.infobox td {
+  border-left: 1px solid var(--rule-soft);
+  padding: 0.4rem 0.5rem;
+  vertical-align: top;
+}
+
+.infobox tr + tr th,
+.infobox tr + tr td {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.infobox .num {
+  display: block;
+  font-size: 1.05rem;
   font-weight: 700;
-  text-align: right;
-  white-space: nowrap;
 }
 
-.infobox-desc {
-  border-bottom: 1px solid var(--rule-soft);
+.infobox .note {
   color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.45;
-  padding: 0 0.7rem 0.5rem;
+  display: block;
+  font-size: 0.95em;
+  line-height: 1.4;
 }
 
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
@@ -414,7 +563,12 @@ section {
     padding: 1rem 1rem 1.5rem;
   }
 
-  /* The infobox stops floating and becomes a normal block above the text */
+  /* The sidebar is not pinned on a phone, the infobox is not floated */
+  .sidebar {
+    margin-top: 0.5rem;
+    position: static;
+  }
+
   .infobox {
     float: none;
     margin: 0 0 1rem;
@@ -438,10 +592,6 @@ section {
 }
 
 @media (max-width: 30rem) {
-  body {
-    font-size: 1rem;
-  }
-
   .masthead h1 {
     font-size: 1.6rem;
   }
@@ -465,6 +615,27 @@ section {
     margin: 18mm;
   }
 
+  /* Always print the light theme, whatever is on the screen, and drop the
+     panels that only make sense on a screen. */
+  html,
+  html[data-theme="dark"],
+  html[data-theme="auto"],
+  html:has(#theme-dark:checked),
+  html:has(#theme-light:checked),
+  html:has(#theme-auto:checked) {
+    color-scheme: light;
+    --page: #fff;
+    --paper: #fff;
+    --ink: #000;
+    --ink-soft: #333;
+    --muted: #555;
+    --rule: #999;
+    --rule-soft: #bbb;
+    --box-head: #eee;
+    --link: #0000ee;
+    --link-visited: #551a8b;
+  }
+
   body {
     background: #fff;
     font-size: 11pt;
@@ -474,7 +645,9 @@ section {
     padding: 0;
   }
 
-  .to-top {
+  .to-top,
+  .appearance,
+  .box-title::after {
     display: none;
   }
 

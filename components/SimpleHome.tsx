@@ -68,24 +68,31 @@ export default function SimpleHome({ lang }: { lang: Language }) {
         </header>
 
         <div className="columns">
-          {/* ─── Sidebar: contents ──────────────────────────────────────── */}
-          <aside>
-            <nav className="box" aria-label={t("toc.title")}>
-              <h2 className="box-title">{t("toc.title")}</h2>
-              <ul>
-                {sections.map((section) => (
-                  <li key={section.href}>
-                    <a href={section.href}>{section.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </aside>
-
           {/* ─── Article ────────────────────────────────────────────────── */}
           <main className="article">
             {/* Hero */}
             <section id="home">
+              {/* Infobox with the counters of the designed page — the same
+                  place Wikipedia puts it: top right of the article, the lead
+                  text flows around it. */}
+              <table className="infobox">
+                <caption>{t("hero.name")}</caption>
+                <tbody>
+                  {highlightKeys.map((key) => (
+                    <tr key={key}>
+                      <th scope="row">{t(`highlight.${key}`)}</th>
+                      <td>
+                        <b className="num">
+                          {t(`highlight.${key}.num`)}
+                          {t(`highlight.${key}.suffix`)}
+                        </b>
+                        <span className="note">{t(`highlight.${key}.desc`)}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
               <p className="lead">{t("hero.description")}</p>
 
               <p>
@@ -143,24 +150,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
             <section id="about">
               <p className="label">{t("about.title")}</p>
               <h2>{withEmphasis(t("about.heading"))}</h2>
-
-              {/* Infobox with the counters of the designed page */}
-              <aside className="infobox">
-                <div className="infobox-title">{t("about.title")}</div>
-                {highlightKeys.map((key) => (
-                  <div key={key}>
-                    <div className="infobox-row">
-                      <span className="infobox-key">{t(`highlight.${key}`)}</span>
-                      <span className="infobox-value">
-                        {t(`highlight.${key}.num`)}
-                        {t(`highlight.${key}.suffix`)}
-                      </span>
-                    </div>
-                    <p className="infobox-desc">{t(`highlight.${key}.desc`)}</p>
-                  </div>
-                ))}
-              </aside>
-
               <p>{t("about.text1")}</p>
               <p>{t("about.text2")}</p>
             </section>
@@ -229,6 +218,59 @@ export default function SimpleHome({ lang }: { lang: Language }) {
               </p>
             </section>
           </main>
+
+          {/* ─── Sidebar: contents + appearance ─────────────────────────── */}
+          <aside className="sidebar">
+            <nav className="box" aria-label={t("toc.title")}>
+              <h2 className="box-title">{t("toc.title")}</h2>
+              <ul>
+                {sections.map((section) => (
+                  <li key={section.href}>
+                    <a href={section.href}>{section.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Wikipedia's Appearance panel: Color (Automatic/Light/Dark) and
+                Text (Small/Standard/Large). The radios drive the page through
+                CSS `:has()`; a small inline script only remembers the choice. */}
+            <form className="box appearance" aria-label={t("appearance.title")}>
+              <h2 className="box-title">{t("appearance.title")}</h2>
+              <div className="appearance-group">
+                <div className="appearance-label">{t("appearance.color")}</div>
+                {(["auto", "light", "dark"] as const).map((value, i) => (
+                  <label className="radio" key={value}>
+                    <input
+                      type="radio"
+                      name="theme"
+                      id={`theme-${value}`}
+                      value={value}
+                      defaultChecked={i === 0}
+                    />
+                    <span className="radio-icon" />
+                    <span className="radio-text">{t(`appearance.color.${value}`)}</span>
+                  </label>
+                ))}
+              </div>
+              <div className="appearance-group">
+                <div className="appearance-label">{t("appearance.text")}</div>
+                {(["small", "standard", "large"] as const).map((value, i) => (
+                  <label className="radio" key={value}>
+                    <input
+                      type="radio"
+                      name="size"
+                      id={`size-${value}`}
+                      value={value}
+                      defaultChecked={i === 1}
+                    />
+                    <span className="radio-icon" />
+                    <span className="radio-text">{t(`appearance.text.${value}`)}</span>
+                  </label>
+                ))}
+              </div>
+            </form>
+          </aside>
         </div>
 
         {/* ─── Footer ──────────────────────────────────────────────────── */}

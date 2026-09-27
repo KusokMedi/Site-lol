@@ -26,8 +26,8 @@ Personal developer portfolio website.
 │   └── sitemap.ts, robots.ts
 ├── components/             # React components
 │   ├── Home.tsx            # Shared page markup for every language
-│   ├── SimpleHome.tsx      # The same page as a document (for /simple/)
-│   ├── SimpleShell.tsx     # <html>/<body> of the document + app/simple.css
+│   ├── SimpleHome.tsx      # The same page as a Wikipedia-style article (for /simple/)
+│   ├── SimpleShell.tsx     # <html>/<body> of the document + app/simple.css + prefs script
 │   ├── LanguageProvider.tsx# i18n context + language switching
 │   ├── LocaleHandler.tsx   # <html lang>, title, meta, URL, popstate
 │   └── SmoothScroll.tsx    # Lenis provider + useLenis()/useScrollTo()
@@ -80,31 +80,50 @@ No server components or middleware are involved.
 
 `/simple/` and `/{lang}/simple/` are the same content formatted as a Wikipedia
 article: a full-width white sheet, sans-serif headings over serif body text, blue
-links, a sidebar with the table of contents, and the numbers of the About section
-in an infobox on the right. Plain CSS (`app/simple.css`, ~11 kB) with no Tailwind,
-web fonts, glass, animations or client JS, and a `@media print` block that makes
-the page print and "save as PDF" the way it looks on screen. Texts and lists come
-from the same dictionaries and `lib/content.ts` as the main site, interactivity is
-replaced by native HTML (anchor links, `<details>`), and the language switcher is
-a list of links under the title with the current language in bold.
+links, the panels on the right (table of contents + Appearance) and an infobox with
+the numbers in the top right corner of the article. Plain CSS (`app/simple.css`,
+~14 kB) with no Tailwind, web fonts, glass or animations, and a `@media print`
+block that makes the page print and "save as PDF" the way it looks on screen.
+Texts and lists come from the same dictionaries and `lib/content.ts` as the main
+site, interactivity is replaced by native HTML (anchor links, `<details>`,
+radio buttons), and the language switcher is a list of links under the title with
+the current language in bold. Links have the system press highlight disabled
+(`-webkit-tap-highlight-color`), otherwise a held link flashes pink on phones
+and on Linux; on `:active` only the underline appears, the colour stays the same.
 
-The sheet spans the whole window while the text column keeps a measure of
-`--measure` (60.5rem = 13rem contents + 3.5rem gutter + 44rem text) and stays
-centred, so a wide monitor keeps the margins of a Wikipedia article. Anchor
+**Layout.** The sheet spans the whole window while article and sidebar are centred
+on the measure `--measure` (13rem panels + 4rem gutter + 40.5rem text). The panels
+are `position: sticky`, so they follow the text instead of leaving a dead column.
+The infobox is a real table with a `<caption>`, the way Wikipedia builds it: it
+floats to the right at the top of the article, and `section { display: flow-root }`
+keeps it inside its own section (it used to overlap the Services heading). Anchor
 scrolling is smooth (`html { scroll-behavior: smooth }`, switched off under
-`prefers-reduced-motion`), and the floating "↑" button in the bottom right corner
-points at `#top` — the very top of the page, not the first section. It fades in
-with the scroll position (`animation-timeline: scroll(root block)`), and in a
-browser without support it is simply always visible.
+`prefers-reduced-motion`), and the floating "↑" button points at `#top` — the very
+top of the page, not the first section. Its fade-in is tied to the scroll position
+(`animation-timeline: scroll(root block)`), and in a browser without support it is
+simply always visible.
+
+**Appearance.** The sidebar panel is Wikipedia's: Color (Automatic/Light/Dark) and
+Text (Small/Standard/Large), as `cdx-radio` style radio buttons. The switching is
+CSS: `html:has(#theme-dark:checked)` plus `data-theme`/`data-size` on `<html>` set
+the palette and the root font size (14/16/18px — the whole layout is in `rem`, so
+the text measure scales with it). A ~1 kB inline script in `SimpleShell` only
+remembers the choice in `localStorage` and sets those attributes before the first
+paint; without it the switches still work for the current page. The dark palette is
+`#101418`/`#1b1f23` surfaces, `#f8f9fa` text, `#88a3e8` links.
+
+**Print.** `@media print` always prints the light theme (whatever is on screen),
+hides the Appearance panel and the "↑" button, prints link addresses and avoids
+breaking sections and the infobox across pages.
 
 On a phone (`@media (max-width: 60rem)`) the sheet stays full width and the two
-columns collapse into one: the table of contents and the infobox become normal
-blocks, the infobox stops floating, the type is larger (16px) and long tech lists
-and URLs wrap, while the "↑" button shrinks and moves in from the safe area. There
-is no separate mobile version — the same page adapts. The sidebar heading comes
-from the `toc.title` key added to all 12 dictionaries. The last line of `about.txt`
-(`terminal.line9`) is not printed: on the main site it is a typed greeting line,
-and the About heading follows this block anyway.
+columns collapse into one: the panels move below the article and stop being sticky,
+the infobox stops floating, long tech lists and URLs wrap, and the "↑" button
+shrinks and moves in from the safe area. There is no separate mobile version — the
+same page adapts. The panel headings and the Appearance labels come from `toc.title`
+and the `appearance.*` keys added to all 12 dictionaries. The last line of
+`about.txt` (`terminal.line9`) is not printed: on the main site it is a typed
+greeting line, and the About heading follows this block anyway.
 
 Routes: `/simple/` (English) plus `/ru/simple/`, `/lv/simple/`, `/uk/simple/`,
 `/zh/simple/`, `/es/simple/`, `/hi/simple/`, `/pt/simple/`, `/fr/simple/`,
