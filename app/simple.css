@@ -1,22 +1,32 @@
 /**
- * Stylesheet of the plain document copy at /simple/ and /{lang}/simple/.
+ * Stylesheet of the document copy at /simple/ and /{lang}/simple/.
  *
- * A document, not a website: white sheet, black ink, thin rules, one accent for
- * links. Plain CSS only — no Tailwind, no web fonts, no glass, no animation, no
- * JavaScript — and the print block at the bottom makes the page print (or save
- * as PDF) the way it looks on screen.
+ * The look of a Wikipedia article (Vector skin): light grey page, white content
+ * area with a hairline border, sans-serif headings over serif body text, blue
+ * links, boxed sidebar with the table of contents, and the infobox on the right
+ * with the numbers from the About section.
+ *
+ * Plain CSS only — no Tailwind, no web fonts, no animation, no JavaScript. The
+ * two-column layout collapses to one column on a phone, and the print block at
+ * the bottom makes the page print (or save as PDF) the way it looks on screen.
  */
 
 :root {
-  --ink: #111111;
-  --ink-soft: #3d3d3d;
-  --muted: #6c6c6c;
-  --rule: #d6d6d6;
-  --shade: #f6f6f6;
-  --link: #0b4f9e;
-  --serif: Georgia, "Times New Roman", Times, serif;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --page: #f8f9fa;
+  --paper: #ffffff;
+  --ink: #202122;
+  --ink-soft: #54595d;
+  --muted: #72777d;
+  --rule: #a2a9b1;
+  --rule-soft: #c8ccd1;
+  --box-head: #eaecf0;
+  --link: #3366cc;
+  --link-visited: #6b4ba1;
+  --sans: "Linux Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Linux Libertine", Georgia, "Times New Roman", Times, serif;
+  --mono: "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  --gutter: 3.5rem;
+  --radius: 2px;
 }
 
 * {
@@ -24,150 +34,363 @@
 }
 
 body {
-  background: #ffffff;
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.65;
-  margin: 0 auto;
-  max-width: 44rem;
-  padding: 3rem 1.5rem 4rem;
-  -webkit-text-size-adjust: 100%;
-}
-
-h1,
-h2,
-h3 {
+  background: var(--page);
   color: var(--ink);
   font-family: var(--serif);
-  line-height: 1.2;
-}
-
-h1 {
-  font-size: 2.1rem;
-  margin: 0 0 0.4rem;
-}
-
-h2 {
-  border-bottom: 1px solid var(--rule);
-  font-size: 1.35rem;
-  margin: 0 0 1rem;
-  padding-bottom: 0.3rem;
-}
-
-h3 {
-  font-size: 1rem;
-  margin: 0 0 0.25rem;
-}
-
-p {
-  margin: 0 0 0.9rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0;
+  -webkit-text-size-adjust: 100%;
 }
 
 a {
   color: var(--link);
+  text-decoration: none;
+}
+
+a:visited {
+  color: var(--link-visited);
+}
+
+a:hover {
   text-decoration: underline;
+}
+
+a.external {
+  color: var(--link);
 }
 
 strong {
   font-weight: 700;
 }
 
-ul {
-  margin: 0 0 0.9rem;
-  padding-left: 1.3rem;
+/* ─── Page frame ──────────────────────────────────────────────────────────── */
+
+.page {
+  margin: 0 auto;
+  max-width: 62rem;
+  padding: 1.5rem 1rem 3rem;
 }
 
-li {
-  margin: 0.15rem 0;
+.sheet {
+  background: var(--paper);
+  border: 1px solid var(--rule);
 }
 
-section {
-  margin-top: 2.2rem;
-}
+/* ─── Masthead: article title + language bar ──────────────────────────────── */
 
-/* Quiet uppercase line above a heading, like a printed section label */
-.label {
-  color: var(--muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  margin: 0 0 0.35rem;
-  text-transform: uppercase;
-}
-
-.nav {
+.masthead {
   border-bottom: 1px solid var(--rule);
-  margin-bottom: 2.2rem;
-  padding-bottom: 0.8rem;
+  padding: 1.25rem 1.5rem 0.9rem;
 }
 
-.nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem 1.1rem;
-  list-style: none;
+.masthead h1 {
+  border: 0;
+  font-family: var(--sans);
+  font-size: 1.9rem;
+  font-weight: 400;
+  line-height: 1.2;
   margin: 0;
   padding: 0;
 }
 
-.nav a {
-  text-decoration: none;
+.tagline {
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  margin: 0.2rem 0 0.7rem;
 }
 
-.nav a:hover {
-  text-decoration: underline;
+.langbar {
+  border-top: 1px solid var(--rule-soft);
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  margin: 0;
+  padding-top: 0.55rem;
 }
 
-.logo {
+.langbar a {
+  white-space: nowrap;
+}
+
+.langbar .current {
   color: var(--ink);
-  font-family: var(--mono);
-  font-weight: 600;
-  text-decoration: none;
+  font-weight: 700;
 }
 
-/* The site's about.txt window, as a plain code listing */
-.term {
-  background: var(--shade);
+/* ─── Layout: sidebar + article ───────────────────────────────────────────── */
+
+.columns {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: 13rem minmax(0, 1fr);
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+/* ─── Sidebar boxes ───────────────────────────────────────────────────────── */
+
+.box {
+  background: var(--paper);
   border: 1px solid var(--rule);
-  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.box-title {
+  background: var(--box-head);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0.45rem 0.7rem;
+}
+
+.box ul {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.box li {
+  margin: 0;
+  padding: 0.15rem 0.7rem;
+}
+
+/* ─── Article ─────────────────────────────────────────────────────────────── */
+
+.article h2 {
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 1.6rem 0 0.7rem;
+  padding-bottom: 0.25rem;
+}
+
+.article h2:first-child {
+  margin-top: 0;
+}
+
+.article h3 {
+  border: 0;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.1rem 0 0.25rem;
+  padding: 0;
+}
+
+.article p {
+  margin: 0 0 0.8rem;
+}
+
+.label {
+  color: var(--muted);
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.3rem;
+  text-transform: uppercase;
+}
+
+.article ul {
+  margin: 0 0 0.9rem;
+  padding-left: 1.4rem;
+}
+
+.article li {
+  margin: 0.15rem 0;
+}
+
+.lead {
+  font-size: 1rem;
+}
+
+/* Terminal: a code listing, Wikipedia's syntax-highlight block in grey */
+.term {
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-family: var(--sans);
   margin: 0 0 1rem;
 }
 
 .term-title {
   border-bottom: 1px solid var(--rule);
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
 }
 
 .term pre {
   color: var(--ink-soft);
   font-family: var(--mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.55;
   margin: 0;
   overflow-x: auto;
-  padding: 0.7rem;
+  padding: 0.6rem;
   white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.stat-num {
-  font-size: 1.15rem;
+.tech {
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  margin: 0 0 0.4rem;
+}
+
+/* Buttons, Vector-skin style, for the two contact links */
+.cta {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  margin: 0 0.4rem 0.4rem 0;
+  padding: 0.45rem 0.9rem;
+}
+
+.cta-primary {
+  background: var(--link);
+  border: 1px solid var(--link);
+  color: #fff;
+}
+
+.cta-primary:visited {
+  color: #fff;
+}
+
+.cta-secondary {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--link);
+}
+
+/* ─── Infobox: the numbers of the About section ───────────────────────────── */
+
+.infobox {
+  background: var(--page);
+  border: 1px solid var(--rule);
+  float: right;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  margin: 0 0 0.8rem 1.2rem;
+  padding: 0;
+  width: 17rem;
+}
+
+.infobox-title {
+  background: var(--box-head);
+  border-bottom: 1px solid var(--rule);
+  font-size: 0.85rem;
   font-weight: 700;
+  padding: 0.45rem 0.7rem;
+  text-align: center;
 }
 
-.langs a {
+.infobox-row {
+  border-bottom: 1px solid var(--rule-soft);
+  display: flex;
+  gap: 0.6rem;
+  justify-content: space-between;
+  padding: 0.4rem 0.7rem;
+}
+
+.infobox-row:last-child {
+  border-bottom: 0;
+}
+
+.infobox-key {
+  color: var(--ink-soft);
+}
+
+.infobox-value {
+  font-weight: 700;
+  text-align: right;
   white-space: nowrap;
 }
 
-footer {
+.infobox-desc {
+  border-bottom: 1px solid var(--rule-soft);
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  padding: 0 0.7rem 0.5rem;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────── */
+
+.footer {
   border-top: 1px solid var(--rule);
   color: var(--muted);
-  font-size: 0.82rem;
-  margin-top: 2.8rem;
-  padding-top: 0.9rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  padding: 0.9rem 1.5rem 1.1rem;
 }
+
+.footer p {
+  margin: 0 0 0.3rem;
+}
+
+.footer .logo {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-weight: 700;
+}
+
+/* ─── Phone: one column, roomier type ─────────────────────────────────────── */
+
+@media (max-width: 60rem) {
+  .columns {
+    gap: 1.2rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The infobox stops floating and becomes a normal block above the text */
+  .infobox {
+    float: none;
+    margin: 0 0 1rem;
+    width: auto;
+  }
+
+  .page {
+    padding: 0.75rem 0.5rem 2rem;
+  }
+
+  .masthead,
+  .columns,
+  .footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  body {
+    font-size: 1rem;
+  }
+
+  .masthead h1 {
+    font-size: 1.6rem;
+  }
+
+  .article h2 {
+    font-size: 1.25rem;
+  }
+
+  /* Long tech lists and URLs have to wrap instead of stretching the page */
+  .article li,
+  .tech,
+  .langbar {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ─── Print / PDF ─────────────────────────────────────────────────────────── */
 
 @media print {
   @page {
@@ -175,9 +398,20 @@ footer {
   }
 
   body {
+    background: #fff;
     font-size: 11pt;
+  }
+
+  .page {
     max-width: none;
     padding: 0;
+  }
+
+  .sheet,
+  .box,
+  .infobox,
+  .term {
+    border-color: #999;
   }
 
   /* Links stay readable in black and white, so print the URL instead */
@@ -193,6 +427,7 @@ footer {
   section,
   li,
   .term,
+  .infobox,
   h2,
   h3 {
     break-inside: avoid;

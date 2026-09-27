@@ -78,14 +78,22 @@ No server components or middleware are involved.
 
 ## Document version
 
-`/simple/` and `/{lang}/simple/` are the same content formatted as a document:
-white sheet, black text, thin rules, underlined links. Plain CSS
-(`app/simple.css`, ~2 kB) with no Tailwind, web fonts, glass, animations or
+`/simple/` and `/{lang}/simple/` are the same content formatted as a Wikipedia
+article: light grey page background, a white column with a hairline border,
+sans-serif headings over serif body text, blue links, a sidebar with the table of
+contents, and the numbers of the About section in an infobox on the right. Plain
+CSS (`app/simple.css`, ~9 kB) with no Tailwind, web fonts, glass, animations or
 client JS, and a `@media print` block that makes the page print and "save as
 PDF" the way it looks on screen. Texts and lists come from the same dictionaries
 and `lib/content.ts` as the main site, interactivity is replaced by native HTML
-(anchor links, `<details>`), and the language switcher becomes a list of links
-in the footer.
+(anchor links, `<details>`), and the language switcher is a list of links under
+the title with the current language in bold.
+
+On a phone (`@media (max-width: 60rem)`) the two columns collapse into one: the
+table of contents and the infobox become normal blocks, the infobox stops
+floating, the type is larger (16px) and long tech lists and URLs wrap. There is
+no separate mobile version — the same page adapts. The sidebar heading comes from
+the `toc.title` key added to all 12 dictionaries.
 
 Routes: `/simple/` (English) plus `/ru/simple/`, `/lv/simple/`, `/uk/simple/`,
 `/zh/simple/`, `/es/simple/`, `/hi/simple/`, `/pt/simple/`, `/fr/simple/`,
