@@ -6,55 +6,41 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
 import { parseGradientText } from "./GradientText";
-import { env } from "@/lib/env";
+import { projectEntries } from "@/lib/content";
 
-type ProjectEntry = {
-  key: string;
-  icon: React.ElementType;
-  linkIcon: React.ElementType;
-  tech: string[];
-  href: string;
-  linkKey: string;
-  gradientFrom: string;
-  gradientTo: string;
-  blur: string;
+// Design-only half of the project list (icons, header gradients) — the data
+// itself lives in lib/content.ts, shared with the design-free /nodesign/ copy.
+const iconsByKey: Record<string, React.ElementType> = {
+  ksnake: Gamepad2,
+  savebot: Download,
+  anonspeak: MessageCircle,
 };
 
-const projectEntries: ProjectEntry[] = [
-  {
-    key: "ksnake",
-    icon: Gamepad2,
-    linkIcon: Github,
-    tech: ["C++", "SDL2", "CMake", "nlohmann/json"],
-    href: env("NEXT_PUBLIC_K_SNAKE_URL"),
-    linkKey: "project.link.github",
-    gradientFrom: "rgba(255,179,0,0.08)",
-    gradientTo: "rgba(255,106,0,0.04)",
+const linkIconsByLinkKey: Record<string, React.ElementType> = {
+  "project.link.github": Github,
+  "project.link.telegram": Send,
+};
+
+const headerGradients: Record<
+  string,
+  { from: string; to: string; blur: string }
+> = {
+  ksnake: {
+    from: "rgba(255,179,0,0.08)",
+    to: "rgba(255,106,0,0.04)",
     blur: "rgba(255,179,0,0.08)",
   },
-  {
-    key: "savebot",
-    icon: Download,
-    linkIcon: Send,
-    tech: ["Python", "aiogram", "yt-dlp", "FFmpeg"],
-    href: env("NEXT_PUBLIC_SAVE_BOT_URL"),
-    linkKey: "project.link.telegram",
-    gradientFrom: "rgba(14,165,233,0.08)",
-    gradientTo: "rgba(30,64,175,0.04)",
+  savebot: {
+    from: "rgba(14,165,233,0.08)",
+    to: "rgba(30,64,175,0.04)",
     blur: "rgba(14,165,233,0.08)",
   },
-  {
-    key: "anonspeak",
-    icon: MessageCircle,
-    linkIcon: Send,
-    tech: ["Python", "aiogram", "SQLite"],
-    href: env("NEXT_PUBLIC_ANON_SPEAK_URL"),
-    linkKey: "project.link.telegram",
-    gradientFrom: "rgba(139,92,246,0.08)",
-    gradientTo: "rgba(109,40,217,0.04)",
+  anonspeak: {
+    from: "rgba(139,92,246,0.08)",
+    to: "rgba(109,40,217,0.04)",
     blur: "rgba(139,92,246,0.08)",
   },
-];
+};
 
 export default function Projects() {
   const { t } = useLanguage();
@@ -78,8 +64,9 @@ export default function Projects() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {projectEntries.map((p, i) => {
-            const Icon = p.icon;
-            const LinkIcon = p.linkIcon;
+            const Icon = iconsByKey[p.key];
+            const LinkIcon = linkIconsByLinkKey[p.linkKey];
+            const gradient = headerGradients[p.key];
             return (
               <motion.div
                 key={p.key}
@@ -92,12 +79,12 @@ export default function Projects() {
                 {/* Header area */}
                 <div
                   className="relative h-40 shrink-0"
-                  style={{ background: `linear-gradient(135deg, ${p.gradientFrom} 0%, ${p.gradientTo} 100%)` }}
+                  style={{ background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)` }}
                 >
                   <div
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[352px] h-[352px]"
                     style={{
-                      background: `radial-gradient(circle closest-side, ${p.blur} 0%, transparent 100%)`,
+                      background: `radial-gradient(circle closest-side, ${gradient.blur} 0%, transparent 100%)`,
                     }}
                   />
 

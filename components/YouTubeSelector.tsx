@@ -4,20 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Youtube } from "lucide-react";
 import { useLanguage } from "@/components/LanguageProvider";
-import { env } from "@/lib/env";
-
-const youtubeChannels = [
-  {
-    name: "@kusokmedi",
-    url: env("NEXT_PUBLIC_YOUTUBE_MAIN_URL"),
-    lang: "ru",
-  },
-  {
-    name: "@kexbytes",
-    url: env("NEXT_PUBLIC_YOUTUBE_EN_URL"),
-    lang: "en",
-  },
-];
+import { youtubeChannels } from "@/lib/content";
 
 export default function YouTubeSelector({ className = "" }: { className?: string }) {
   const [isOpen, setIsOpen] = useState(false);

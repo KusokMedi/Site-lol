@@ -5,9 +5,9 @@ import { Zap, Globe, Bot, Server, Terminal, Code2, Search, Cloud, Wrench, Plug }
 import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import { useLanguage } from "@/components/LanguageProvider";
+import { serviceKeys } from "@/lib/content";
 import { parseGradientText } from "./GradientText";
 
-const serviceKeys = ["web", "bots", "backend", "linux", "programs", "audit", "hosting", "support", "api"];
 const iconsByKey: Record<string, React.ElementType> = {
   web:      Globe,
   bots:     Bot,

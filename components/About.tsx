@@ -6,17 +6,18 @@ import AnimatedSection from "./AnimatedSection";
 import SectionBadge from "./SectionBadge";
 import CountUp from "./CountUp";
 import { useLanguage } from "@/components/LanguageProvider";
+import { highlightKeys } from "@/lib/content";
 import { parseGradientText } from "./GradientText";
+
+const iconsByKey: Record<string, React.ElementType> = {
+  experience: Briefcase,
+  projects: Layers,
+  tech: Code2,
+  commits: GitCommit,
+};
 
 export default function About() {
   const { t } = useLanguage();
-
-  const highlights = [
-    { key: "experience", icon: Briefcase },
-    { key: "projects",   icon: Layers },
-    { key: "tech",       icon: Code2 },
-    { key: "commits",    icon: GitCommit },
-  ];
 
   return (
     <AnimatedSection id="about" className="relative py-28 sm:py-36">
@@ -48,15 +49,16 @@ export default function About() {
 
           {/* Right — stats grid */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            {highlights.map((item, i) => {
+            {highlightKeys.map((key, i) => {
+              const Icon = iconsByKey[key];
               // The number and its suffix are separate dictionary keys, so a
               // translation can reword the unit without breaking the counter.
-              const raw = t(`highlight.${item.key}.num`);
+              const raw = t(`highlight.${key}.num`);
               const num = Number.parseInt(raw, 10);
 
               return (
                 <motion.div
-                  key={item.key}
+                  key={key}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
@@ -69,17 +71,17 @@ export default function About() {
                     style={{ background: "radial-gradient(circle at 50% 0%, rgba(255,179,0,0.06) 0%, transparent 70%)" }}
                   />
 
-                  <item.icon className="w-4 h-4 text-accent-400/80 mb-4" />
+                  <Icon className="w-4 h-4 text-accent-400/80 mb-4" />
 
                   <div className="space-y-0.5">
                     <div className="text-[1.6rem] sm:text-[1.75rem] font-bold leading-none tracking-tight gradient-accent-text">
-                      <CountUp value={Number.isNaN(num) ? 0 : num} suffix={t(`highlight.${item.key}.suffix`)} />
+                      <CountUp value={Number.isNaN(num) ? 0 : num} suffix={t(`highlight.${key}.suffix`)} />
                     </div>
                     <div className="text-sm font-medium text-white/70 mt-1">
-                      {t(`highlight.${item.key}`)}
+                      {t(`highlight.${key}`)}
                     </div>
                     <div className="text-xs text-white/30 leading-relaxed pt-0.5">
-                      {t(`highlight.${item.key}.desc`)}
+                      {t(`highlight.${key}.desc`)}
                     </div>
                   </div>
                 </motion.div>

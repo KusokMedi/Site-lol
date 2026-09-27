@@ -20,16 +20,19 @@ Personal developer portfolio website.
 │   ├── layout.tsx          # Root layout (fonts, ambient background, PWA meta)
 │   ├── page.tsx            # "/" — English version
 │   ├── [lang]/page.tsx     # "/ru/", "/lv/" … — 12 languages, statically generated
+│   ├── nodesign/           # "/nodesign/" — same content, no design, English only
 │   ├── not-found.tsx       # 404
 │   └── sitemap.ts, robots.ts
 ├── components/             # React components
 │   ├── Home.tsx            # Shared page markup for every language
+│   ├── NoDesignHome.tsx    # The same page without design (for /nodesign/)
 │   ├── LanguageProvider.tsx# i18n context + language switching
 │   ├── LocaleHandler.tsx   # <html lang>, title, meta, URL, popstate
 │   └── SmoothScroll.tsx    # Lenis provider + useLenis()/useScrollTo()
 ├── lib/
 │   ├── languages.ts        # Language list, paths, og:locale
 │   ├── dictionaries.ts     # Server-side dictionaries
+│   ├── content.ts          # Shared content: services, projects, socials, YouTube
 │   ├── seo.ts              # Per-language metadata (title/description/hreflang)
 │   ├── env.ts              # NEXT_PUBLIC_* with fallbacks
 │   └── locales/*.json      # 12 translations
@@ -70,6 +73,16 @@ No server components or middleware are involved.
 - The active dictionary is inlined by the server; the other 11 load as separate chunks only when the visitor switches language.
 - The choice is stored in `localStorage`; on `/` the browser language is used.
 - Title, description, `og:locale` and `hreflang` are rendered at build time, so the static HTML is already in the right language.
+
+## No-design copy
+
+`/nodesign/` is an exact copy of the homepage with the design stripped: the same
+content from `en.json`, but no Tailwind, fonts, animations, icons or client JS.
+Its own root layout (`app/nodesign/layout.tsx`) loads only a tiny
+`nodesign.css`, and the texts and lists come from the same dictionaries and
+`lib/content.ts` as the main site. Interactivity is replaced by native HTML
+(anchor links, `<details>`); the page is `noindex` with a canonical to `/` and is
+not listed in the sitemap.
 
 ## Deploy
 

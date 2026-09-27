@@ -20,16 +20,19 @@
 │   ├── layout.tsx          # Корневой layout (шрифты, фон, PWA-мета)
 │   ├── page.tsx            # "/" — английская версия
 │   ├── [lang]/page.tsx     # "/ru/", "/lv/" … — 12 языков, статическая генерация
+│   ├── nodesign/           # "/nodesign/" — тот же контент без дизайна, только английский
 │   ├── not-found.tsx       # 404
 │   └── sitemap.ts, robots.ts
 ├── components/             # React-компоненты
 │   ├── Home.tsx            # Общая разметка страницы для всех языков
+│   ├── NoDesignHome.tsx    # Та же страница без дизайна (для /nodesign/)
 │   ├── LanguageProvider.tsx# i18n-контекст + переключение языка
 │   ├── LocaleHandler.tsx   # <html lang>, title, meta, URL, popstate
 │   └── SmoothScroll.tsx    # Lenis-провайдер + useLenis()/useScrollTo()
 ├── lib/
 │   ├── languages.ts        # Список языков, пути, og:locale
 │   ├── dictionaries.ts     # Серверные словари
+│   ├── content.ts          # Общий контент: сервисы, проекты, соцссылки, YouTube
 │   ├── seo.ts              # Per-language metadata (title/description/hreflang)
 │   ├── env.ts              # NEXT_PUBLIC_* с фолбэками
 │   └── locales/*.json      # 12 переводов
@@ -70,6 +73,16 @@ npm start          # локальный просмотр ./out
 - Словарь приходит с сервера вместе со страницей, остальные 11 подгружаются отдельным чанком только при переключении языка.
 - Выбор языка сохраняется в `localStorage`; на `/` подхватывается язык браузера.
 - Название, описание, `og:locale` и `hreflang` проставляются на этапе сборки — в статическом HTML уже лежит нужный язык.
+
+## Версия без дизайна
+
+`/nodesign/` — точная копия главной страницы без дизайна: тот же контент из
+`en.json`, но без Tailwind, шрифтов, анимаций, иконок и клиентского JS. Свой
+root layout (`app/nodesign/layout.tsx`) подключает только крошечный
+`nodesign.css`, а тексты и списки берутся из тех же словарей и `lib/content.ts`,
+что и у основного сайта. Интерактив заменён нативным HTML (ссылки-якоря,
+`<details>`), страница закрыта от индексации (`noindex`, canonical на `/`) и в
+sitemap не входит.
 
 ## Деплой
 
