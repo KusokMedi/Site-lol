@@ -154,6 +154,7 @@ strong {
 .masthead {
   border-bottom: 1px solid var(--rule);
   padding: 1.25rem max(1.5rem, calc(50% - var(--measure) / 2)) 0.9rem;
+  position: relative;
 }
 
 .masthead h1 {
@@ -166,18 +167,24 @@ strong {
   padding: 0;
 }
 
-.tagline {
+/* Роль в одну строку с именем: «KusokMedi | Developer / Programmer».
+   Пробелы вокруг разделителя — в разметке, а не в CSS, поэтому текст
+   копируется и читается вслух правильно. */
+.masthead h1 .role {
   color: var(--ink-soft);
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  margin: 0.2rem 0 0.7rem;
+  font-size: 0.52em;
+}
+
+.masthead h1 .sep {
+  color: var(--rule);
+  margin-left: 0.45em;
 }
 
 .langbar {
   border-top: 1px solid var(--rule-soft);
   color: var(--ink-soft);
   font-size: 0.8rem;
-  margin: 0;
+  margin: 0.6rem 0 0;
   padding-top: 0.55rem;
 }
 
@@ -188,6 +195,69 @@ strong {
 .langbar .current {
   color: var(--ink);
   font-weight: 700;
+}
+
+/* ─── Menu button: only on a phone ────────────────────────────────────────── */
+
+/* Both icons are drawn with two extra lines, so they follow the theme and
+   need no icon font or SVG. Hidden on the desktop, where the panels are
+   already in the sidebar. */
+.nav-burger,
+.nav-close {
+  align-items: center;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  display: none;
+  height: 2.2rem;
+  justify-content: center;
+  width: 2.2rem;
+}
+
+.nav-burger:hover,
+.nav-close:hover {
+  background: var(--box-head);
+  text-decoration: none;
+}
+
+.bars,
+.cross {
+  display: block;
+  height: 2px;
+  position: relative;
+  width: 1.15rem;
+}
+
+.bars {
+  background: currentColor;
+}
+
+.bars::before,
+.bars::after,
+.cross::before,
+.cross::after {
+  background: currentColor;
+  content: "";
+  height: 2px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 1.15rem;
+}
+
+.bars::before {
+  top: -6px;
+}
+
+.bars::after {
+  top: 6px;
+}
+
+.cross::before {
+  transform: rotate(45deg);
+}
+
+.cross::after {
+  transform: rotate(-45deg);
 }
 
 /* ─── Layout: sidebar + article ───────────────────────────────────────────── */
@@ -534,10 +604,51 @@ section {
     padding: 1rem 1rem 1.5rem;
   }
 
-  /* The sidebar is not pinned on a phone */
+  /* На телефоне панели не висят под статьёй, а открываются меню-бургером.
+     Состояние — якорь `#menu`: бургер ставит его, любая ссылка из меню и
+     крестик убирают, поэтому меню закрывается само и без скрипта. */
+  .nav-burger {
+    display: flex;
+    left: 1rem;
+    position: absolute;
+    top: 1.15rem;
+  }
+
+  /* Отступ h1 = бургер (1rem) + его ширина (2.2rem) + зазор */
+  .masthead h1 {
+    padding-left: 3.6rem;
+  }
+
+  .nav-close {
+    display: flex;
+    margin: 0 0 0.6rem auto;
+  }
+
   .sidebar {
-    margin-top: 0.5rem;
-    position: static;
+    align-self: stretch;
+    background: var(--page);
+    display: none;
+    inset: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 1rem;
+    position: fixed;
+    z-index: 40;
+  }
+
+  html:has(#menu:target) .sidebar {
+    display: block;
+  }
+
+  html:has(#menu:target) .to-top {
+    display: none;
+  }
+
+  @media screen {
+    /* Пока открыто меню, страница под ним не скроллится */
+    html:has(#menu:target) {
+      overflow: hidden;
+    }
   }
 
   .page {
@@ -558,7 +669,7 @@ section {
 
 @media (max-width: 30rem) {
   .masthead h1 {
-    font-size: 1.6rem;
+    font-size: 1.45rem;
   }
 
   .article h2 {
@@ -634,6 +745,9 @@ section {
     padding: 0;
   }
 
+  .sidebar,
+  .nav-burger,
+  .nav-close,
   .to-top,
   .appearance,
   .box-title::after {

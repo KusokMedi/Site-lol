@@ -87,7 +87,10 @@ block that makes the page print and "save as PDF" the way it looks on screen.
 Texts and lists come from the same dictionaries and `lib/content.ts` as the main
 site, interactivity is replaced by native HTML (anchor links, `<details>`,
 radio buttons), and the language switcher is a list of links under the title with
-the current language in bold. A pressed link never changes colour: the system
+the current language in bold. The name and the role sit on one line — "KusokMedi |
+Developer / Programmer": `hero.name` and `hero.title` inside a single `<h1>` with a dimmed
+separator, spaces around it in the markup so the text copies and reads out correctly; below
+480px the role wraps under the name instead of stretching the page. A pressed link never changes colour: the system
 press highlight (`-webkit-tap-highlight-color`) is off, `:active` only adds the
 underline, and there is no separate `:visited` colour at all — in the dark palette
 it read as pink, so the language switcher changed shade once you had visited a page.
@@ -123,11 +126,17 @@ paint; without it the switches still work for the current page. The dark palette
 hides the Appearance panel and the "↑" button, prints link addresses and avoids
 breaking sections and the numbers table across pages.
 
-On a phone (`@media (max-width: 60rem)`) the sheet stays full width and the two
-columns collapse into one: the panels move below the article and stop being sticky,
-long tech lists and URLs wrap, and the "↑" button
-shrinks and moves in from the safe area. There is no separate mobile version — the
-same page adapts. The panel headings and the Appearance labels come from `toc.title`
+On a phone (`@media (max-width: 60rem)`) the sheet stays full width, the two
+columns collapse into one, long tech lists and URLs wrap, and the "↑" button
+shrinks and moves in from the safe area. The panels no longer sit below the article:
+a burger button (three lines drawn in CSS) opens them into a fullscreen menu with the
+contents, the Appearance panel and a close button, and the page underneath does not
+scroll (`html:has(#menu:target) { overflow: hidden }`). The state is pure CSS — the
+burger is a link to `#menu`, so `:target` both opens the menu and closes it again on
+any link inside it (a jump to a section) or on the close button (`href="#top"`); no
+script is involved. Where the menu is taller than the screen it scrolls inside itself.
+There is no separate mobile version — the same page adapts, and in print
+(`@media print`) neither the panels nor the burger are printed. The panel headings and the Appearance labels come from `toc.title`
 and the `appearance.*` keys added to all 12 dictionaries. The last line of
 `about.txt` (`terminal.line9`) is not printed: on the main site it is a typed
 greeting line, and the About heading follows this block anyway.

@@ -51,8 +51,19 @@ export default function SimpleHome({ lang }: { lang: Language }) {
       <div className="sheet">
         {/* ─── Title + language bar ─────────────────────────────────────── */}
         <header className="masthead">
-          <h1>{t("hero.name")}</h1>
-          <p className="tagline">{t("hero.title")}</p>
+          {/* On a phone the panels live in a fullscreen menu; this burger is
+              its only trigger. It is an anchor to `#menu`, so the open/close
+              state is `:target` in CSS and works without JavaScript. */}
+          <a className="nav-burger" href="#menu" aria-label={t("aria.openMenu")}>
+            <span className="bars" aria-hidden="true" />
+          </a>
+          <h1>
+            {t("hero.name")}
+            <span className="role">
+              <span className="sep">{" | "}</span>
+              {t("hero.title")}
+            </span>
+          </h1>
           <p className="langbar">
             {languages.map((code, i) => (
               <span key={code}>
@@ -215,7 +226,11 @@ export default function SimpleHome({ lang }: { lang: Language }) {
           </main>
 
           {/* ─── Sidebar: contents + appearance ─────────────────────────── */}
-          <aside className="sidebar">
+          <aside className="sidebar" id="menu">
+            <a className="nav-close" href="#top" aria-label={t("aria.closeMenu")}>
+              <span className="cross" aria-hidden="true" />
+            </a>
+
             <nav className="box" aria-label={t("toc.title")}>
               <h2 className="box-title">{t("toc.title")}</h2>
               <ul>
