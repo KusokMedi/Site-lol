@@ -134,7 +134,14 @@ contents, the Appearance panel and a close button, and the page underneath does 
 scroll (`html:has(#menu:target) { overflow: hidden }`). The state is pure CSS — the
 burger is a link to `#menu`, so `:target` both opens the menu and closes it again on
 any link inside it (a jump to a section) or on the close button (`href="#top"`); no
-script is involved. Where the menu is taller than the screen it scrolls inside itself.
+script is involved. Opening is animated: the panel slides down (`menu-in`, 0.18s) and
+the contents and Appearance blocks follow one after another with a 0.06s stagger
+(`menu-box-in`). Both animations sit on `html:has(#menu:target)`, so they start on
+their own, and `prefers-reduced-motion: reduce` switches them off (the selector is
+repeated there — `:has(#menu:target)` carries an id, so a plain `.sidebar` would not
+win). The buttons themselves are 2.75rem (44px, the smallest comfortable tap target)
+with a pointer cursor, a hover state, press feedback (`scale(0.94)`) and a visible
+keyboard focus ring. Where the menu is taller than the screen it scrolls inside itself.
 There is no separate mobile version — the same page adapts, and in print
 (`@media print`) neither the panels nor the burger are printed. The panel headings and the Appearance labels come from `toc.title`
 and the `appearance.*` keys added to all 12 dictionaries. The last line of

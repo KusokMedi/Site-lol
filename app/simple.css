@@ -201,16 +201,21 @@ strong {
 
 /* Both icons are drawn with two extra lines, so they follow the theme and
    need no icon font or SVG. Hidden on the desktop, where the panels are
-   already in the sidebar. */
+   already in the sidebar. 2.75rem — минимальная область нажатия, до неё
+   не добирается палец, а не курсор. */
 .nav-burger,
 .nav-close {
   align-items: center;
+  background: var(--paper);
   border: 1px solid var(--rule);
   color: var(--ink);
+  cursor: pointer;
   display: none;
-  height: 2.2rem;
+  height: 2.75rem;
   justify-content: center;
-  width: 2.2rem;
+  padding: 0;
+  transition: background-color 0.12s ease, transform 0.1s ease;
+  width: 2.75rem;
 }
 
 .nav-burger:hover,
@@ -219,12 +224,24 @@ strong {
   text-decoration: none;
 }
 
+/* Отклик на нажатие и видимый фокус с клавиатуры — как у обычной кнопки */
+.nav-burger:active,
+.nav-close:active {
+  transform: scale(0.94);
+}
+
+.nav-burger:focus-visible,
+.nav-close:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
 .bars,
 .cross {
   display: block;
   height: 2px;
   position: relative;
-  width: 1.15rem;
+  width: 1.25rem;
 }
 
 .bars {
@@ -241,15 +258,15 @@ strong {
   left: 0;
   position: absolute;
   top: 0;
-  width: 1.15rem;
+  width: 1.25rem;
 }
 
 .bars::before {
-  top: -6px;
+  top: -5px;
 }
 
 .bars::after {
-  top: 6px;
+  top: 5px;
 }
 
 .cross::before {
@@ -588,6 +605,23 @@ section {
   text-decoration: none;
 }
 
+/* Открытие меню: панель выезжает сверху, её блоки — с задержкой друг за
+   другом. Анимация висит на `html:has(#menu:target)`, поэтому запускается сама
+   при появлении якоря и не требует скрипта. */
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@keyframes menu-box-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+}
+
 @keyframes to-top-in {
   to {
     opacity: 1;
@@ -611,12 +645,13 @@ section {
     display: flex;
     left: 1rem;
     position: absolute;
-    top: 1.15rem;
+    /* Центр кнопки — по середине первой строки заголовка */
+    top: 0.8rem;
   }
 
-  /* Отступ h1 = бургер (1rem) + его ширина (2.2rem) + зазор */
+  /* Отступ h1 = бургер (1rem) + его ширина (2.75rem) + зазор */
   .masthead h1 {
-    padding-left: 3.6rem;
+    padding-left: 4rem;
   }
 
   .nav-close {
@@ -637,7 +672,16 @@ section {
   }
 
   html:has(#menu:target) .sidebar {
+    animation: menu-in 0.18s ease-out;
     display: block;
+  }
+
+  html:has(#menu:target) .sidebar > .box {
+    animation: menu-box-in 0.22s ease-out both;
+  }
+
+  html:has(#menu:target) .sidebar > .box + .box {
+    animation-delay: 0.06s;
   }
 
   html:has(#menu:target) .to-top {
@@ -706,6 +750,28 @@ section {
   .infobox .note {
     grid-column: 1 / -1;
     padding-top: 0;
+  }
+}
+
+/* Кто-то просит не двигать: отключаем анимацию открытия меню и переходы
+   кнопок. Блок стоит после всех раскладок, иначе его правила проигрывают
+   по порядку. */
+@media (prefers-reduced-motion: reduce) {
+  .nav-burger,
+  .nav-close {
+    transition: none;
+  }
+
+  .nav-burger:active,
+  .nav-close:active {
+    transform: none;
+  }
+
+  /* Селектор повторяет правило анимации: у `html:has(#menu:target) .sidebar`
+     есть id в `:has()`, поэтому более простой `.sidebar` его не перебьёт. */
+  html:has(#menu:target) .sidebar,
+  html:has(#menu:target) .sidebar > .box {
+    animation: none;
   }
 }
 
