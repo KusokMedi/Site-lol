@@ -1,5 +1,5 @@
 import { getDict } from "@/lib/dictionaries";
-import { defaultLanguage } from "@/lib/languages";
+import { languageNames, languages, simplePath, type Language } from "@/lib/languages";
 import { env } from "@/lib/env";
 import {
   highlightKeys,
@@ -10,32 +10,17 @@ import {
 } from "@/lib/content";
 
 /**
- * The site in its simplest form — the exact same content as the designed page,
- * with only plain formatting: the site's dark background and gold accent, but
- * no Tailwind, no icons, no animation, no client JS. Lives at /simple/ for
- * reading, translating and checking the copy.
+ * The site as a plain document — the exact same content as the designed page,
+ * formatted like a printable page: no Tailwind, no icons, no animation, no
+ * client JS. Served at /simple/ (English) and /{lang}/simple/ for every other
+ * language, for reading, translating, printing and saving as PDF.
  *
  * Everything here is a server component on purpose: the static HTML is the
  * whole page, so it renders with scripting disabled and without hydration.
  */
-
-const dict = getDict(defaultLanguage);
-const t = (key: string) => dict[key] ?? key;
-
-/**
- * Renders the `**highlighted**` markers of the locale files. The designed page
- * turns them into gradient spans, the simple copy colours them — same words.
- * split() with a capture group keeps unmatched asterisks intact.
- */
-function withEmphasis(text: string): React.ReactNode[] {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith("**") && part.endsWith("**")
-      ? <strong key={i}>{part.slice(2, -2)}</strong>
-      : part,
-  );
-}
-
-export default function SimpleHome() {
+export default function SimpleHome({ lang }: { lang: Language }) {
+  const dict = getDict(lang);
+  const t = (key: string) => dict[key] ?? key;
   const year = new Date().getFullYear();
 
   const navLinks = [
@@ -45,6 +30,16 @@ export default function SimpleHome() {
     { label: t("nav.projects"), href: "#projects" },
     { label: t("nav.contacts"), href: "#contact" },
   ];
+
+  /**
+   * Renders the `**highlighted**` markers of the locale files. The designed page
+   * turns them into gradient spans, the document copy keeps them as bold text.
+   * split() with a capture group leaves unmatched asterisks intact.
+   */
+  const withEmphasis = (text: string): React.ReactNode[] =>
+    text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+      part.startsWith("**") && part.endsWith("**") ? <strong key={i}>{part.slice(2, -2)}</strong> : part,
+    );
 
   return (
     <>
@@ -203,16 +198,16 @@ export default function SimpleHome() {
             <a href={env("NEXT_PUBLIC_TELEGRAM_URL")} target="_blank" rel="noopener noreferrer">
               {t("contact.button")}
             </a>{" "}
-            <a href={`mailto:${env("NEXT_PUBLIC_EMAIL")}`}>
-              {t("contact.email_button")}
-            </a>
+            <a href={`mailto:${env("NEXT_PUBLIC_EMAIL")}`}>{t("contact.email_button")}</a>
           </p>
         </section>
       </main>
 
       <footer>
         <p>
-          <a href="#home">{t("hero.name")}~</a>
+          <a className="logo" href="#home">
+            {t("hero.name")}~
+          </a>
         </p>
         <p>
           © {year} {t("hero.name")}. {t("footer.rights")}
@@ -220,6 +215,15 @@ export default function SimpleHome() {
         {/* Stands in for the floating scroll-to-top button, which needs JS */}
         <p>
           <a href="#home">{t("aria.scrollToTop")}</a>
+        </p>
+        {/* Stands in for the language switcher of the designed header */}
+        <p className="langs">
+          {languages.map((code, i) => (
+            <span key={code}>
+              {i > 0 ? " · " : ""}
+              {code === lang ? languageNames[code] : <a href={simplePath(code)}>{languageNames[code]}</a>}
+            </span>
+          ))}
         </p>
       </footer>
     </>

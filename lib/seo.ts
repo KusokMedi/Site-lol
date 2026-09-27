@@ -53,4 +53,18 @@ export function rootMetadata(): Metadata {
   return { ...languageMetadata(defaultLanguage), alternates: { canonical: "/", languages: alternates() } };
 }
 
+/**
+ * Metadata of the plain copy at "/simple/" and "/{lang}/simple/".
+ *
+ * Same titles and Open Graph as the designed page, but never indexed (it would
+ * otherwise compete with the real page) and canonicalised to the designed URL.
+ */
+export function simpleMetadata(lang: Language): Metadata {
+  return {
+    ...languageMetadata(lang),
+    robots: { index: false, follow: false },
+    alternates: { canonical: langPath(lang), languages: alternates() },
+  };
+}
+
 export type { Dict };

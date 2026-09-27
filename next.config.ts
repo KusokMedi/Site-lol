@@ -18,7 +18,6 @@ const buildRevision =
 const staticEntries = [
   "/index.html",
   "/404.html",
-  "/simple/index.html",
   "/manifest.json",
   "/icon.svg",
   "/icon-192.png",
@@ -27,9 +26,11 @@ const staticEntries = [
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
+  // The document copy in every language, "/simple/" included.
+  "/simple/index.html",
   ...languages
     .filter((lang) => lang !== defaultLanguage)
-    .map((lang) => `/${lang}/index.html`),
+    .flatMap((lang) => [`/${lang}/index.html`, `/${lang}/simple/index.html`]),
 ].map((url) => ({ url, revision: buildRevision }));
 
 const withPWA = withPWAInit({

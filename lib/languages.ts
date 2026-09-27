@@ -48,6 +48,11 @@ export function langPath(lang: Language): string {
   return lang === defaultLanguage ? "/" : `/${lang}/`;
 }
 
+/** Public URL of the plain document copy: "/simple/" and "/ru/simple/". */
+export function simplePath(lang: Language): string {
+  return lang === defaultLanguage ? "/simple/" : `/${lang}/simple/`;
+}
+
 /**
  * hreflang map for every supported language plus x-default.
  * The root URL is the English one, every other language has its own path.

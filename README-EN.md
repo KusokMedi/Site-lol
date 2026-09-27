@@ -20,12 +20,14 @@ Personal developer portfolio website.
 │   ├── layout.tsx          # Root layout (fonts, ambient background, PWA meta)
 │   ├── page.tsx            # "/" — English version
 │   ├── [lang]/page.tsx     # "/ru/", "/lv/" … — 12 languages, statically generated
-│   ├── simple/             # "/simple/" — same content, plain formatting, English only
-│   ├── not-found.tsx       # 404
+│   ├── simple/             # "/simple/" — document copy, English
+│   ├── (lang-simple)/      # "/ru/simple/", "/lv/simple/" … — the same in 11 languages
+│   ├── not-found.tsx       # 404 (pulls the design in itself, no root layout wraps it)
 │   └── sitemap.ts, robots.ts
 ├── components/             # React components
 │   ├── Home.tsx            # Shared page markup for every language
-│   ├── SimpleHome.tsx      # The same page in plain formatting (for /simple/)
+│   ├── SimpleHome.tsx      # The same page as a document (for /simple/)
+│   ├── SimpleShell.tsx     # <html>/<body> of the document + app/simple.css
 │   ├── LanguageProvider.tsx# i18n context + language switching
 │   ├── LocaleHandler.tsx   # <html lang>, title, meta, URL, popstate
 │   └── SmoothScroll.tsx    # Lenis provider + useLenis()/useScrollTo()
@@ -74,15 +76,30 @@ No server components or middleware are involved.
 - The choice is stored in `localStorage`; on `/` the browser language is used.
 - Title, description, `og:locale` and `hreflang` are rendered at build time, so the static HTML is already in the right language.
 
-## Simple version
+## Document version
 
-`/simple/` is the same site with the design reduced to the bare minimum: the
-colours and type habits of the main site (dark background, gold accent), but
-plain CSS — no Tailwind, web fonts, glass, animations or client JS. Its own root
-layout (`app/simple/layout.tsx`) loads a single small `simple.css`, and the
-texts and lists come from the same dictionaries and `lib/content.ts` as the main
-site. Interactivity is replaced by native HTML (anchor links, `<details>`); the
-page is `noindex` with a canonical to `/` and is not listed in the sitemap.
+`/simple/` and `/{lang}/simple/` are the same content formatted as a document:
+white sheet, black text, thin rules, underlined links. Plain CSS
+(`app/simple.css`, ~2 kB) with no Tailwind, web fonts, glass, animations or
+client JS, and a `@media print` block that makes the page print and "save as
+PDF" the way it looks on screen. Texts and lists come from the same dictionaries
+and `lib/content.ts` as the main site, interactivity is replaced by native HTML
+(anchor links, `<details>`), and the language switcher becomes a list of links
+in the footer.
+
+Routes: `/simple/` (English) plus `/ru/simple/`, `/lv/simple/`, `/uk/simple/`,
+`/zh/simple/`, `/es/simple/`, `/hi/simple/`, `/pt/simple/`, `/fr/simple/`,
+`/de/simple/`, `/ja/simple/`, `/ko/simple/`. Those live in a separate route tree
+(`app/(lang-simple)/`) so they can sit under `/{lang}/simple/` and still render
+through `SimpleShell` instead of `RootShell` — which means that tree and
+`app/simple/` each have their own root layout. The pages are `noindex` with a
+canonical to the designed URL and are not listed in the sitemap.
+
+## 404
+
+`app/not-found.tsx` is the only page no root layout wraps, so it brings the
+design itself: `import "@/app/globals.css"` plus the fonts on a wrapper.
+Without that, `404.html` was exported with no stylesheet at all.
 
 ## Deploy
 

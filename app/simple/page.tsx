@@ -1,18 +1,10 @@
-import type { Metadata } from "next";
 import SimpleHome from "@/components/SimpleHome";
-import { getDict } from "@/lib/dictionaries";
 import { defaultLanguage } from "@/lib/languages";
+import { simpleMetadata } from "@/lib/seo";
 
-const dict = getDict(defaultLanguage);
+export const metadata = simpleMetadata(defaultLanguage);
 
-export const metadata: Metadata = {
-  title: `${dict["hero.name"]} — ${dict["hero.title"]}`,
-  description: dict["hero.description"],
-  // The same content as "/", so it must not compete with it in search results.
-  robots: { index: false, follow: false },
-  alternates: { canonical: "/" },
-};
-
+/** "/simple/" — the document copy of the English page. */
 export default function SimplePage() {
-  return <SimpleHome />;
+  return <SimpleHome lang={defaultLanguage} />;
 }

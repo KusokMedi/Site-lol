@@ -1,0 +1,200 @@
+/**
+ * Stylesheet of the plain document copy at /simple/ and /{lang}/simple/.
+ *
+ * A document, not a website: white sheet, black ink, thin rules, one accent for
+ * links. Plain CSS only — no Tailwind, no web fonts, no glass, no animation, no
+ * JavaScript — and the print block at the bottom makes the page print (or save
+ * as PDF) the way it looks on screen.
+ */
+
+:root {
+  --ink: #111111;
+  --ink-soft: #3d3d3d;
+  --muted: #6c6c6c;
+  --rule: #d6d6d6;
+  --shade: #f6f6f6;
+  --link: #0b4f9e;
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #ffffff;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  margin: 0 auto;
+  max-width: 44rem;
+  padding: 3rem 1.5rem 4rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin: 0 0 0.4rem;
+}
+
+h2 {
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.35rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.3rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin: 0 0 0.25rem;
+}
+
+p {
+  margin: 0 0 0.9rem;
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+strong {
+  font-weight: 700;
+}
+
+ul {
+  margin: 0 0 0.9rem;
+  padding-left: 1.3rem;
+}
+
+li {
+  margin: 0.15rem 0;
+}
+
+section {
+  margin-top: 2.2rem;
+}
+
+/* Quiet uppercase line above a heading, like a printed section label */
+.label {
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  margin: 0 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.nav {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2.2rem;
+  padding-bottom: 0.8rem;
+}
+
+.nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1.1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a {
+  text-decoration: none;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+
+.logo {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* The site's about.txt window, as a plain code listing */
+.term {
+  background: var(--shade);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  margin: 0 0 1rem;
+}
+
+.term-title {
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.7rem;
+}
+
+.term pre {
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin: 0;
+  overflow-x: auto;
+  padding: 0.7rem;
+  white-space: pre-wrap;
+}
+
+.stat-num {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.langs a {
+  white-space: nowrap;
+}
+
+footer {
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 2.8rem;
+  padding-top: 0.9rem;
+}
+
+@media print {
+  @page {
+    margin: 18mm;
+  }
+
+  body {
+    font-size: 11pt;
+    max-width: none;
+    padding: 0;
+  }
+
+  /* Links stay readable in black and white, so print the URL instead */
+  a {
+    color: inherit;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+
+  section,
+  li,
+  .term,
+  h2,
+  h3 {
+    break-inside: avoid;
+  }
+}

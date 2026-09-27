@@ -2,7 +2,33 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { LanguageProvider, useLanguage } from "@/components/LanguageProvider";
+
+// The global 404 is the one page of the app that no root layout wraps (the
+// layouts live in route groups and in /simple/), so it has to pull the design in
+// itself: without this import its Tailwind classes are unstyled and the page
+// comes out blank. RootShell does the same for every other route.
+import "@/app/globals.css";
+
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+// Framer Motion writes the *start* state of every animation (opacity:0) into the
+// static HTML. Without scripting nothing animates it back, so the 404 would
+// render as a blank dark page — same guard as RootShell.
+const NO_SCRIPT_STYLE = `[style*="opacity:0"]{opacity:1!important}`;
 
 function NotFoundContent() {
   const { t } = useLanguage();
@@ -58,7 +84,14 @@ function NotFoundContent() {
 export default function NotFound() {
   return (
     <LanguageProvider>
-      <NotFoundContent />
+      {/* The font variables normally sit on <html>; here they have to be set on
+          a wrapper, because Next generates the <html> element of the 404 itself. */}
+      <div className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: NO_SCRIPT_STYLE }} />
+        </noscript>
+        <NotFoundContent />
+      </div>
     </LanguageProvider>
   );
 }
