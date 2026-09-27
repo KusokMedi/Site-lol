@@ -124,12 +124,16 @@ paint; without it the switches still work for the current page. The dark palette
 
 **Print.** `@media print` always prints the light theme (whatever is on screen),
 hides the Appearance panel and the "↑" button, prints link addresses and avoids
-breaking sections and the numbers table across pages.
+breaking sections and the numbers table across pages. The footer is down to two
+lines — "KusokMedi~" and the copyright; the plain "Наверх" text link
+(`aria.scrollToTop`) is gone, and only the floating button scrolls up, keeping that
+key as its `aria-label` and `title`.
 
 On a phone (`@media (max-width: 60rem)`) the sheet stays full width, the two
 columns collapse into one, long tech lists and URLs wrap, and the "↑" button
 shrinks and moves in from the safe area. The panels no longer sit below the article:
-a burger button (three lines drawn in CSS) opens them into a fullscreen menu with the
+a burger button to the right of the title (the h1 keeps a 4rem right padding for it,
+three lines drawn in CSS) opens them into a fullscreen menu with the
 contents, the Appearance panel and a close button, and the page underneath does not
 scroll (`html:has(#menu:target) { overflow: hidden }`). The state is pure CSS — the
 burger is a link to `#menu`, so `:target` both opens the menu and closes it again on

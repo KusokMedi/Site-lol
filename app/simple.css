@@ -643,15 +643,15 @@ section {
      крестик убирают, поэтому меню закрывается само и без скрипта. */
   .nav-burger {
     display: flex;
-    left: 1rem;
     position: absolute;
+    right: 1rem;
     /* Центр кнопки — по середине первой строки заголовка */
     top: 0.8rem;
   }
 
   /* Отступ h1 = бургер (1rem) + его ширина (2.75rem) + зазор */
   .masthead h1 {
-    padding-left: 4rem;
+    padding-right: 4rem;
   }
 
   .nav-close {

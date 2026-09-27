@@ -293,9 +293,6 @@ export default function SimpleHome({ lang }: { lang: Language }) {
           <p>
             © {year} {t("hero.name")}. {t("footer.rights")}
           </p>
-          <p>
-            <a href="#top">{t("aria.scrollToTop")}</a>
-          </p>
         </footer>
       </div>
 
