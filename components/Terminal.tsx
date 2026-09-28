@@ -4,6 +4,63 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/components/LanguageProvider";
 
+interface TerminalLinesProps {
+  fileContent: string[];
+  lineTexts: string[];
+  /** Line the cursor sits on, or null when the block is not typing. */
+  currentLineIdx: number | null;
+  /**
+   * Reserve layer: pads every line with a cursor-sized spacer, so the space it
+   * reserves is never narrower than what the typing layer can reach.
+   */
+  reserve?: boolean;
+}
+
+function TerminalLines({
+  fileContent,
+  lineTexts,
+  currentLineIdx,
+  reserve = false,
+}: TerminalLinesProps) {
+  return (
+    <div className="p-4 space-y-0.5">
+      {fileContent.map((_, li) => {
+        const isEmpty = fileContent[li] === "";
+        const isCurrentLine = currentLineIdx === li;
+
+        return (
+          <div
+            key={li}
+            className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]"
+          >
+            <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
+              {li + 1}
+            </span>
+            {isEmpty ? (
+              <span className="text-white/[0.06] select-none">~</span>
+            ) : (
+              <span className="text-white/60">
+                {lineTexts[li]}
+                {reserve ? (
+                  <span className="inline-block w-[7px] h-[13px] align-middle ml-px" />
+                ) : (
+                  isCurrentLine && (
+                    <motion.span
+                      className="inline-block w-[7px] h-[13px] bg-white/50 align-middle ml-px"
+                      animate={{ opacity: [1, 0] }}
+                      transition={{ duration: 0.5, repeat: Infinity }}
+                    />
+                  )
+                )}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // Inner component - re-mounts completely when `key` changes (lang switch)
 function TypingContent({ fileContent }: { fileContent: string[] }) {
   const allChars = useMemo(() => {
@@ -43,41 +100,14 @@ function TypingContent({ fileContent }: { fileContent: string[] }) {
   const isTyping = revealedCount < allChars.length;
   const currentLineIdx = isTyping
     ? (allChars[revealedCount]?.lineIdx ?? fileContent.length - 1)
-    : fileContent.length - 1;
+    : null;
 
   return (
-    <div className="p-4 space-y-0.5">
-      {fileContent.map((_, li) => {
-        const text = lineTexts[li];
-        const isEmpty = fileContent[li] === "";
-        const isCurrentLine = isTyping && li === currentLineIdx;
-
-        return (
-          <div
-            key={li}
-            className="flex items-start gap-3 font-mono text-[12px] sm:text-[13px] leading-[1.7]"
-          >
-            <span className="text-white/[0.12] select-none shrink-0 w-5 text-right tabular-nums">
-              {li + 1}
-            </span>
-            {isEmpty ? (
-              <span className="text-white/[0.06] select-none">~</span>
-            ) : (
-              <span className="text-white/60">
-                {text}
-                {isCurrentLine && (
-                  <motion.span
-                    className="inline-block w-[7px] h-[13px] bg-white/50 align-middle ml-px"
-                    animate={{ opacity: [1, 0] }}
-                    transition={{ duration: 0.5, repeat: Infinity }}
-                  />
-                )}
-              </span>
-            )}
-          </div>
-        );
-      })}
-    </div>
+    <TerminalLines
+      fileContent={fileContent}
+      lineTexts={lineTexts}
+      currentLineIdx={currentLineIdx}
+    />
   );
 }
 
@@ -127,8 +157,32 @@ export default function Terminal({ className = "" }: { className?: string }) {
       </div>
 
       {/* key=lang forces full remount on language change - guaranteed clean reset */}
-      <div style={{ minHeight: "260px" }}>
-        <TypingContent key={lang} fileContent={fileContent} />
+      <div className="grid" style={{ minHeight: "260px" }}>
+        {/*
+          Both layers are pinned to cell 1/1 so they overlap: the invisible one
+          holds the finished text and reserves its height from the first paint.
+          While typing, lines reach their wrap width at different times, and the
+          box used to grow - and with it the whole page - for as long as the
+          animation ran, throwing every nav anchor off by up to 81px on narrow
+          viewports. The typing layer is never taller than the reserve (its text
+          is always a prefix, and the reserve pads every line with a
+          cursor-sized spacer), so the height cannot move.
+
+          Both placements must be explicit: an auto-placed layer skips the
+          already-taken cell and lands in the next row, which would stack them
+          instead of overlapping.
+        */}
+        <div className="invisible" style={{ gridArea: "1 / 1" }} aria-hidden>
+          <TerminalLines
+            fileContent={fileContent}
+            lineTexts={fileContent}
+            currentLineIdx={null}
+            reserve
+          />
+        </div>
+        <div style={{ gridArea: "1 / 1" }}>
+          <TypingContent key={lang} fileContent={fileContent} />
+        </div>
       </div>
     </motion.div>
   );

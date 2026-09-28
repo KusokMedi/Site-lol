@@ -51,6 +51,7 @@ export default [
         document: "readonly",
         navigator: "readonly",
         performance: "readonly",
+        getComputedStyle: "readonly",
         requestAnimationFrame: "readonly",
         cancelAnimationFrame: "readonly",
         setTimeout: "readonly",
