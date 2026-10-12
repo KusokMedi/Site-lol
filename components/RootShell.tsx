@@ -190,7 +190,11 @@ export default function RootShell({
   children: React.ReactNode;
 }) {
   return (
-    <html lang={lang} className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang={lang}
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: BROWSER_SCRIPT }} />
         <noscript>
