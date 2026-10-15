@@ -6,6 +6,7 @@ const FALLBACKS = {
   NEXT_PUBLIC_SAVE_BOT_URL: "https://t.me/KusokMediSaveBot",
   NEXT_PUBLIC_ANON_SPEAK_URL: "https://t.me/AnonSpeakKM_bot",
   NEXT_PUBLIC_TELEGRAM_URL: "https://t.me/kusokmedi52",
+  NEXT_PUBLIC_PATREON_URL: "https://patreon.com/KusokMedi",
   NEXT_PUBLIC_DISCORD_URL: "https://discord.gg/sX97m22zR9",
   NEXT_PUBLIC_YOUTUBE_MAIN_URL: "https://youtube.com/@kusokmedi",
   NEXT_PUBLIC_YOUTUBE_EN_URL: "https://youtube.com/@kexbytes",

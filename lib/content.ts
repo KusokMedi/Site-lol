@@ -58,6 +58,7 @@ export const socialEntries: SocialEntry[] = [
   { name: "GitHub Organization", url: env("NEXT_PUBLIC_GITHUB_ORG_URL") },
   { name: "Discord", url: env("NEXT_PUBLIC_DISCORD_URL") },
   { name: "Telegram", url: env("NEXT_PUBLIC_TELEGRAM_URL") },
+  { name: "Patreon", url: env("NEXT_PUBLIC_PATREON_URL") },
 ];
 
 export type YouTubeChannel = {

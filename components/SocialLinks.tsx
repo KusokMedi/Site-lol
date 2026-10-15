@@ -5,6 +5,15 @@ import { Github, Send, Globe, MessagesSquare } from "lucide-react";
 import YouTubeSelector from "./YouTubeSelector";
 import { socialEntries } from "@/lib/content";
 
+// Patreon is not part of lucide, so its glyph ships as a tiny inline SVG.
+function Patreon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M0 .48v23.04h4.22V.48zm15.385 0c-4.764 0-8.641 3.88-8.641 8.65 0 4.755 3.877 8.623 8.641 8.623 4.75 0 8.615-3.868 8.615-8.623C24 4.36 20.136.48 15.385.48z" />
+    </svg>
+  );
+}
+
 // Icon and hover colour per social - design only, the links come from
 // lib/content.ts so /simple/ can render the same list without either.
 const iconsByName: Record<string, React.ElementType> = {
@@ -12,11 +21,13 @@ const iconsByName: Record<string, React.ElementType> = {
   "GitHub Organization": Globe,
   Discord: MessagesSquare,
   Telegram: Send,
+  Patreon,
 };
 
 const colorByName: Record<string, string> = {
   Discord: "hover:text-[#5865F2]",
   Telegram: "hover:text-[#0088cc]",
+  Patreon: "hover:text-[#f96854]",
 };
 
 export default function SocialLinks({ className = "" }: { className?: string }) {
