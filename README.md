@@ -38,7 +38,9 @@
 │   ├── seo.ts              # Per-language metadata (title/description/hreflang)
 │   ├── env.ts              # NEXT_PUBLIC_* с фолбэками
 │   └── locales/*.json      # 12 переводов
-└── public/                 # Статика, иконки PWA, CNAME
+├── public/
+│   ├── files/              # Файлы для раздачи (/files/...)
+│   └── ...                 # Статика, иконки PWA, CNAME
 ```
 
 ## Разработка
@@ -61,13 +63,43 @@ npm run typecheck
 ## Сборка
 
 ```bash
-npm run build      # статический экспорт в ./out
+npm run build      # статический экспорт в ./out (плюс страницы скачивания)
 npm start          # локальный просмотр ./out
 ```
 
 `next.config.ts` включает `output: "export"` и `trailingSlash: true`, поэтому
 результат - обычная статика, которую можно положить на GitHub Pages, Vercel
 или любой CDN. Server-компоненты и middleware не используются.
+
+Исключение - сборка на Vercel (`VERCEL=1`): там сайт собирается как обычный
+Next.js-сервер, чтобы работал route handler скачивания. Локально серверный
+режим можно проверить командой `NEXT_SERVER_RUNTIME=1 npm run dev`.
+
+## Файлы
+
+Публичные файлы лежат в `public/files/`. Код менять не нужно: создавайте папки
+любой вложенности и добавляйте HTML, CSS, JS, MP4, PNG, ZIP, PDF и что угодно
+ещё - после коммита и деплоя файл доступен по URL.
+
+- `/files/<путь>` - обычная отдача через `public`: HTML открывается в браузере,
+  MP4 играет, PDF показывается (если браузер умеет), остальное отдаётся с MIME
+  по расширению.
+- `/files/download/<путь>` - принудительное скачивание с сохранением имени:
+  `Content-Disposition: attachment`, корректные `Content-Type` и
+  `Content-Length`, поддержка Range (`206 Partial Content`).
+
+На Vercel запросы обрабатывает `app/files/download/[...path]/route.server.ts`:
+потоковая отдача из `public/files/`, проверка path traversal и симлинков,
+404 для отсутствующих файлов и директорий. На GitHub Pages заголовки задать
+нельзя, поэтому при статическом экспорте `app/files/download/[...path]/page.export.tsx`
+генерирует для каждого файла страницу `out/files/download/<путь>/index.html`,
+которая сразу запускает скачивание. Переключение между двумя вариантами
+происходит через `pageExtensions` в `next.config.ts` в зависимости от среды.
+
+Каталог `public/files/download/` зарезервирован под маршрут скачивания.
+На Vercel файлы попадают в бандл serverless-функции
+(`outputFileTracingIncludes`), поэтому очень большие архивы могут упереться
+в лимит размера функции.
 
 ## Языки
 
@@ -164,7 +196,9 @@ layout, поэтому дизайн она подключает сама: `impor
 
 `.github/workflows/deploy.yml` собирает `out/` и выкладывает его на GitHub Pages
 (кастомный домен - `public/CNAME`). На Vercel достаточно подключить репозиторий:
-статический экспорт deploy'ится как есть.
+там автоматически включается серверный режим и работает скачивание с
+HTTP-заголовками. На GitHub Pages скачивание обслуживают статические страницы,
+сгенерированные после сборки.
 
 [Vercel Analytics](https://vercel.com/analytics) подключен для отслеживания посещений.
 

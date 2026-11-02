@@ -84,6 +84,8 @@ export default [
         fetch: "readonly",
         Request: "readonly",
         Response: "readonly",
+        Headers: "readonly",
+        ReadableStream: "readonly",
       },
       parserOptions: {
         ecmaFeatures: {

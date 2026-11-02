@@ -33,12 +33,31 @@ const staticEntries = [
     .flatMap((lang) => [`/${lang}/index.html`, `/${lang}/simple/index.html`]),
 ].map((url) => ({ url, revision: buildRevision }));
 
+// `output: "export"` cannot send Content-Disposition/Content-Length headers,
+// so the download route needs a real Next.js server on Vercel. GitHub Pages
+// keeps the static export (with generated download pages instead). Local
+// `next dev` is server-side as usual; NEXT_SERVER_RUNTIME=1 allows testing a
+// production server build locally.
+const isServerRuntime =
+  process.env.VERCEL === "1" ||
+  process.env.NEXT_SERVER_RUNTIME === "1" ||
+  process.env.NODE_ENV === "development";
+
+// A static export cannot set Content-Disposition, so it gets a generated page
+// per file; a Node server gets the streaming route handler. The two files live
+// next to each other and `pageExtensions` decides which one is part of the app.
+const pageExtensions = isServerRuntime
+  ? ["tsx", "server.ts", "ts"]
+  : ["export.tsx", "tsx", "ts"];
+
 const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   workboxOptions: {
-    additionalManifestEntries: staticEntries,
-    directoryIndex: "/index.html",
+    // The explicit page entries only exist in a static export. In server mode
+    // the pages are Next.js routes, and precaching "/index.html" would 404.
+    additionalManifestEntries: isServerRuntime ? [] : staticEntries,
+    directoryIndex: isServerRuntime ? undefined : "/index.html",
     // The default "index.html" navigation fallback would answer every language
     // URL with the English page - navigations are cached per URL instead.
     navigateFallback: null,
@@ -58,12 +77,23 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   // Pure static export - deployable to GitHub Pages and any CDN.
   // Language routes are real pages (app/[lang]), so no middleware is needed.
-  output: "export",
+  // On Vercel the app is a normal server so the download route can set headers.
+  ...(isServerRuntime ? {} : { output: "export" as const }),
+  pageExtensions,
   trailingSlash: true,
   images: {
     unoptimized: true,
   },
   devIndicators: process.env.NODE_ENV === "development" ? { position: "bottom-right" } : false,
+  // Public files are not imported by any module, so the download route's
+  // serverless function needs them added explicitly on Vercel.
+  ...(isServerRuntime
+    ? {
+        outputFileTracingIncludes: {
+          "/files/download/[...path]": ["./public/files/**/*"],
+        },
+      }
+    : {}),
 };
 
 export default withPWA(nextConfig);
