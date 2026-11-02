@@ -43,13 +43,6 @@ const isServerRuntime =
   process.env.NEXT_SERVER_RUNTIME === "1" ||
   process.env.NODE_ENV === "development";
 
-// A static export cannot set Content-Disposition, so it gets a generated page
-// per file; a Node server gets the streaming route handler. The two files live
-// next to each other and `pageExtensions` decides which one is part of the app.
-const pageExtensions = isServerRuntime
-  ? ["tsx", "server.ts", "ts"]
-  : ["export.tsx", "tsx", "ts"];
-
 const withPWA = withPWAInit({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
@@ -79,7 +72,6 @@ const nextConfig: NextConfig = {
   // Language routes are real pages (app/[lang]), so no middleware is needed.
   // On Vercel the app is a normal server so the download route can set headers.
   ...(isServerRuntime ? {} : { output: "export" as const }),
-  pageExtensions,
   trailingSlash: true,
   images: {
     unoptimized: true,

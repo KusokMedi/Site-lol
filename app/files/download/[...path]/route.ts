@@ -16,7 +16,23 @@ import { Readable } from "node:stream";
 const FILES_ROOT = path.join(process.cwd(), "public", "files");
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
+
+/**
+ * Static export needs at least one param for a dynamic segment. The placeholder
+ * is never served in practice: the post-build script replaces the whole
+ * `out/files/download` tree with one download page per real file. On Vercel and
+ * in `next dev` the list stays empty and the route is fully dynamic.
+ */
+export function generateStaticParams() {
+  if (
+    process.env.VERCEL === "1" ||
+    process.env.NEXT_SERVER_RUNTIME === "1" ||
+    process.env.NODE_ENV === "development"
+  ) {
+    return [];
+  }
+  return [{ path: ["_placeholder"] }];
+}
 
 const MIME_TYPES: Record<string, string> = {
   ".avif": "image/avif",
@@ -245,6 +261,18 @@ export async function GET(
   request: Request,
   context: { params: Promise<{ path?: string[] }> },
 ): Promise<Response> {
+  const isServerRuntime =
+    process.env.VERCEL === "1" ||
+    process.env.NEXT_SERVER_RUNTIME === "1" ||
+    process.env.NODE_ENV === "development";
+
+  if (!isServerRuntime) {
+    return new Response("Not Found", {
+      status: 404,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  }
+
   return handle(request, context, false);
 }
 
@@ -252,5 +280,14 @@ export async function HEAD(
   request: Request,
   context: { params: Promise<{ path?: string[] }> },
 ): Promise<Response> {
+  const isServerRuntime =
+    process.env.VERCEL === "1" ||
+    process.env.NEXT_SERVER_RUNTIME === "1" ||
+    process.env.NODE_ENV === "development";
+
+  if (!isServerRuntime) {
+    return new Response(null, { status: 404 });
+  }
+
   return handle(request, context, true);
 }

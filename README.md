@@ -41,6 +41,8 @@
 ├── public/
 │   ├── files/              # Файлы для раздачи (/files/...)
 │   └── ...                 # Статика, иконки PWA, CNAME
+└── scripts/
+    └── build-download-pages.mjs  # Страницы скачивания для статического экспорта
 ```
 
 ## Разработка
@@ -88,13 +90,12 @@ Next.js-сервер, чтобы работал route handler скачивани
   `Content-Disposition: attachment`, корректные `Content-Type` и
   `Content-Length`, поддержка Range (`206 Partial Content`).
 
-На Vercel запросы обрабатывает `app/files/download/[...path]/route.server.ts`:
+На Vercel запросы обрабатывает `app/files/download/[...path]/route.ts`:
 потоковая отдача из `public/files/`, проверка path traversal и симлинков,
 404 для отсутствующих файлов и директорий. На GitHub Pages заголовки задать
-нельзя, поэтому при статическом экспорте `app/files/download/[...path]/page.export.tsx`
-генерирует для каждого файла страницу `out/files/download/<путь>/index.html`,
-которая сразу запускает скачивание. Переключение между двумя вариантами
-происходит через `pageExtensions` в `next.config.ts` в зависимости от среды.
+нельзя, поэтому `scripts/build-download-pages.mjs` после статической сборки
+создаёт для каждого файла страницу `out/files/download/<путь>/index.html`,
+которая сразу запускает скачивание.
 
 Каталог `public/files/download/` зарезервирован под маршрут скачивания.
 На Vercel файлы попадают в бандл serverless-функции
