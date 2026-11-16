@@ -1,5 +1,7 @@
 # KusokMedi Portfolio
 
+[![License](https://img.shields.io/github/license/KusokMedi/Site-lol)](LICENSE) [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-pink)](https://github.com/sponsors/KusokMedi) [![Patreon](https://img.shields.io/badge/Patreon-kusokmedi-orange)](https://www.patreon.com/kusokmedi)
+
 **Russian** | [English](/README-EN.md)
 
 Личный сайт-портфолио разработчика.
@@ -212,3 +214,10 @@ HTTP-заголовками. На GitHub Pages скачивание обслуж
 - Discord: [сервер](https://discord.gg/sX97m22zR9)
 - GitHub: [@kusokmedi](https://github.com/kusokmedi)
 - YouTube: [@kusokmedi](https://youtube.com/@kusokmedi)
+
+## Support
+
+If you find this project useful, consider supporting:
+
+- GitHub Sponsors: https://github.com/sponsors/KusokMedi
+- Patreon: https://www.patreon.com/kusokmedi
