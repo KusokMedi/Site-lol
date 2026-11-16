@@ -1,7 +1,5 @@
 import { collectDirectories, FilesBrowser } from "../browser";
 
-export const dynamicParams = true;
-
 export async function generateStaticParams() {
   const dirs = await collectDirectories();
   const params = dirs
