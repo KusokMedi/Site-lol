@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a problem with the KusokMedi portfolio site
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please fill in the details below.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser / device
+      placeholder: "Chrome 120 on Windows 11"
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Page URL
+      placeholder: "https://kusokmedi.lat/..."
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the issue and how to reproduce it.
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or console output
+      description: Attach screenshots or paste console errors.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues before opening this one.
+          required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contact the maintainer
+    url: https://kusokmedi.lat/
+    about: Questions and support requests
+  - name: Telegram
+    url: https://t.me/kusokmedi52
+    about: Direct contact on Telegram
