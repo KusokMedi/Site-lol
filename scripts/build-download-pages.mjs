@@ -225,30 +225,10 @@ for (const segments of directories) {
   if (!hasIndex) {
     const entries = await listDirectoryEntries(sourceDir);
     const parentSegments = segments.slice(0, -1);
-    const normalParent =
-      parentSegments.length > 0
-        ? `/files/${parentSegments.map(encodeURIComponent).join("/")}/`
-        : "/files/";
     const downloadParent =
       parentSegments.length > 0
         ? `/files/download/${parentSegments.map(encodeURIComponent).join("/")}/`
         : "/files/";
-
-    const normalDir = path.join(outDir, "files", ...segments);
-    await mkdir(normalDir, { recursive: true });
-    await writeFile(
-      path.join(normalDir, "index.html"),
-      directoryPage({
-        title: `Index of /files/${segments.join("/")}/`,
-        entries,
-        makeHref: (entry) =>
-          entry.isDir
-            ? `/files/${[...segments, entry.name].map(encodeURIComponent).join("/")}/`
-            : `/files/${[...segments, entry.name].map(encodeURIComponent).join("/")}`,
-        parentHref: normalParent,
-      }),
-      "utf8",
-    );
 
     const downloadDir = path.join(outDir, "files", "download", ...segments);
     await mkdir(downloadDir, { recursive: true });
