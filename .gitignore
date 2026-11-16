@@ -33,6 +33,7 @@ yarn-error.log*
 # vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
+# route handler backup created during static builds
+scripts/.route.ts.server-backup
+
 next-env.d.ts

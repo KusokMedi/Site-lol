@@ -1,5 +1,5 @@
 import { createReadStream } from "node:fs";
-import { realpath, stat } from "node:fs/promises";
+import { readdir, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 
@@ -16,7 +16,7 @@ import { Readable } from "node:stream";
 const FILES_ROOT = path.join(process.cwd(), "public", "files");
 
 export const runtime = "nodejs";
-
+export const dynamic = "force-dynamic";
 /**
  * Static export needs at least one param for a dynamic segment. The placeholder
  * is never served in practice: the post-build script replaces the whole
@@ -142,6 +142,41 @@ async function resolveFile(segments: readonly string[]): Promise<string | null> 
   }
 }
 
+async function resolveDirectory(segments: readonly string[]): Promise<string | null> {
+  const root = path.resolve(FILES_ROOT);
+  const target = segments.length === 0 ? root : path.resolve(root, ...segments);
+
+  if (target !== root && !target.startsWith(root + path.sep)) return null;
+
+  try {
+    const [realRoot, realTarget] = await Promise.all([realpath(root), realpath(target)]);
+    if (realTarget !== realRoot && !realTarget.startsWith(realRoot + path.sep)) return null;
+
+    const info = await stat(realTarget);
+    if (!info.isDirectory()) return null;
+
+    return realTarget;
+  } catch {
+    return null;
+  }
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case "&":
+        return "&amp;";
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case '"':
+        return "&quot;";
+      default:
+        return "&#39;";
+    }
+  });
+}
 function encodeFilename(fileName: string): string {
   return encodeURIComponent(fileName).replace(/['()*]/g, (char) =>
     `%${char.charCodeAt(0).toString(16).toUpperCase()}`,
@@ -215,6 +250,84 @@ function badRequest(): Response {
   });
 }
 
+async function listDirectory(segments: string[], dirPath: string): Promise<string> {
+  const realRoot = await realpath(FILES_ROOT);
+  const entries = await readdir(dirPath, { withFileTypes: true });
+  const items: { name: string; isDir: boolean }[] = [];
+
+  for (const entry of entries) {
+    if (entry.name.startsWith(".")) continue;
+
+    const entryPath = path.join(dirPath, entry.name);
+    let isDir = entry.isDirectory();
+
+    if (entry.isSymbolicLink()) {
+      try {
+        const real = await realpath(entryPath);
+        if (real !== realRoot && !real.startsWith(realRoot + path.sep)) continue;
+        isDir = (await stat(real)).isDirectory();
+      } catch {
+        continue;
+      }
+    }
+
+    items.push({ name: entry.name, isDir });
+  }
+
+  items.sort((a, b) =>
+    a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+  );
+
+  const parentHref =
+    segments.length > 1
+      ? `/files/download/${segments
+          .slice(0, -1)
+          .map(encodeURIComponent)
+          .join("/")}/`
+      : "/files/";
+
+  const rows = items
+    .map((item) => {
+      const href = item.isDir
+        ? `/files/download/${[...segments, item.name]
+            .map(encodeURIComponent)
+            .join("/")}/`
+        : `/files/download/${[...segments, item.name]
+            .map(encodeURIComponent)
+            .join("/")}`;
+      return `<li><a href="${escapeHtml(href)}">${escapeHtml(item.name)}${
+        item.isDir ? "/" : ""
+      }</a></li>`;
+    })
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Index of /files/download/${escapeHtml(segments.join("/"))}</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 24px; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: Canvas; color: CanvasText; }
+  main { max-width: 48rem; margin: 0 auto; }
+  h1 { font-size: 1.25rem; word-break: break-all; }
+  ul { list-style: none; padding: 0; }
+  li { padding: 0.25rem 0; }
+  a { color: LinkText; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Index of /files/download/${escapeHtml(segments.join("/"))}/</h1>
+  <p><a href="${escapeHtml(parentHref)}">..</a></p>
+  <ul>${rows}</ul>
+</main>
+</body>
+</html>`;
+}
+
 async function handle(
   request: Request,
   context: { params: Promise<{ path?: string[] }> },
@@ -222,6 +335,25 @@ async function handle(
 ): Promise<Response> {
   const segments = sanitizeSegments((await context.params).path);
   if (!segments) return badRequest();
+
+  const dirPath = await resolveDirectory(segments);
+  if (dirPath) {
+    if (headOnly) {
+      return new Response(null, {
+        status: 200,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
+    const html = await listDirectory(segments, dirPath);
+    return new Response(html, {
+      status: 200,
+      headers: {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Content-Type": "text/html; charset=utf-8",
+      },
+    });
+  }
 
   const filePath = await resolveFile(segments);
   if (!filePath) return notFound();

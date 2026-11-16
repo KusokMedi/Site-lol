@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/build-download-pages.mjs",
+    "build": "node scripts/prepare-static-build.mjs && next build; node scripts/restore-route.mjs; node scripts/build-download-pages.mjs",
     "start": "npx --yes serve out",
     "preview": "npx --yes serve out",
     "lint": "eslint .",
